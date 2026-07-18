@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "1. Top-left panel (DEFENDETE):  \n   - Position: (12, 22)  \n   - Size: (170, 110)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"DEFENDETE\" (bold, white, 18px), \"Fase 1\" (white, 12px), \"JUEZ: Impaciente\" (white, 12px)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n2. Top-right panel (CREDIBILIDAD):  \n   - Position: (818, 22)  \n   - Size: (170, 110)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"CREDIBILIDAD\" (cyan, 16px), \"58\" (white, 20px), \"Neutral\" (white, 12px), \"SOSPECHA\" (red, 16px), \"56\" (white, 20px), \"Neutral\" (white, 12px)  \n   - Progress bars: Green (credibility) and red (suspicion), 1px solid rgba(100,100,100,0.5)  \n\n3. Top-right buttons (Notas/Pruebas/Datos):  \n   - Position: (818, 252)  \n   - Size: (170, 110)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Icons: Document (Notas), Test tube (Pruebas), List (Datos) – white, 24px  \n   - Text: \"Notas\" (white, 12px), \"Pruebas\" (white, 12px), \"Datos\" (white, 12px)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n4. Left panel (TRIBUNAL):  \n   - Position: (12, 322)  \n   - Size: (170, 310)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"TRIBUNAL\" (white, 16px)  \n   - Juror numbers: \"1\", \"2\", \"3\" (white, 14px, dark gray background)  \n   - Juror names: \"JURADO 1\", \"JURADO 2\", \"JURADO 3\" (white, 12px)  \n   - Juror progress bars: Green, 1px solid rgba(100,100,100,0.5)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n5. Center panel (JUEZ dialogue):  \n   - Position: (334, 435)  \n   - Size: (665, 230)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"JUEZ\" (yellow, 18px), Quote (white, 14px), \"¿Entiende los cargos?\" (white, 14px)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n6. Bottom-left panel (CÓMO DEFENDERTE):  \n   - Position: (12, 710)  \n   - Size: (170, 180)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"CÓMO DEFENDERTE\" (white, 16px)  \n   - Tips: \"Habla claro y con confianza\", \"Responde solo a lo que te pregunten\", \"Aporta detalles y contexto\", \"Tu tono y pausas también importan\" (white, 12px)  \n   - Icons: Checkmark (green, 16px)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n7. Bottom-right panel (HISTORIAL):  \n   - Position: (818, 710)  \n   - Size: (170, 180)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"HISTORIAL\" (white, 16px), Timestamps (\"03:45\", \"03:46\") and dialogue (white, 12px)  \n   - Icon: Expand (white, 16px)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n8. Bottom-center microphone:  \n   - Position: (472, 780)  \n   - Size: (56, 56)  \n   - Color: Green (rgba(0,200,0,0.8))  \n   - Icon: Microphone (white, 32px)  \n   - Border: 2px solid green  \n\n9. Bottom-center text:  \n   - Position: (312, 930)  \n   - Size: (625, 40)  \n   - Color: Dark gray (rgba(30,30,30,0.9))  \n   - Text: \"Habla para defenderte... (Pulsa ENTER para enviar)\" (white, 14px)  \n   - Border: 1px solid rgba(100,100,100,0.5)  \n\n10. Bottom-right buttons (Settings/End session/Share):  \n    - Position: (818, 930)  \n    - Size: (170, 40)  \n    - Color: Dark gray (rgba(30,30,30,0.9))  \n    - Icons: Gear (Settings), \"Fin de sesión\" (white, 12px), Share (white, 16px)  \n    - Border: 1px solid rgba(100,100,100,0.5)",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1784378912,
+  "id": "202607182048062ffc1c4e43894d00",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "202607182048062ffc1c4e43894d00",
+  "usage": {
+    "completion_tokens": 1301,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2069,
+    "prompt_tokens_details": {
+      "cached_tokens": 4
+    },
+    "total_tokens": 3370
+  }
+}
