@@ -1,0 +1,76 @@
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA: Jugador creativo y reactivo
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+
+──────────────────────────────────────────────────────────────────────
+FASE 1 · Apertura — el jugador improvisa
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Inicia el juicio. Acusado, se le imputa: Hurto agravado de 3.000 kg de queso manchego D.O. del Museo...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Sí, su señoría. Entiendo los cargos, pero quiero dejar claro desde ya que esa noche yo estaba trabaj...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+──────────────────────────────────────────────────────────────────────
+FASE 2 · Testimonio fiscal — jugador debe decidir si objeta
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → JUEZ: ¡Protesto! El análisis del maletero solo demuestra que el queso estuvo en el coche, no que yo lo pus...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → FISCAL: El acusado objeta. Responde a su argumento.
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · Guarda — jugador pregunta cosas inesperadas
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Cuéntale al tribunal qué pasó esa noche.
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Señor Eustaquio, ¿recuerda usted qué tenía para cenar esa noche? Digo, porque 20 minutos en el baño ...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Entonces, si estuvo usted en el baño desde las 03:35 hasta las 03:55, y el robo fue a las 03:47, ¿có...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · Supervisor — jugador destapa la venganza
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Cuéntale al tribunal lo que sabes del acusado.
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Señor Tellez, usted me despidió hace un mes. ¿Es eso cierto?
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Y ese día fue el único despedido en 'reducción de personal', ¿verdad? ¿No le parece a usted que tien...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+──────────────────────────────────────────────────────────────────────
+FASE 5 · Alegato final — jugador improvisa
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Su señoría, la fiscalía no tiene pruebas directas. El maletero del coche lo usan 5 empleados, no sol...
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/chat (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA COMPLETADA
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀

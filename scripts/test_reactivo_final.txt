@@ -1,0 +1,110 @@
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA: Jugador creativo y reactivo
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+
+──────────────────────────────────────────────────────────────────────
+FASE 1 · Apertura — el jugador improvisa
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Inicia el juicio. Acusado, se le imputa: Hurto agravado de 3.000 kg de queso manchego D.O. del Museo...
+⚖️  JUEZ: *asiente lentamente, mirando al acusado por encima de las gafas*
+
+Acusado, ha escuchado la imputación. Hurto agravado. Tres mil kilos. Ciento ochenta mil euros. La madrugada del robo, las tres cuarenta y siete.
+
+*hace una pausa, el silencio se estira*
+
+¿Entiende usted la gravedad de lo que se le imputa? ¿Y declara usted culpable o no culpable?
+⏱️  15831ms
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Sí, su señoría. Entiendo los cargos, pero quiero dejar claro desde ya que esa noche yo estaba trabaj...
+⚖️  JUEZ: *anota algo en un cuaderno sin levantar la vista*
+
+Queda constancia: el acusado se declara no culpable. Alegato: trabajaba esa noche, reparto habitual, vehículo del museo.
+
+*levanta la cabeza, voz medida*
+
+Fiscalía. Presente su caso. Testigos y evidencias. Con orden. Sin prisa.
+⏱️  1383ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 2 · Testimonio fiscal — jugador debe decidir si objeta
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.
+⚖️  FISCAL: Mi teoría es clara: el acusado usó su acceso y conocimiento del museo para robar 180.000€ en queso manchego D.O. a las 03:47. La primera prueba irrefutable es el análisis del maletero del coche oficial, que arrojó un 99,7% de coincidencia con el queso sustraído.
+⏱️  1113ms
+
+======================================================================
+🎙️  JUGADOR → JUEZ: ¡Protesto! El análisis del maletero solo demuestra que el queso estuvo en el coche, no que yo lo pus...
+⚖️  JUEZ: *levanta la mano, deteniendo al fiscal*
+
+Protesta admitida. *espera* Fundamente. ¿Qué testigo o prueba acredita que otros cuatro empleados tuvieron acceso al vehículo entre las 03:30 y las 04:00?
+⏱️  1392ms
+
+======================================================================
+🎙️  JUGADOR → FISCAL: El acusado objeta. Responde a su argumento.
+⚖️  FISCAL: ¿Cinco empleados? Solo uno era repostero nocturno, conocía los puntos ciegos de las cámaras y tenía las llaves del coche a las 03:47. El video muestra a alguien con su uniforme exacto cargando las cajas. Las estadísticas no roban queso, señoría; los empleados con acceso y oportunidad, sí.
+⏱️  1279ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · Guarda — jugador pregunta cosas inesperadas
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Cuéntale al tribunal qué pasó esa noche.
+⚖️  GUARDA: Su señoría... yo estaba en el baño, con un dolor de tripas tremendo. Desde las tres y media... hasta casi las cuatro. No vi nada, yo qué sé. Mi turno acabó a las seis, como siempre.
+⏱️  1035ms
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Señor Eustaquio, ¿recuerda usted qué tenía para cenar esa noche? Digo, porque 20 minutos en el baño ...
+⚖️  GUARDA: Un bocata de chorizo... y un yogur caducado, creo. La máquina expendedora no enfría bien. Yo qué sé, su señoría... el estómago me falla a menudo.
+⏱️  8739ms
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Entonces, si estuvo usted en el baño desde las 03:35 hasta las 03:55, y el robo fue a las 03:47, ¿có...
+⚖️  GUARDA: Porque me citaron, su señoría. Yo solo digo la verdad: estaba en el retrete, sudando la gota gorda. No vi al ladrón, ni oí ruidos raros... solo la tubería. Yo qué sé.
+⏱️  14213ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · Supervisor — jugador destapa la venganza
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Cuéntale al tribunal lo que sabes del acusado.
+⚖️  SUPERVISOR: Le conste que el acusado trabajaba en el museo desde hace tres años. Conocía perfectamente la distribución de cámaras, los puntos ciegos del almacén y tenía llave del coche de reparto oficial. Es pertinente señalar que su despido por reducción de personal no elimina su conocimiento privilegiado de las instalaciones.
+⏱️  1339ms
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Señor Tellez, usted me despidió hace un mes. ¿Es eso cierto?
+⚖️  SUPERVISOR: Así es. Se procedió a su despido por reducción de personal hace un mes. Le conste que fue una decisión administrativa estricta, ajena a mis preferencias personales. Es pertinente señalar que su salida no altera los hechos objetivos: usted conocía los sistemas de seguridad y el acceso al vehículo.
+⏱️  1098ms
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Y ese día fue el único despedido en 'reducción de personal', ¿verdad? ¿No le parece a usted que tien...
+⚖️  SUPERVISOR: *se incomoda, evita la mirada*
+
+Le conste que... la reestructuración afectó a su puesto específicamente. Es pertinente señalar que las decisiones de personal responden a criterios objetivos de la dirección. Sus insinuaciones carecen de fundamento documental. Lo relevante aquí es su acceso al almacén y al vehículo de reparto, no mis motivos administrativos.
+⏱️  1773ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 5 · Alegato final — jugador improvisa
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Su señoría, la fiscalía no tiene pruebas directas. El maletero del coche lo usan 5 empleados, no sol...
+⚖️  JUEZ: *escucha sin inmutarse, bolígrafo quieto sobre el papel*
+
+Defensa expone: acceso compartido al vehículo, coartada digital 03:50, testigo con hueco de veinte minutos, animadversión del supervisor.
+
+*gira la cabeza hacia la fiscalía*
+
+Fiscalía. Réplica. Tiene la palabra. Explique cómo 3.000 kilos salen del museo sin que el conductor del único vehículo de reparto lo note. O lo note y calla.
+⏱️  1596ms
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA COMPLETADA
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀

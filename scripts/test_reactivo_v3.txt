@@ -1,0 +1,130 @@
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA: Jugador creativo y reactivo
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+
+──────────────────────────────────────────────────────────────────────
+FASE 1 · Apertura — el jugador improvisa
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Inicia el juicio. Acusado, se le imputa: Hurto agravado de 3.000 kg de queso manchego D.O. del Museo...
+⚖️  JUEZ: *asiente lentamente*
+
+Acusado, ¿entiende los cargos que se le imputan? Hurto agravado. Tres mil kilogramos de queso manchego con Denominación de Origen. Ciento ochenta mil euros. Hora cero tres cuarenta y siete. Museo del Jamón.
+
+*mira al acusado por encima de las gafas*
+
+Tiene derecho a guardar silencio. Todo lo que diga podrá ser usado en su contra. Tiene derecho a un abogado. Si no puede costearlo, se le designará uno de oficio.
+
+*hace una pausa*
+
+¿Cómo se declara? ¿Culpable... o no culpable?
+⏱️  2393ms
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Sí, su señoría. Entiendo los cargos, pero quiero dejar claro desde ya que esa noche yo estaba trabaj...
+⚖️  JUEZ: *anota algo en su cuaderno*
+
+Queda constancia. El acusado se declara no culpable. Alegato: estaba trabajando, repartiendo con el vehículo del museo. Esa es su versión.
+
+*levanta la vista*
+
+Fiscalía. Proceda con su primer testigo.
+⏱️  1071ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 2 · Testimonio fiscal — jugador debe decidir si objeta
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.
+⚖️  FISCAL: La evidencia es irrefutable: el análisis del maletero del coche oficial reveló trazas de queso manchego D.O. con un 99,7% de coincidencia genética. A las 03:47, el único con acceso, uniforme y conocimiento de las cámaras era el acusado, cargando personalmente los 3.000 kilos robados.
+⏱️  1130ms
+
+======================================================================
+🎙️  JUGADOR → JUEZ: ¡Protesto! El análisis del maletero solo demuestra que el queso estuvo en el coche, no que yo lo pus...
+⚖️  JUEZ: *levanta la mano con calma*
+
+Protesta rechazada. El acusado no puede objetar pruebas durante su propia declaración inicial. La admisibilidad del análisis del maletero se discutirá cuando la fiscalía lo presente formalmente.
+
+*se inclina hacia adelante*
+
+Eso dicho... su observación sobre los cinco empleados tiene peso probatorio. La defensa podrá explorarlo en el contrainterrogatorio correspondiente.
+
+*vuelve la mirada al fiscal*
+
+Fiscalía. Su primer testigo.
+⏱️  2347ms
+
+======================================================================
+🎙️  JUGADOR → FISCAL: El acusado objeta. Responde a su argumento.
+⚖️  FISCAL: El acusado no ha presentado ningún argumento nuevo, solo silencio. Reitero: las trazas en el maletero (99,7%) y el vídeo a las 03:47 le colocan en la escena con el botín. Que el coche lo usen cinco personas no borra su ADN del queso ni su imagen cargando las cajas. Pida condena.
+⏱️  3321ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · Guarda — jugador pregunta cosas inesperadas
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Cuéntale al tribunal qué pasó esa noche.
+⚖️  GUARDA: Su señoría... mi turno empezó a las diez de la noche, normal. Sobre las tres y media me dio un dolor de barriga tremendo... estuve en el servicio hasta casi las cuatro. No vi nada, yo qué sé. A las seis me fui a mi casa, como siempre.
+⏱️  2100ms
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Señor Eustaquio, ¿recuerda usted qué tenía para cenar esa noche? Digo, porque 20 minutos en el baño ...
+⚖️  GUARDA: Un bocata de chorizo que me hizo mi mujer... y un yogur de esos de beber, su señoría. Igual fue el chorizo, que a veces pica, o el yogur que llevaba días en la nevera... Yo qué sé, el caso es que me dolía la tripa y ya está.
+⏱️  1762ms
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Entonces, si estuvo usted en el baño desde las 03:35 hasta las 03:55, y el robo fue a las 03:47, ¿có...
+⚖️  GUARDA: Porque me llamaron a declarar, su señoría... Yo estaba sentado en el trono, con mis dolores, la puerta cerrada. No tengo ojos en la nuca ni cámaras en el culo, perdone. El robo fue a las tres cuarenta y siete, yo qué sé... Yo solo sé que no vi nada.
+⏱️  26227ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · Supervisor — jugador destapa la venganza
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Cuéntale al tribunal lo que sabes del acusado.
+⚖️  SUPERVISOR: Le conste al tribunal que el acusado conocía la operativa del museo, los puntos ciegos de las cámaras y tenía llaves del coche de reparto. Es pertinente señalar que su despido por reducción de personal no elimina su responsabilidad en el hurto de las 3.000 kg de queso manchego D.O. a las 03:47.
+⏱️  1466ms
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Señor Tellez, usted me despidió hace un mes. ¿Es eso cierto?
+⚖️  SUPERVISOR: Efectivamente, le conste que procedí a su despido hace un mes por reducción de personal. Es pertinente señalar que esa decisión administrativa no guarda relación con su conocimiento de la operativa ni con el hurto de las 3.000 kg de queso manchego D.O. a las 03:47.
+⏱️  1263ms
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Y ese día fue el único despedido en 'reducción de personal', ¿verdad? ¿No le parece a usted que tien...
+⚖️  SUPERVISOR: *se incomoda visiblemente, evita la mirada*
+
+Le conste que... fue el único afectado por la reestructuración. Es pertinente señalar que mis motivos son estrictamente profesionales. Su conocimiento de los puntos ciegos y el coche de reparto son hechos objetivos, no opiniones.
+⏱️  1136ms
+
+──────────────────────────────────────────────────────────────────────
+FASE 5 · Alegato final — jugador improvisa
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Su señoría, la fiscalía no tiene pruebas directas. El maletero del coche lo usan 5 empleados, no sol...
+⚖️  JUEZ: *escucha en silencio, dedos entrelazados*
+
+El acusado presenta su defensa completa antes de que comience el juicio. Interesante estrategia.
+
+*abre un expediente*
+
+Tres puntos relevantes: acceso compartido al vehículo, coartada digital a las 03:50, animadversión del supervisor. La defensa los desarrollará en su momento.
+
+*cierra el expediente*
+
+Pero el procedimiento es claro. Fiscalía presenta su caso. Defensa contrainterroga. Luego la defensa presenta el suyo.
+
+*mira al fiscal*
+
+Señor fiscal. Llame a su primer testigo.
+⏱️  1557ms
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA COMPLETADA
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀

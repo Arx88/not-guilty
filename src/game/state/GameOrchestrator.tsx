@@ -64,11 +64,14 @@ export function GameOrchestrator() {
   const setError = useGame((s) => s.setError);
   const credibilidad = useGame((s) => s.credibilidad);
   const sospecha = useGame((s) => s.sospecha);
+  const setWindowObjecion = useGame((s) => s.setWindowObjecion);
+  const setTimerSegundos = useGame((s) => s.setTimerSegundos);
+  const setSubfaseActual = useGame((s) => s.setSubfaseActual);
+  const windowObjecion = useGame((s) => s.windowObjecion);
+  const timerSegundos = useGame((s) => s.timerSegundos);
 
   // ── Estado local ──
   const [subfase, setSubfase] = useState<Subfase>('F1.espera');
-  const [windowObjecion, setWindowObjecion] = useState(false);
-  const [timerSegundos, setTimerSegundos] = useState<number | null>(null);
   const [intervencionJugador, setIntervencionJugador] = useState<string | null>(null);
   const [contadorContraGuarda, setContadorContraGuarda] = useState(0);
   const [contadorContraSupervisor, setContadorContraSupervisor] = useState(0);
@@ -78,6 +81,11 @@ export function GameOrchestrator() {
   subfaseRef.current = subfase;
   const faseRef = useRef(fase);
   faseRef.current = fase;
+
+  // Sincronizar subfase con store (para que UI pueda reaccionar)
+  useEffect(() => {
+    setSubfaseActual(subfase);
+  }, [subfase, setSubfaseActual]);
 
   // ── Helper: hablar con NPC ──
   const hablar = useCallback(
@@ -289,14 +297,19 @@ export function GameOrchestrator() {
 
       case 'F5.veredicto': {
         const t = setTimeout(() => {
+          // Fórmula del GDD: score = Credibilidad - Sospecha
+          // Si score >= 0, absuelto. Si no, culpable.
           const score = credibilidad - sospecha;
-          const veredicto = score >= 0 ? 'absuelto' : 'culpable';
+          const veredicto: 'absuelto' | 'culpable' = score >= 0 ? 'absuelto' : 'culpable';
+          const veredictoTexto = veredicto === 'absuelto' ? 'NO CULPABLE' : 'CULPABLE';
+
           hablar(
             'juez',
-            `El acusado ha presentado su alegato. Emite veredicto: ${veredicto === 'absuelto' ? 'NO CULPABLE' : 'CULPABLE'}.`,
-            `Estado final: Credibilidad ${credibilidad}, Sospecha ${sospecha}. El acusado ha presentado su alegato. Emite veredicto. Si Credibilidad - Sospecha >= 0, di "NO CULPABLE" y absuélvele. Si no, di "CULPABLE" y condénale. Explica tu razonamiento en máximo 60 palabras.`
+            `Emite veredicto. Credibilidad final: ${credibilidad}/100. Sospecha final: ${sospecha}/100. Tu veredicto es: ${veredictoTexto}.`,
+            `Es el momento del VEREDICTO FINAL. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto OBLIGATORIO es: ${veredictoTexto}. Empieza tu respuesta SIEMPRE con "${veredictoTexto}." y luego explica en máximo 50 palabras por qué llegas a ese veredicto basándote en las pruebas y testimonios del juicio.`
           );
-          setVeredicto(veredicto);
+          // Forzar veredicto en el estado aunque la IA tarde
+          setTimeout(() => setVeredicto(veredicto), 4000);
           setSubfase('done');
         }, 1500);
         return () => clearTimeout(t);

@@ -66,6 +66,19 @@ REGLAS:
 - Si te preguntan por Eustaquio, tu tono cambia a hostil: lo llamas "incompetente", "inútil"."""
 
 
+def wait_for_server(max_wait=60):
+    """Espera a que el server responda."""
+    for i in range(max_wait):
+        try:
+            r = requests.get(f"{BASE}/", timeout=3)
+            if r.status_code == 200:
+                return True
+        except:
+            pass
+        time.sleep(1)
+    return False
+
+
 def chat(npc, system_prompt, user_msg, history=None):
     messages = []
     if history:
@@ -75,26 +88,39 @@ def chat(npc, system_prompt, user_msg, history=None):
     print(f"\n{'='*70}")
     print(f"🎙️  JUGADOR → {npc.upper()}: {user_msg[:100]}{'...' if len(user_msg) > 100 else ''}")
 
-    try:
-        r = requests.post(f"{BASE}/api/chat", json={
-            "messages": messages,
-            "systemPrompt": system_prompt,
-            "npc": npc,
-            "temperature": 0.75,
-            "maxTokens": 200
-        }, timeout=60)
-        if r.status_code != 200:
-            print(f"❌ ERROR {r.status_code}: {r.text[:200]}")
+    # Reintentar si el server está caído (keep-alive lo reinicia)
+    for attempt in range(5):
+        try:
+            r = requests.post(f"{BASE}/api/chat", json={
+                "messages": messages,
+                "systemPrompt": system_prompt,
+                "npc": npc,
+                "temperature": 0.75,
+                "maxTokens": 200
+            }, timeout=60)
+            if r.status_code == 200:
+                data = r.json()
+                reply = data["reply"]
+                latency = data["latencyMs"]
+                print(f"⚖️  {npc.upper()}: {reply}")
+                print(f"⏱️  {latency}ms")
+                return reply, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": reply}]
+            elif r.status_code == 502:
+                print(f"⚠️  NVIDIA caído (intento {attempt+1}/5). Esperando server...")
+                wait_for_server(30)
+                continue
+            else:
+                print(f"❌ ERROR {r.status_code}: {r.text[:200]}")
+                return None, None
+        except requests.exceptions.ConnectionError:
+            print(f"⚠️  Server caído (intento {attempt+1}/5). Esperando reinicio...")
+            wait_for_server(30)
+            continue
+        except Exception as e:
+            print(f"❌ EXCEPCIÓN: {e}")
             return None, None
-        data = r.json()
-        reply = data["reply"]
-        latency = data["latencyMs"]
-        print(f"⚖️  {npc.upper()}: {reply}")
-        print(f"⏱️  {latency}ms")
-        return reply, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": reply}]
-    except Exception as e:
-        print(f"❌ EXCEPCIÓN: {e}")
-        return None, None
+    print(f"❌ No se pudo completar tras 5 intentos.")
+    return None, None
 
 
 def test_jugador_creativo():

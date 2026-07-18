@@ -48,6 +48,12 @@ interface GameState {
   errorJuego: string | null;
   veredictoFinal: 'culpable' | 'absuelto' | null;
 
+  // Orquestador → UI
+  windowObjecion: boolean; // true cuando hay window de objeción activa
+  timerSegundos: number | null; // countdown visible
+  subfaseActual: string; // para que UI muestre qué espera
+  evidenciaSeleccionada: string | null; // ID de evidencia seleccionada en F3
+
   // Acciones
   iniciarPartida: (caso?: CaseData) => void;
   setFase: (f: Fase) => void;
@@ -65,6 +71,10 @@ interface GameState {
   setVinculoExpuesto: (v: boolean) => void;
   setError: (e: string | null) => void;
   setVeredicto: (v: 'culpable' | 'absuelto') => void;
+  setWindowObjecion: (v: boolean) => void;
+  setTimerSegundos: (n: number | null) => void;
+  setSubfaseActual: (s: string) => void;
+  setEvidenciaSeleccionada: (id: string | null) => void;
   reset: () => void;
 }
 
@@ -89,6 +99,10 @@ const INITIAL = {
   speakerActual: null,
   errorJuego: null,
   veredictoFinal: null,
+  windowObjecion: false,
+  timerSegundos: null,
+  subfaseActual: '',
+  evidenciaSeleccionada: null,
 };
 
 export const useGame = create<GameState>((set, get) => ({
@@ -147,5 +161,9 @@ export const useGame = create<GameState>((set, get) => ({
   setVinculoExpuesto: (v) => set({ vinculoExpuesto: v }),
   setError: (e) => set({ errorJuego: e }),
   setVeredicto: (v) => set({ veredictoFinal: v, fase: 'veredicto' }),
+  setWindowObjecion: (v) => set({ windowObjecion: v }),
+  setTimerSegundos: (n) => set({ timerSegundos: n }),
+  setSubfaseActual: (s) => set({ subfaseActual: s }),
+  setEvidenciaSeleccionada: (id) => set({ evidenciaSeleccionada: id }),
   reset: () => set({ ...INITIAL }),
 }));

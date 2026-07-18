@@ -1,5 +1,5 @@
 /**
- * UI overlay: medidores, timer, botón objeción, micrófono, feedback visual.
+ * UI overlay completo: medidores, timer, botón PROTESTO, F3 evidencias, micrófono.
  */
 'use client';
 
@@ -9,22 +9,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Mic, MicOff, AlertTriangle, Gavel, Clock, Heart } from 'lucide-react';
+import { Mic, MicOff, AlertTriangle, Gavel } from 'lucide-react';
 import { useState } from 'react';
+import { CASE_QUESO } from '../data/case-queso';
 
-interface GameUIProps {
-  windowObjecion?: boolean;
-  timerSegundos?: number | null;
-  subfase?: string;
-}
-
-export function GameUI(_props: GameUIProps = {}) {
+export function GameUI() {
   const fase = useGame((s) => s.fase);
   const credibilidad = useGame((s) => s.credibilidad);
   const sospecha = useGame((s) => s.sospecha);
   const caption = useGame((s) => s.caption);
-  const speakerActual = useGame((s) => s.speakerActual);
-  const iaPensando = useGame((s) => s.iaPensando);
   const transcripcion = useGame((s) => s.transcripcion);
   const volumen = useGame((s) => s.volumen);
   const caso = useGame((s) => s.caso);
@@ -33,13 +26,12 @@ export function GameUI(_props: GameUIProps = {}) {
   const juradosRecusados = useGame((s) => s.juradosRecusados);
   const errorJuego = useGame((s) => s.errorJuego);
   const veredictoFinal = useGame((s) => s.veredictoFinal);
+  const windowObjecion = useGame((s) => s.windowObjecion);
+  const timerSegundos = useGame((s) => s.timerSegundos);
+  const subfaseActual = useGame((s) => s.subfaseActual);
 
   const [micActive, setMicActive] = useState(false);
   const mic = useMic({});
-
-  // Flash visual basado en el valor del medidor (sin refs)
-  const flashCred = credibilidad > 50 ? 'good' : 'bad';
-  const flashSosp = sospecha > 70 ? 'bad' : sospecha < 30 ? 'good' : null;
 
   const toggleMic = () => {
     if (micActive) {
@@ -53,7 +45,26 @@ export function GameUI(_props: GameUIProps = {}) {
 
   if (fase === 'pre') return null;
 
-  // Encontrar el jurado con menor simpatía (candidato a recusación)
+  // ¿En qué subfase estamos?
+  const esperandoJugador =
+    subfaseActual === 'F1.espera' ||
+    subfaseActual === 'F3.espera' ||
+    subfaseActual === 'F4.guarda_contra' ||
+    subfaseActual === 'F4.supervisor_contra' ||
+    subfaseActual === 'F5.alegato';
+
+  // Mensaje de qué debe hacer el jugador
+  const hintJugador = () => {
+    if (windowObjecion) return 'Di "¡Protesto!" + tu fundamento AHORA';
+    if (subfaseActual === 'F1.espera') return 'Responde al juez (sí/no/libre)';
+    if (subfaseActual === 'F3.espera') return 'Di "sí" para presentar evidencia o "no"';
+    if (subfaseActual === 'F4.guarda_contra') return 'Contra-interroga al GUARDA (habla libre)';
+    if (subfaseActual === 'F4.supervisor_contra') return 'Contra-interroga al SUPERVISOR (habla libre)';
+    if (subfaseActual === 'F5.alegato') return 'ALEGATO FINAL: habla con fuerza';
+    return 'Escuchando al tribunal...';
+  };
+
+  // Peor jurado para hint
   const peorJurado = jurados
     .filter((j) => !juradosRecusados.includes(j.silla))
     .sort((a, b) => a.simpatiaInicial - b.simpatiaInicial)[0];
@@ -82,28 +93,25 @@ export function GameUI(_props: GameUIProps = {}) {
         </Card>
       </div>
 
-      {/* ─── Top-right: medidores con flash ─── */}
+      {/* ─── Top-right: medidores ─── */}
       <div className="absolute top-3 right-3 w-64 pointer-events-auto">
         <Card className="p-2.5 bg-black/70 border-amber-700/40 backdrop-blur space-y-1.5">
           <div>
             <div className="flex justify-between text-[10px] font-mono mb-0.5">
               <span className="text-emerald-400">CREDIBILIDAD</span>
-              <span className={flashCred === 'good' ? 'text-emerald-300' : 'text-red-300'}>
-                {credibilidad}
-              </span>
+              <span className={credibilidad >= 50 ? 'text-emerald-300' : 'text-red-300'}>{credibilidad}</span>
             </div>
             <Progress value={credibilidad} className="h-2 bg-emerald-950" />
           </div>
           <div>
             <div className="flex justify-between text-[10px] font-mono mb-0.5">
               <span className="text-red-400">SOSPECHA</span>
-              <span className={flashSosp === 'bad' ? 'text-red-300 animate-pulse' : flashSosp === 'good' ? 'text-emerald-300' : 'text-red-300'}>
-                {sospecha} {flashSosp === 'bad' && '⚠'}
+              <span className={sospecha > 70 ? 'text-red-300 animate-pulse' : 'text-red-300'}>
+                {sospecha} {sospecha > 70 && '⚠'}
               </span>
             </div>
             <Progress value={sospecha} className="h-2 bg-red-950" />
           </div>
-          {/* Volumen micrófono */}
           <div>
             <div className="flex justify-between text-[9px] font-mono mb-0.5">
               <span className="text-amber-400">MIC</span>
@@ -114,19 +122,53 @@ export function GameUI(_props: GameUIProps = {}) {
         </Card>
       </div>
 
-      {/* ─── Hint: lo que debe hacer el jugador ─── */}
+      {/* ─── Hint de turno del jugador ─── */}
       <div className="absolute top-32 right-3 w-64 pointer-events-none">
-        <Card className="p-2 bg-emerald-950/60 border-emerald-700/40 backdrop-blur">
-          <div className="text-[9px] font-mono text-emerald-400 tracking-widest mb-0.5">TU TURNO</div>
-          <div className="text-[11px] text-emerald-100/90 font-mono leading-tight">
-            {fase === 'F1' && 'Di "sí" o "no" (o lo que quieras)'}
-            {fase === 'F2' && 'Di "¡Protesto!" durante la window o calla'}
-            {fase === 'F3' && 'Di "sí" para presentar evidencia'}
-            {fase === 'F4' && 'Contra-interroga al testigo (habla libre)'}
-            {fase === 'F5' && 'Alegato final: habla con fuerza'}
+        <Card
+          className={`p-2 backdrop-blur border ${
+            esperandoJugador || windowObjecion
+              ? 'bg-emerald-950/60 border-emerald-700/40'
+              : 'bg-stone-950/60 border-stone-700/30'
+          }`}
+        >
+          <div
+            className={`text-[9px] font-mono tracking-widest mb-0.5 ${
+              esperandoJugador || windowObjecion ? 'text-emerald-400' : 'text-stone-500'
+            }`}
+          >
+            {esperandoJugador || windowObjecion ? '► TU TURNO' : '... ESCUCHANDO ...'}
           </div>
+          <div
+            className={`text-[11px] font-mono leading-tight ${
+              esperandoJugador || windowObjecion ? 'text-emerald-100/90' : 'text-stone-400'
+            }`}
+          >
+            {hintJugador()}
+          </div>
+          {timerSegundos !== null && timerSegundos > 0 && (
+            <div className="mt-1 text-[14px] font-mono text-amber-300 font-bold">
+              ⏱ {timerSegundos}s
+            </div>
+          )}
         </Card>
       </div>
+
+      {/* ─── BOTÓN GRANDE PROTESTO cuando hay window ─── */}
+      {windowObjecion && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div className="text-center">
+            <div
+              className="text-7xl font-black text-red-500 mb-4 animate-pulse"
+              style={{ textShadow: '0 0 20px rgba(239,68,68,0.8)' }}
+            >
+              ¡PROTESTO!
+            </div>
+            <div className="text-red-200 text-sm font-mono bg-black/70 px-4 py-2 rounded inline-block">
+              Di "¡Protesto!" + tu fundamento · {timerSegundos}s restantes
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Transcripción en vivo del jugador ─── */}
       {transcripcion && (
@@ -138,7 +180,7 @@ export function GameUI(_props: GameUIProps = {}) {
         </div>
       )}
 
-      {/* ─── Botón micrófono + comandos ─── */}
+      {/* ─── Botón micrófono ─── */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto flex flex-col items-center gap-2">
         <Button
           onClick={toggleMic}
@@ -148,7 +190,6 @@ export function GameUI(_props: GameUIProps = {}) {
               ? 'bg-red-700 hover:bg-red-800 border-red-400 animate-pulse'
               : 'bg-amber-700 hover:bg-amber-800 border-amber-300/40'
           }`}
-          title={micActive ? 'Apagar micrófono' : 'Activar micrófono'}
         >
           {micActive ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
         </Button>
@@ -157,19 +198,19 @@ export function GameUI(_props: GameUIProps = {}) {
         </div>
       </div>
 
-      {/* ─── Hints de comandos ─── */}
+      {/* ─── Comandos ─── */}
       <div className="absolute bottom-6 left-3 pointer-events-none">
         <Card className="p-2 bg-black/60 border-amber-700/30 backdrop-blur">
           <div className="text-[9px] font-mono text-amber-500 mb-1">COMANDOS</div>
           <div className="space-y-0.5 text-[10px] font-mono text-amber-300/80">
-            <div><span className="text-amber-400">"</span>¡Protesto!<span className="text-amber-400">"</span> — objetar</div>
-            <div><span className="text-amber-400">"</span>Recusación, jurado N<span className="text-amber-400">"</span></div>
+            <div>"¡Protesto!" — objetar</div>
+            <div>"Recusación, jurado N"</div>
             <div className="text-emerald-400/70 mt-1">F4/F5: habla libre</div>
           </div>
         </Card>
       </div>
 
-      {/* ─── Estado del jurado (mini) ─── */}
+      {/* ─── Estado jurado ─── */}
       <div className="absolute bottom-6 right-3 pointer-events-none">
         <Card className="p-2 bg-black/60 border-amber-700/30 backdrop-blur">
           <div className="text-[9px] font-mono text-amber-500 mb-1">JURADO</div>
@@ -202,7 +243,7 @@ export function GameUI(_props: GameUIProps = {}) {
         </Card>
       </div>
 
-      {/* ─── Tensión: latido cuando sospecha > 70 ─── */}
+      {/* ─── Latido visual cuando sospecha > 70 ─── */}
       {sospecha > 70 && (
         <div
           className="absolute inset-0 pointer-events-none"
@@ -238,9 +279,7 @@ export function GameUI(_props: GameUIProps = {}) {
                 {veredictoFinal === 'absuelto' ? 'NO CULPABLE' : 'CULPABLE'}
               </div>
               <div className="text-amber-300 text-sm">
-                {veredictoFinal === 'absuelto'
-                  ? 'Queda libre. Sin costas.'
-                  : 'Condena: 4 años de prisión.'}
+                {veredictoFinal === 'absuelto' ? 'Queda libre. Sin costas.' : 'Condena: 4 años de prisión.'}
               </div>
               <div className="mt-6 grid grid-cols-2 gap-4 text-xs font-mono">
                 <div>
