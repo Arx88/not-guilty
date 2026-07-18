@@ -49,10 +49,17 @@ interface GameState {
   veredictoFinal: 'culpable' | 'absuelto' | null;
 
   // Orquestador → UI
-  windowObjecion: boolean; // true cuando hay window de objeción activa
-  timerSegundos: number | null; // countdown visible
-  subfaseActual: string; // para que UI muestre qué espera
-  evidenciaSeleccionada: string | null; // ID de evidencia seleccionada en F3
+  windowObjecion: boolean;
+  timerSegundos: number | null;
+  subfaseActual: string;
+  evidenciaSeleccionada: string | null;
+
+  // NUEVAS MECÁNICAS
+  objecionesRestantes: number;
+  contradiccionesDescubiertas: string[];
+  feedbackFlash: string | null;
+  testimoniosEscuchados: Record<string, string>;
+  puedeSenalarContradiccion: boolean;
 
   // Acciones
   iniciarPartida: (caso?: CaseData) => void;
@@ -75,6 +82,12 @@ interface GameState {
   setTimerSegundos: (n: number | null) => void;
   setSubfaseActual: (s: string) => void;
   setEvidenciaSeleccionada: (id: string | null) => void;
+  setObjecionesRestantes: (n: number) => void;
+  gastarObjecion: () => boolean;
+  descubrirContradiccion: (id: string) => void;
+  setFeedbackFlash: (s: string | null) => void;
+  setTestimonioEscuchado: (testigoId: string, texto: string) => void;
+  setPuedeSenalarContradiccion: (v: boolean) => void;
   reset: () => void;
 }
 
@@ -103,6 +116,11 @@ const INITIAL = {
   timerSegundos: null,
   subfaseActual: '',
   evidenciaSeleccionada: null,
+  objecionesRestantes: 3,
+  contradiccionesDescubiertas: [],
+  feedbackFlash: null,
+  testimoniosEscuchados: {},
+  puedeSenalarContradiccion: false,
 };
 
 export const useGame = create<GameState>((set, get) => ({
@@ -165,5 +183,28 @@ export const useGame = create<GameState>((set, get) => ({
   setTimerSegundos: (n) => set({ timerSegundos: n }),
   setSubfaseActual: (s) => set({ subfaseActual: s }),
   setEvidenciaSeleccionada: (id) => set({ evidenciaSeleccionada: id }),
+  setObjecionesRestantes: (n) => set({ objecionesRestantes: n }),
+  gastarObjecion: () => {
+    const restantes = get().objecionesRestantes;
+    if (restantes <= 0) return false;
+    set({ objecionesRestantes: restantes - 1 });
+    return true;
+  },
+  descubrirContradiccion: (id) =>
+    set((s) => ({
+      contradiccionesDescubiertas: s.contradiccionesDescubiertas.includes(id)
+        ? s.contradiccionesDescubiertas
+        : [...s.contradiccionesDescubiertas, id],
+    })),
+  setFeedbackFlash: (msg) => {
+    set({ feedbackFlash: msg });
+    if (msg) setTimeout(() => set({ feedbackFlash: null }), 3000);
+  },
+  setTestimonioEscuchado: (testigoId, texto) =>
+    set((s) => ({
+      testimoniosEscuchados: { ...s.testimoniosEscuchados, [testigoId]: texto },
+      puedeSenalarContradiccion: Object.keys(s.testimoniosEscuchados).length >= 1,
+    })),
+  setPuedeSenalarContradiccion: (v) => set({ puedeSenalarContradiccion: v }),
   reset: () => set({ ...INITIAL }),
 }));

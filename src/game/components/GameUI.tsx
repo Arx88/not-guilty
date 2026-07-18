@@ -39,6 +39,11 @@ export function GameUI() {
   const windowObjecion = useGame((s) => s.windowObjecion);
   const timerSegundos = useGame((s) => s.timerSegundos);
   const subfaseActual = useGame((s) => s.subfaseActual);
+  // Nuevas mecánicas
+  const objecionesRestantes = useGame((s) => s.objecionesRestantes);
+  const contradiccionesDescubiertas = useGame((s) => s.contradiccionesDescubiertas);
+  const feedbackFlash = useGame((s) => s.feedbackFlash);
+  const puedeSenalarContradiccion = useGame((s) => s.puedeSenalarContradiccion);
 
   const [micActive, setMicActive] = useState(false);
   const [textInput, setTextInput] = useState('');
@@ -90,12 +95,12 @@ export function GameUI() {
 
   // Mensaje de qué debe hacer el jugador — CLARO y CONTEXTUAL
   const hintJugador = () => {
-    if (windowObjecion) return '¡PROTESTA AHORA! Di "¡Protesto!" + por qué objetas. Ej: "¡Protesto! Esa prueba no demuestra que fui yo"';
-    if (subfaseActual === 'F1.espera') return 'El juez te preguntó algo. Responde "sí" o "no" (o lo que quieras decir)';
-    if (subfaseActual === 'F3.espera') return 'Click en una evidencia de abajo para presentarla, o di "no"';
-    if (subfaseActual === 'F4.guarda_contra') return 'Pregúntale al GUARDA lo que quieras. Ej: "¿A qué hora terminó su turno?"';
-    if (subfaseActual === 'F4.supervisor_contra') return 'Pregúntale al SUPERVISOR. Ej: "¿Por qué me despidió?"';
-    if (subfaseActual === 'F5.alegato') return 'ALEGATO FINAL: convence al juez de tu inocencia en 45 segundos';
+    if (windowObjecion) return `¡PROTESTA! Tienes ${objecionesRestantes} objeciones. Di "¡Protesto!" + por qué. Ej: "¡Protesto! El coche lo usan 5 empleados"`;
+    if (subfaseActual === 'F1.espera') return 'El juez te preguntó algo. Responde "sí" o lo que quieras';
+    if (subfaseActual === 'F3.espera') return 'Click una evidencia para presentarla. La exculpatoria (verde) te ayuda más';
+    if (subfaseActual === 'F4.guarda_contra') return 'Pregúntale al GUARDA. ESCUCHA lo que dice para buscar contradicciones después';
+    if (subfaseActual === 'F4.supervisor_contra') return 'Pregúntale al SUPERVISOR. ¿Dijo algo distinto al guarda? Di "contradicción"';
+    if (subfaseActual === 'F5.alegato') return 'ALEGATO FINAL (60s): convence al juez. Usa las contradicciones que encontraste';
     return 'Esperando al tribunal...';
   };
 
@@ -334,14 +339,67 @@ export function GameUI() {
 
       {/* ─── BOTÓN PROTESTO clickable cuando hay window ─── */}
       {windowObjecion && (
-        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 pointer-events-auto z-40">
+        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 pointer-events-auto z-40 flex flex-col items-center gap-2">
           <Button
-            onClick={() => sendPlayerInput('¡Protesto!')}
-            className="bg-red-700 hover:bg-red-800 text-red-50 px-8 py-4 text-lg font-black animate-pulse border-2 border-red-400"
+            onClick={() => {
+              if (objecionesRestantes <= 0) {
+                sendPlayerInput('¡Protesto!');
+              } else {
+                // Abrir input de texto para que escriba el fundamento
+                setShowTextInput(true);
+              }
+            }}
+            disabled={objecionesRestantes <= 0}
+            className={`px-8 py-4 text-lg font-black border-2 ${
+              objecionesRestantes > 0
+                ? 'bg-red-700 hover:bg-red-800 text-red-50 border-red-400 animate-pulse'
+                : 'bg-stone-800 text-stone-600 border-stone-700 cursor-not-allowed'
+            }`}
           >
             <Gavel className="mr-2 h-5 w-5" />
-            ¡PROTESTO!
+            ¡PROTESTO! ({objecionesRestantes} restantes)
           </Button>
+          {objecionesRestantes <= 0 && (
+            <div className="text-[10px] font-mono text-red-400">Sin objeciones. Piensa mejor la próxima.</div>
+          )}
+        </div>
+      )}
+
+      {/* ─── BOTÓN CONTRADICCIÓN (nueva mecánica) ─── */}
+      {puedeSenalarContradiccion && fase === 'F4' && (
+        <div className="absolute bottom-32 right-3 pointer-events-auto z-40">
+          <Button
+            onClick={() => {
+              setShowTextInput(true);
+            }}
+            className="bg-purple-700 hover:bg-purple-800 text-purple-50 px-4 py-2 text-sm font-bold border border-purple-400"
+            title="Señala una contradicción entre los testimonios"
+          >
+            ⚡ CONTRADICCIÓN
+          </Button>
+          {contradiccionesDescubiertas.length > 0 && (
+            <div className="text-[9px] font-mono text-purple-300 mt-1">
+              {contradiccionesDescubiertas.length} encontrada(s)
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── FEEDBACK FLASH (nueva mecánica) ─── */}
+      {feedbackFlash && (
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+          <div
+            className={`px-6 py-3 rounded-lg border-2 font-bold text-lg shadow-2xl ${
+              feedbackFlash.includes('ADMITIDA') || feedbackFlash.includes('VÁLIDA') || feedbackFlash.includes('venganza') || feedbackFlash.includes('exculpatoria')
+                ? 'bg-emerald-900/90 border-emerald-400 text-emerald-100'
+                : feedbackFlash.includes('rechazada') || feedbackFlash.includes('No hay') || feedbackFlash.includes('incriminatoria') || feedbackFlash.includes('Renunciaste')
+                ? 'bg-red-900/90 border-red-400 text-red-100'
+                : 'bg-amber-900/90 border-amber-400 text-amber-100'
+            }`}
+            style={{ animation: 'bubbleIn 0.3s ease-out' }}
+          >
+            {feedbackFlash}
+          </div>
         </div>
       )}
 
@@ -381,9 +439,9 @@ export function GameUI() {
         <Card className="p-2 bg-black/60 border-amber-700/30 backdrop-blur">
           <div className="text-[9px] font-mono text-amber-500 mb-1">
             {fase === 'F1' && 'CÓMO RESPONDER'}
-            {fase === 'F2' && (windowObjecion ? '¡OBJETA AHORA!' : 'ESPERA TU TURNO')}
+            {fase === 'F2' && (windowObjecion ? `¡OBJETA! (${objecionesRestantes} restantes)` : 'ESPERA TU TURNO')}
             {fase === 'F3' && 'EVIDENCIAS'}
-            {fase === 'F4' && 'CONTRA-INTERROGATORIO'}
+            {fase === 'F4' && 'CONTRA-INTERROGATORIO + CONTRADICCIONES'}
             {fase === 'F5' && 'ALEGATO FINAL'}
           </div>
           <div className="space-y-0.5 text-[10px] font-mono text-amber-300/80">
@@ -396,23 +454,25 @@ export function GameUI() {
             {fase === 'F2' && windowObjecion && (
               <>
                 <div className="text-red-400">Di "¡Protesto!" + tu razón</div>
-                <div className="text-amber-500/60">Ej: "¡Protesto! Esa prueba es circunstancial"</div>
+                <div className="text-amber-500/60">Ej: "¡Protesto! El coche lo usan 5 empleados"</div>
+                <div className="text-amber-500/60">Cuidado: solo tienes {objecionesRestantes} objeciones</div>
               </>
             )}
             {fase === 'F2' && !windowObjecion && (
               <div className="text-amber-500/60">Espera a que el fiscal termine...</div>
             )}
             {fase === 'F3' && (
-              <div>Click una evidencia o di "no"</div>
+              <div>Click una evidencia. Verde = exculpatoria, Rojo = incriminatoria</div>
             )}
             {fase === 'F4' && (
               <>
-                <div>Habla o escribe preguntas</div>
+                <div>Pregunta a los testigos</div>
+                <div className="text-purple-400">Si encuentras una mentira: di "contradicción"</div>
                 <div className="text-amber-500/60">Ej: "¿Dónde estaba a las 03:47?"</div>
               </>
             )}
             {fase === 'F5' && (
-              <div>Tu última oportunidad. Convence al juez.</div>
+              <div>Usa todo lo que descubriste. Convence al juez.</div>
             )}
           </div>
         </Card>

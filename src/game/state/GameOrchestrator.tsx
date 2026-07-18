@@ -1,15 +1,12 @@
 /**
- * Orquestador REACTIVO del juego.
- *
- * Filosofía: el jugador habla cuando quiere. Su texto va al NPC activo.
- * La IA responde a lo que dijo. Los medidores cambian según evaluación.
- *
- * Flujo:
- * F1 (Apertura): Juez lee cargos → jugador responde lo que quiera → juez reacciona → F2
- * F2 (Fiscal): Fiscal presenta evidencia 1 → window objeción 6s → fiscal presenta evidencia 2 → window objeción → F3
- * F3 (Defensa): Juez pregunta si quiere presentar evidencia → jugador habla → juez decide → F4
- * F4 (Testigos): Sube guarda → jugador contra-interroga (habla libre) → sube supervisor → mismo → F5
- * F5 (Alegato): Jugador tiene 30s para alegato → veredicto automático
+ * Orquestador REDISEÑADO con mecánicas que importan.
+ * 
+ * CAMBIOS FUNDAMENTALES:
+ * 1. Objeciones LIMITADAS (3 total) — gastar con cuidado
+ * 2. CONTRADICCIONES — el jugador puede señalar contradicciones entre testigos
+ * 3. FEEDBACK CLARO — cada acción muestra "+X Credibilidad" o "-X Sospecha"
+ * 4. TIMING HUMANO — 20s para objeciones, no 6s
+ * 5. TESTIMONIOS SE GUARDAN — para comparar después
  */
 'use client';
 
@@ -21,36 +18,29 @@ import { CASE_QUESO } from '../data/case-queso';
 import { sndSuccess, sndFail, sndGavel, sndTick, sndWindowOpen, sndWindowClose, sndVerdict, sndClick, initAudio } from './sounds';
 
 type Subfase =
-  | 'F1.espera'           // Esperando respuesta del jugador a "¿entiende los cargos?"
-  | 'F1.respuesta'        // Juez reacciona a lo que dijo el jugador
-  | 'F2.fiscal1'          // Fiscal presenta evidencia 1
-  | 'F2.window1'          // Window objeción 6s
-  | 'F2.fiscal2'          // Fiscal presenta evidencia 2
-  | 'F2.window2'          // Window objeción 6s
-  | 'F2.transicion'       // Juez anuncia F3
-  | 'F3.pregunta'         // Juez pregunta si quiere presentar evidencia
-  | 'F3.espera'           // Jugador responde
-  | 'F3.transicion'       // Juez anuncia F4
-  | 'F4.guarda_subida'    // Sube el guarda
-  | 'F4.guarda_testimonio' // Guarda declara
-  | 'F4.guarda_contra'    // Jugador contra-interroga al guarda
+  | 'F1.espera'
+  | 'F1.respuesta'
+  | 'F2.fiscal1'
+  | 'F2.window1'
+  | 'F2.fiscal2'
+  | 'F2.window2'
+  | 'F2.transicion'
+  | 'F3.espera'
+  | 'F3.transicion'
+  | 'F4.guarda_subida'
+  | 'F4.guarda_testimonio'
+  | 'F4.guarda_contra'
   | 'F4.supervisor_subida'
   | 'F4.supervisor_testimonio'
   | 'F4.supervisor_contra'
   | 'F4.transicion'
-  | 'F5.alegato'          // Jugador hace alegato
-  | 'F5.veredicto'        // Juez emite veredicto
+  | 'F5.alegato'
+  | 'F5.veredicto'
   | 'done';
 
-const TIMER_FASES: Record<string, number> = {
-  'F4.guarda_contra': 30,     // 30s para contra-interrogar
-  'F4.supervisor_contra': 30,
-  'F5.alegato': 45,           // 45s para alegato
-};
-
 export function GameOrchestrator() {
-  // ── Estado del juego ──
   const fase = useGame((s) => s.fase);
+  const npcActual = useGame((s) => s.npcActual);
   const caso = useGame((s) => s.caso);
   const iniciarPartida = useGame((s) => s.iniciarPartida);
   const setFase = useGame((s) => s.setFase);
@@ -59,7 +49,6 @@ export function GameOrchestrator() {
   const setIaPensando = useGame((s) => s.setIaPensando);
   const pushMensaje = useGame((s) => s.pushMensaje);
   const ajustarMedidor = useGame((s) => s.ajustarMedidor);
-  const ajustarSimpatia = useGame((s) => s.ajustarSimpatia);
   const recusarJurado = useGame((s) => s.recusarJurado);
   const setVeredicto = useGame((s) => s.setVeredicto);
   const setError = useGame((s) => s.setError);
@@ -70,25 +59,28 @@ export function GameOrchestrator() {
   const setSubfaseActual = useGame((s) => s.setSubfaseActual);
   const windowObjecion = useGame((s) => s.windowObjecion);
   const timerSegundos = useGame((s) => s.timerSegundos);
+  // Nuevas mecánicas
+  const objecionesRestantes = useGame((s) => s.objecionesRestantes);
+  const gastarObjecion = useGame((s) => s.gastarObjecion);
+  const descubrirContradiccion = useGame((s) => s.descubrirContradiccion);
+  const setFeedbackFlash = useGame((s) => s.setFeedbackFlash);
+  const setTestimonioEscuchado = useGame((s) => s.setTestimonioEscuchado);
 
-  // ── Estado local ──
   const [subfase, setSubfase] = useState<Subfase>('F1.espera');
   const [intervencionJugador, setIntervencionJugador] = useState<string | null>(null);
   const [contadorContraGuarda, setContadorContraGuarda] = useState(0);
   const [contadorContraSupervisor, setContadorContraSupervisor] = useState(0);
 
-  // Refs
   const subfaseRef = useRef(subfase);
   subfaseRef.current = subfase;
   const faseRef = useRef(fase);
   faseRef.current = fase;
 
-  // Sincronizar subfase con store (para que UI pueda reaccionar)
   useEffect(() => {
     setSubfaseActual(subfase);
   }, [subfase, setSubfaseActual]);
 
-  // ── Helper: hablar con NPC ──
+  // ── Helper: hablar con NPC + guardar testimonio ──
   const hablar = useCallback(
     async (
       npc: 'juez' | 'fiscal' | 'guarda' | 'novia' | 'supervisor',
@@ -103,12 +95,11 @@ export function GameOrchestrator() {
       try {
         const result = await llamarNPC({ npc, userMessage: mensaje, contextoExtra, isStageDirection });
         setCaption(result.reply, npc);
-        pushMensaje({
-          role: 'assistant',
-          content: result.reply,
-          npc,
-          ts: Date.now(),
-        });
+        pushMensaje({ role: 'assistant', content: result.reply, npc, ts: Date.now() });
+        // Guardar testimonio para comparar después
+        if (npc === 'guarda' || npc === 'supervisor' || npc === 'novia') {
+          setTestimonioEscuchado(npc, result.reply);
+        }
         return result.reply;
       } catch (err: any) {
         setError(err.message);
@@ -118,50 +109,49 @@ export function GameOrchestrator() {
         setIaPensando(false);
       }
     },
-    [setCaption, setIaPensando, setNpcActual, pushMensaje, setError]
+    [setCaption, setIaPensando, setNpcActual, pushMensaje, setError, setTestimonioEscuchado]
   );
+
+  // ── Helper: feedback visual ──
+  const feedback = useCallback((msg: string, tipo: 'bien' | 'mal' | 'info') => {
+    setFeedbackFlash(msg);
+    if (tipo === 'bien') sndSuccess();
+    else if (tipo === 'mal') sndFail();
+  }, [setFeedbackFlash]);
 
   // ── Iniciar partida ──
   useEffect(() => {
     iniciarPartida(CASE_QUESO);
   }, [iniciarPartida]);
 
-  // ── F1: Juez lee cargos al iniciar ──
-  // Sin ref guard — usar subfase como guard natural
+  // ── F1: Juez lee cargos ──
   useEffect(() => {
-    console.log('[F1-EFFECT] fase:', fase, 'caso:', !!caso, 'subfase:', subfase, 'interv:', !!intervencionJugador);
     if (fase === 'F1' && caso && subfase === 'F1.espera' && !intervencionJugador) {
-      console.log('[F1-EFFECT] ✅ Condición cumplida, disparando juez en 800ms');
       const t = setTimeout(() => {
-        console.log('[F1-EFFECT] Llamando a hablar()...');
         hablar(
           'juez',
-          `El juez abre la sesión y lee los cargos en voz alta: "${caso.cargos}". Lugar: ${caso.lugar}, hora: ${caso.hora}. Luego pregunta al acusado: ¿Entiende los cargos?`,
+          `El juez abre la sesión y lee los cargos: "${caso.cargos}". Lugar: ${caso.lugar}, hora: ${caso.hora}. Luego pregunta: ¿Entiende los cargos?`,
           undefined,
-          true // isStageDirection
-        ).then(() => console.log('[F1-EFFECT] Juez respondió OK'))
-         .catch((e) => console.error('[F1-EFFECT] Error juez:', e));
+          true
+        );
+        feedback('El juicio ha comenzado. Responde al juez.', 'info');
       }, 800);
-      return () => {
-        console.log('[F1-EFFECT] Cleanup (timeout cancelado)');
-        clearTimeout(t);
-      };
+      return () => clearTimeout(t);
     }
-  }, [fase, caso, subfase, hablar, intervencionJugador]);
+  }, [fase, caso, subfase, hablar, intervencionJugador, feedback]);
 
-  // ── STATE MACHINE: reaccionar a subfase ──
+  // ── STATE MACHINE ──
   useEffect(() => {
-    console.log('[SM]', subfase);
     if (!caso) return;
 
     switch (subfase) {
       case 'F1.respuesta': {
-        // Juez reacciona a lo que dijo el jugador
         const t = setTimeout(() => {
           hablar(
             'juez',
-            `El acusado ha dicho: "${intervencionJugador}". Reacciona brevemente y pasa la palabra al fiscal.`,
-            `El jugador respondió a "¿entiende los cargos?" con: "${intervencionJugador}". Si dijo "sí" o similar, acusa recibo y pasa al fiscal. Si dijo "no", le preguntas si se declara culpable o inocente.`
+            `El acusado dijo: "${intervencionJugador}". Reacciona brevemente y pasa la palabra al fiscal.`,
+            undefined,
+            true
           );
           setIntervencionJugador(null);
           setFase('F2');
@@ -175,7 +165,8 @@ export function GameOrchestrator() {
           hablar(
             'fiscal',
             'Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.',
-            'Empieza: "La acusación sostiene que..." Menciona específicamente el análisis del maletero con 99.7% de coincidencia.'
+            undefined,
+            true
           );
           setSubfase('F2.window1');
         }, 1500);
@@ -184,13 +175,13 @@ export function GameOrchestrator() {
 
       case 'F2.window1': {
         setWindowObjecion(true);
-        setTimerSegundos(6);
+        setTimerSegundos(20); // 20s, no 6s
         sndWindowOpen();
         const t = setTimeout(() => {
           setWindowObjecion(false);
           setTimerSegundos(null);
           setSubfase('F2.fiscal2');
-        }, 6000);
+        }, 20000);
         return () => clearTimeout(t);
       }
 
@@ -199,7 +190,8 @@ export function GameOrchestrator() {
           hablar(
             'fiscal',
             'Presenta la segunda evidencia: el video de seguridad del museo a las 03:47.',
-            'Segunda evidencia: video de seguridad a las 03:47, persona con uniforme del museo cargando caja en el maletero.'
+            undefined,
+            true
           );
           setSubfase('F2.window2');
         }, 2500);
@@ -208,19 +200,19 @@ export function GameOrchestrator() {
 
       case 'F2.window2': {
         setWindowObjecion(true);
-        setTimerSegundos(6);
+        setTimerSegundos(20);
         sndWindowOpen();
         const t = setTimeout(() => {
           setWindowObjecion(false);
           setTimerSegundos(null);
           setSubfase('F2.transicion');
-        }, 6000);
+        }, 20000);
         return () => clearTimeout(t);
       }
 
       case 'F2.transicion': {
         const t = setTimeout(() => {
-          hablar('juez', 'Fiscal, ha presentado su caso. Defensa, ¿desea presentar evidencia a su favor?');
+          hablar('juez', 'Fiscal, ha presentado su caso. Defensa, ¿desea presentar evidencia a su favor?', undefined, true);
           setFase('F3');
           setSubfase('F3.espera');
         }, 2000);
@@ -229,7 +221,7 @@ export function GameOrchestrator() {
 
       case 'F3.transicion': {
         const t = setTimeout(() => {
-          hablar('juez', 'Llamemos al primer testigo. Don Eustaquio, guardia de seguridad del museo.');
+          hablar('juez', 'Llamemos al primer testigo. Don Eustaquio, guardia de seguridad.', undefined, true);
           setFase('F4');
           setSubfase('F4.guarda_subida');
         }, 1500);
@@ -237,40 +229,38 @@ export function GameOrchestrator() {
       }
 
       case 'F4.guarda_subida': {
-        const t = setTimeout(() => {
-          setSubfase('F4.guarda_testimonio');
-        }, 1500);
+        const t = setTimeout(() => setSubfase('F4.guarda_testimonio'), 1500);
         return () => clearTimeout(t);
       }
 
       case 'F4.guarda_testimonio': {
         const t = setTimeout(() => {
-          hablar(
-            'guarda',
-            'Cuéntale al tribunal qué pasó esa noche.',
-            'Testimonio inicial. Estabas en el baño 20 min con dolor de estómago desde las 03:35. No viste nada.'
-          );
+          hablar('guarda', 'Cuéntale al tribunal qué pasó esa noche.', undefined, true).then((reply) => {
+            if (reply) {
+              feedback('Testimonio del guarda registrado. ESCUCHA con atención — busca contradicciones.', 'info');
+            }
+          });
           setSubfase('F4.guarda_contra');
-          setTimerSegundos(TIMER_FASES['F4.guarda_contra']);
+          setTimerSegundos(40);
         }, 1500);
         return () => clearTimeout(t);
       }
 
       case 'F4.guarda_contra': {
-        // Esperar input del jugador o timeout
         const t = setTimeout(() => {
           if (contadorContraGuarda === 0) {
-            hablar('juez', 'Sin preguntas, defensa. Llame al segundo testigo.');
+            hablar('juez', 'Sin preguntas, defensa. Llame al segundo testigo.', undefined, true);
+            feedback('No contrainterrogaste al guarda. Sin información adicional.', 'info');
           }
           setSubfase('F4.supervisor_subida');
-        }, TIMER_FASES['F4.guarda_contra'] * 1000);
+        }, 40000);
         return () => clearTimeout(t);
       }
 
       case 'F4.supervisor_subida': {
         setTimerSegundos(null);
         const t = setTimeout(() => {
-          hablar('juez', 'Llame al segundo testigo. Anselmo Tellez, supervisor del museo.');
+          hablar('juez', 'Llame al segundo testigo. Anselmo Tellez, supervisor.', undefined, true);
           setSubfase('F4.supervisor_testimonio');
         }, 1500);
         return () => clearTimeout(t);
@@ -278,13 +268,13 @@ export function GameOrchestrator() {
 
       case 'F4.supervisor_testimonio': {
         const t = setTimeout(() => {
-          hablar(
-            'supervisor',
-            'Cuéntale al tribunal lo que sabes del acusado.',
-            'Testimonio inicial. Buscas inculpar al acusado. Destaca que conocía las cámaras y tenía acceso al coche.'
-          );
+          hablar('supervisor', 'Cuéntale al tribunal lo que sabes del acusado.', undefined, true).then((reply) => {
+            if (reply) {
+              feedback('Testimonio del supervisor registrado. COMPARA con lo que dijo el guarda.', 'info');
+            }
+          });
           setSubfase('F4.supervisor_contra');
-          setTimerSegundos(TIMER_FASES['F4.supervisor_contra']);
+          setTimerSegundos(40);
         }, 1500);
         return () => clearTimeout(t);
       }
@@ -292,38 +282,36 @@ export function GameOrchestrator() {
       case 'F4.supervisor_contra': {
         const t = setTimeout(() => {
           if (contadorContraSupervisor === 0) {
-            hablar('juez', 'Suficiente. Pasemos al alegato final.');
+            hablar('juez', 'Suficiente. Pasemos al alegato final.', undefined, true);
           }
           setSubfase('F4.transicion');
-        }, TIMER_FASES['F4.supervisor_contra'] * 1000);
+        }, 40000);
         return () => clearTimeout(t);
       }
 
       case 'F4.transicion': {
         setTimerSegundos(null);
         const t = setTimeout(() => {
-          hablar('juez', 'Defensa, tiene 45 segundos para su alegato final. Hable cuando esté listo.');
+          hablar('juez', 'Defensa, tiene 60 segundos para su alegato final.', undefined, true);
           setFase('F5');
           setSubfase('F5.alegato');
-          setTimerSegundos(TIMER_FASES['F5.alegato']);
+          setTimerSegundos(60);
         }, 1500);
         return () => clearTimeout(t);
       }
 
       case 'F5.veredicto': {
         const t = setTimeout(() => {
-          // Fórmula del GDD: score = Credibilidad - Sospecha
           const score = credibilidad - sospecha;
           const veredicto: 'absuelto' | 'culpable' = score >= 0 ? 'absuelto' : 'culpable';
           const veredictoTexto = veredicto === 'absuelto' ? 'NO CULPABLE' : 'CULPABLE';
-
           sndVerdict();
           hablar(
             'juez',
-            `Emite veredicto. Credibilidad final: ${credibilidad}/100. Sospecha final: ${sospecha}/100. Tu veredicto es: ${veredictoTexto}.`,
-            `Es el momento del VEREDICTO FINAL. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto OBLIGATORIO es: ${veredictoTexto}. Empieza tu respuesta SIEMPRE con "${veredictoTexto}." y luego explica en máximo 50 palabras por qué llegas a ese veredicto basándote en las pruebas y testimonios del juicio.`
+            `Emite veredicto. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Veredicto: ${veredictoTexto}.`,
+            `VEREDICTO FINAL. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto OBLIGATORIO es: ${veredictoTexto}. Empieza con "${veredictoTexto}." y explica en máximo 50 palabras.`,
+            true
           );
-          // Forzar veredicto en el estado aunque la IA tarde
           setTimeout(() => {
             setVeredicto(veredicto);
             if (veredicto === 'absuelto') sndSuccess();
@@ -334,47 +322,84 @@ export function GameOrchestrator() {
         return () => clearTimeout(t);
       }
     }
-  }, [subfase, caso, hablar, setFase, setVeredicto, intervencionJugador, credibilidad, sospecha, contadorContraGuarda, contadorContraSupervisor]);
+  }, [subfase, caso, hablar, setFase, setVeredicto, intervencionJugador, credibilidad, sospecha, contadorContraGuarda, contadorContraSupervisor, feedback, setWindowObjecion, setTimerSegundos]);
 
   // ── Timer countdown ──
   useEffect(() => {
     if (timerSegundos === null) return;
-    if (timerSegundos <= 0) {
-      setTimerSegundos(null);
-      return;
-    }
+    if (timerSegundos <= 0) { setTimerSegundos(null); return; }
     const t = setTimeout(() => setTimerSegundos(timerSegundos - 1), 1000);
     return () => clearTimeout(t);
-  }, [timerSegundos]);
+  }, [timerSegundos, setTimerSegundos]);
 
-  // ── Detección de keywords ──
+  // ── Detección de keywords + contradicciones ──
   const onKeyword = useCallback(
     (kw: string, fullText: string) => {
       const sf = subfaseRef.current;
-      console.log('[KW]', kw, sf, '→', fullText);
 
-      // PROTESTO en windows de objeción
+      // PROTESTO — ahora GASTA un recurso limitado
       if (
         (kw === 'protesto' || kw === 'protesta' || kw === 'objeción' || kw === 'objecion') &&
         (sf === 'F2.window1' || sf === 'F2.window2') &&
         windowObjecion
       ) {
+        // Verificar si le quedan objeciones
+        if (objecionesRestantes <= 0) {
+          setCaption('No te quedan objeciones. Tendrás que aguantar esta evidencia.', 'sistema');
+          feedback('Sin objeciones restantes. Piensa mejor la próxima.', 'mal');
+          return;
+        }
+        gastarObjecion();
         setWindowObjecion(false);
         setTimerSegundos(null);
         sndWindowClose();
+        feedback(`Objeción #${4 - objecionesRestantes} usada. Quedan ${objecionesRestantes - 1}.`, 'info');
         hablar(
           'juez',
-          `El acusado ha protestado: "${fullText}". Evalúa la objeción y decide: "Protesta admitida" o "Protesta rechazada".`,
-          `El jugador objeta con este fundamento: "${fullText}". Si el fundamento es relevante (cadena de custodia, identificación dudosa, peso vs admisibilidad), ADMITE la objeción. Si es irrelevante o llega tarde, RECHÁZALA. Empieza SIEMPRE con "Protesta admitida" o "Protesta rechazada".`
+          `El acusado objeta: "${fullText}". Decide: admitida o rechazada.`,
+          `El jugador objeta: "${fullText}". Si el fundamento es relevante (cadena de custodia, acceso compartido, peso vs admisibilidad), ADMITE. Si es irrelevante, RECHAZA. Empieza con "Protesta admitida" o "Protesta rechazada".`,
+          true
         ).then((reply: string | undefined) => {
           if (reply && reply.toLowerCase().includes('admitida')) {
             ajustarMedidor('credibilidad', +8);
             ajustarMedidor('sospecha', -10);
-            sndSuccess();
+            feedback('¡PROTESTA ADMITIDA! +8 Credibilidad, -10 Sospecha', 'bien');
           } else if (reply && reply.toLowerCase().includes('rechazada')) {
             ajustarMedidor('credibilidad', -3);
             ajustarMedidor('sospecha', +5);
-            sndFail();
+            feedback('Protesta rechazada. -3 Credibilidad, +5 Sospecha', 'mal');
+          }
+        });
+      }
+
+      // CONTRADICCIÓN — nueva mecánica
+      if (kw === 'contradicción' || kw === 'contradiccion' || kw === 'contradice') {
+        const testimonios = useGame.getState().testimoniosEscuchados;
+        const casoData = useGame.getState().caso;
+        if (!casoData || Object.keys(testimonios).length < 2) {
+          feedback('Necesitas al menos 2 testimonios para señalar una contradicción.', 'info');
+          return;
+        }
+        // La IA del juez evalúa si la contradicción es real
+        hablar(
+          'juez',
+          `El acusado señala una contradicción: "${fullText}". Compara los testimonios y decide si es válida.`,
+          `El jugador dice que hay una contradicción: "${fullText}".
+Testimonios escuchados: ${JSON.stringify(testimonios)}.
+Si hay una contradicción REAL entre los testimonios (ej: un testigo dice X y otro dice lo contrario), di "CONTRADICCIÓN VÁLIDA" y exige al testigo que explique. Si no hay contradicción real, di "No hay contradicción" y pasa de largo.`,
+          true
+        ).then((reply: string | undefined) => {
+          if (reply && reply.toLowerCase().includes('contradicción válida')) {
+            ajustarMedidor('credibilidad', +12);
+            ajustarMedidor('sospecha', -8);
+            feedback('¡CONTRADICCIÓN VÁLIDA! +12 Credibilidad, -8 Sospecha', 'bien');
+            // Marcar contradicción como descubierta
+            if (casoData.contradicciones) {
+              casoData.contradicciones.forEach((c) => descubrirContradiccion(c.id));
+            }
+          } else {
+            ajustarMedidor('credibilidad', -5);
+            feedback('No hay contradicción. -5 Credibilidad por perder el tiempo.', 'mal');
           }
         });
       }
@@ -387,11 +412,8 @@ export function GameOrchestrator() {
           if (silla >= 1 && silla <= 5) {
             const ok = recusarJurado(silla);
             if (ok) {
-              hablar(
-                'juez',
-                `El acusado solicita recusar al jurado ${silla}. Fundamento: "${fullText}". Decide si lo retiras o lo mantienes.`,
-                `El jugador recusa al jurado ${silla}. Para decidir: si el jurado tenía sesgo evidente (fruncía el ceño, no reaccionaba a evidencia exculpatoria), RETÍRALo. Si no, MANTÉNlo y dile al jugador que sigue.`
-              );
+              feedback(`Jurado ${silla} recusado.`, 'info');
+              hablar('juez', `El acusado recusa al jurado ${silla}. Fundamento: "${fullText}".`, undefined, true);
             } else {
               setCaption('Ya no tienes recusaciones disponibles.', 'sistema');
             }
@@ -399,29 +421,24 @@ export function GameOrchestrator() {
         }
       }
     },
-    [hablar, ajustarMedidor, recusarJurado, setCaption, windowObjecion]
+    [hablar, ajustarMedidor, recusarJurado, setCaption, windowObjecion, objecionesRestantes, gastarObjecion, feedback, descubrirContradiccion]
   );
 
-  // ── Final transcript → según subfase ──
+  // ── Final transcript ──
   const onFinalTranscript = useCallback(
     (text: string) => {
       const sf = subfaseRef.current;
       if (!text || text.trim().length < 3) return;
-      console.log('[FT]', sf, '→', text);
 
-      // F1: respuesta a "¿entiende los cargos?"
       if (sf === 'F1.espera') {
         setIntervencionJugador(text);
         setSubfase('F1.respuesta');
         return;
       }
 
-      // F3: respuesta a "¿desea presentar evidencia?"
       if (sf === 'F3.espera' && caso) {
         const lower = text.toLowerCase();
-        // Si el jugador presenta una evidencia específica (viene con "Presento la evidencia:")
-        if (lower.includes('presento la evidencia') || lower.includes('evidencia')) {
-          // Buscar qué evidencia es
+        if (lower.includes('evidencia') || lower.includes('presento')) {
           const evidencias = caso.evidencias;
           let evidenciaPresentada: typeof evidencias[0] | null = null;
           for (const ev of evidencias) {
@@ -432,109 +449,74 @@ export function GameOrchestrator() {
           }
           if (evidenciaPresentada) {
             const ev = evidenciaPresentada;
-            // Bonus según tipo
             if (ev.tipo === 'exculpatoria') {
               ajustarMedidor('credibilidad', +8);
               ajustarMedidor('sospecha', -10);
-              sndSuccess();
+              feedback(`¡Evidencia exculpatoria! +8 Credibilidad, -10 Sospecha`, 'bien');
             } else if (ev.tipo === 'ambigua') {
               ajustarMedidor('credibilidad', +4);
               ajustarMedidor('sospecha', -3);
+              feedback(`Evidencia ambigua. +4 Credibilidad, -3 Sospecha`, 'info');
             } else if (ev.tipo === 'incriminatoria') {
               ajustarMedidor('sospecha', +8);
-              sndFail();
+              feedback(`¡Evidencia incriminatoria! +8 Sospecha. Mal elección.`, 'mal');
             }
-            hablar(
-              'juez',
-              `El acusado presenta: ${ev.nombre}. ${ev.descripcion}. ¿Fiscal, objeta?`,
-              `El jugador presenta la evidencia "${ev.nombre}" (${ev.tipo}). Admítela brevemente y pasa a testigos.`
-            );
+            hablar('juez', `El acusado presenta: ${ev.nombre}. ${ev.descripcion}.`, undefined, true);
           } else {
-            hablar(
-              'juez',
-              `El acusado solicita presentar evidencia. Admitida. Pasemos a los testigos.`,
-              `El jugador dice: "${text}". Admite y pasa a testigos.`
-            );
             ajustarMedidor('credibilidad', +3);
+            hablar('juez', 'Evidencia admitida. Pasemos a los testigos.', undefined, true);
           }
-        } else if (lower.includes('no') || lower.includes('renuncio') || lower.includes('pasar')) {
-          hablar(
-            'juez',
-            `La defensa renuncia a presentar evidencia. Pasemos a los testigos.`,
-            `El jugador dice: "${text}". Si no quiere presentar evidencia, pasa a testigos.`
-          );
+        } else if (lower.includes('no') || lower.includes('renuncio')) {
           ajustarMedidor('credibilidad', -5);
-          sndFail();
+          feedback('Renunciaste a presentar evidencia. -5 Credibilidad', 'mal');
+          hablar('juez', 'La defensa renuncia. Pasemos a los testigos.', undefined, true);
         } else {
-          // Respuesta ambigua, interpretar como sí
-          hablar(
-            'juez',
-            `El acusado solicita presentar evidencia. Admitida. Pasemos a los testigos.`,
-            `El jugador dice: "${text}". Admite y pasa a testigos.`
-          );
           ajustarMedidor('credibilidad', +3);
+          hablar('juez', 'Evidencia admitida. Pasemos a los testigos.', undefined, true);
         }
         setSubfase('F3.transicion');
         return;
       }
 
-      // F4.guarda_contra: contra-interrogatorio al guarda
       if (sf === 'F4.guarda_contra') {
         setContadorContraGuarda((c) => c + 1);
-        hablar(
-          'guarda',
-          text,
-          `El jugador te contrainterroga: "${text}". Responde como Don Eustaquio. Si te preguntan por tu turno, di 22:00 a 06:00. Si te preguntan por el baño, di 20 min. Si te preguntan por Anselmo, tu tono cambia: lo consideras mandón.`
-        ).then((reply: string | undefined) => {
-          // Si el jugador expone una contradicción, premiar
+        hablar('guarda', text).then((reply: string | undefined) => {
           if (reply && (reply.includes('no recuerdo') || reply.includes('no vi') || reply.includes('baño'))) {
             ajustarMedidor('sospecha', -3);
+            feedback('El guarda admite que no vio nada. -3 Sospecha', 'info');
           }
         });
         return;
       }
 
-      // F4.supervisor_contra
       if (sf === 'F4.supervisor_contra') {
         setContadorContraSupervisor((c) => c + 1);
-        hablar(
-          'supervisor',
-          text,
-          `El jugador te contrainterroga: "${text}". Responde como Anselmo Tellez. Si te preguntan por el despido, di "reducción de personal". Si insisten, admite "solo a él" con incomodidad. Si te preguntan por Eustaquio, hostilízalo.`
-        ).then((reply: string | undefined) => {
-          // Si el jugador expone el vínculo de enemistad o la mentira del despido, premiar
-          if (
-            (text.toLowerCase().includes('por qué') && text.toLowerCase().includes('despid')) ||
-            (text.toLowerCase().includes('cuántos') && text.toLowerCase().includes('despid'))
-          ) {
+        hablar('supervisor', text).then((reply: string | undefined) => {
+          const lower = text.toLowerCase();
+          if ((lower.includes('despid') && (lower.includes('cuántos') || lower.includes('solo'))) ||
+              (lower.includes('por qué') && lower.includes('despid'))) {
             ajustarMedidor('credibilidad', +5);
             ajustarMedidor('sospecha', -5);
+            feedback('¡Expones el móvil de venganza! +5 Credibilidad, -5 Sospecha', 'bien');
           }
         });
         return;
       }
 
-      // F5.alegato: cuando el jugador termina su alegato, pasar a veredicto
       if (sf === 'F5.alegato') {
-        hablar(
-          'juez',
-          `El acusado presenta su alegato: "${text}". Emite veredicto.`,
-          `El jugador dice: "${text}". Evalúa su argumento. Credibilidad actual: ${credibilidad}, Sospecha: ${sospecha}. Emite veredicto explicando brevemente.`
-        );
+        hablar('juez', `El acusado presenta su alegato: "${text}". Emite veredicto.`, undefined, true);
         setTimerSegundos(null);
         setSubfase('F5.veredicto');
         return;
       }
     },
-    [hablar, ajustarMedidor, credibilidad, sospecha, caso]
+    [hablar, ajustarMedidor, feedback, caso, setTimerSegundos]
   );
 
   // ── Hook de micrófono ──
   useMic({ onKeyword, onFinalTranscript });
 
-  // ── Listener para input de texto (botón PROTESTO + campo de texto) ──
-  // Esto garantiza que el juego funcione sin micrófono
-  // Usamos refs para evitar registrar el listener múltiples veces
+  // ── Listener para input de texto ──
   const onKeywordRef = useRef(onKeyword);
   const onFinalTranscriptRef = useRef(onFinalTranscript);
   onKeywordRef.current = onKeyword;
@@ -544,23 +526,19 @@ export function GameOrchestrator() {
     const handler = (e: Event) => {
       const text = (e as CustomEvent<string>).detail;
       if (!text || text.trim().length < 1) return;
-      console.log('[UI INPUT]', text);
-
-      // Procesar como keyword si aplica
       const lower = text.toLowerCase();
-      for (const kw of ['protesto', 'protesta', 'objeción', 'objecion', 'recusación', 'recusacion', 'sí', 'si', 'no']) {
+      const keywords = ['protesto', 'protesta', 'objeción', 'objecion', 'recusación', 'recusacion', 'contradicción', 'contradiccion', 'contradice', 'sí', 'si', 'no'];
+      for (const kw of keywords) {
         if (lower.includes(kw)) {
           onKeywordRef.current(kw, text);
           break;
         }
       }
-
-      // Procesar como final transcript
       onFinalTranscriptRef.current(text);
     };
     window.addEventListener('notguilty-player-input', handler);
     return () => window.removeEventListener('notguilty-player-input', handler);
-  }, []); // Sin dependencias = se registra una sola vez
+  }, []);
 
   return null;
 }

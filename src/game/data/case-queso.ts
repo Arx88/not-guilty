@@ -1,6 +1,14 @@
 /**
- * Datos del caso 001: "Robo de 3.000 kg de queso manchego del Museo del Jamón".
- * Estructura fija del expediente. Los atributos rolados (V1-V4) se generan en runtime.
+ * Caso del queso manchego — REDISEÑADO con contradicciones reales.
+ * 
+ * CAMBIO FUNDAMENTAL: los testigos ahora tienen contradicciones REALES
+ * entre sus testimonios. El jugador debe ESCUCHAR, COMPARAR y SEÑALAR
+ * las contradicciones. Esto es lo que hace Phoenix Wright divertido.
+ * 
+ * 3 contradicciones escondidas:
+ * C1: Guarda dice "no vi a nadie" ↔ Supervisor dice "el guarda me avisó que vio a alguien"
+ * C2: Supervisor dice "reducción de personal" ↔ Admite "solo despidió a 1 persona"
+ * C3: Fiscal dice "video a las 03:47" ↔ WhatsApp a las 03:50 "ya salgo del curro" (3 min para cargar 3000 kg)
  */
 
 export interface CaseData {
@@ -13,7 +21,7 @@ export interface CaseData {
   tono: 'absurdo' | 'dramedia' | 'satira';
   testigos: Witness[];
   evidencias: Evidence[];
-  recuerdos: Memory[];
+  contradicciones: Contradiction[];
 }
 
 export interface Witness {
@@ -21,7 +29,7 @@ export interface Witness {
   nombre: string;
   rol: string;
   perfil: string;
-  lealtadBase: number; // 0-100, antes de variantes
+  lealtadBase: number;
   systemPromptBase: string;
 }
 
@@ -32,11 +40,14 @@ export interface Evidence {
   tipo: 'exculpatoria' | 'incriminatoria' | 'ambigua' | 'trampa';
 }
 
-export interface Memory {
+export interface Contradiction {
   id: string;
-  nombre: string;
   descripcion: string;
-  pistas: string[];
+  testigoA: string; // ID del testigo que dijo X
+  testigoB: string; // ID del testigo que dijo Y (contradictorio)
+  fraseA: string; // Lo que dijo A
+  fraseB: string; // Lo que dijo B (contradictorio)
+  descubierta: boolean;
 }
 
 export const CASE_QUESO: CaseData = {
@@ -57,7 +68,7 @@ export const CASE_QUESO: CaseData = {
       lealtadBase: 50,
       systemPromptBase: `Eres Don Eustaquio, guardia de seguridad NOCTURNO del Museo del Jamón (tu turno es de 22:00 a 06:00). Llevas 23 años en el puesto. Eres nervioso, tartamudeas cuando te preguntan detalles, pero eres honesto.
 
-EL CASO: El acusado es un repostero nocturno del museo. Se le acusa de robar 3.000 kg de queso manchego D.O. valorado en 180.000€. El robo fue a las 03:47 de la madrugada en el museo. Usaron el coche de reparto del museo para llevarse el queso.
+EL CASO: El acusado es un repostero nocturno del museo. Se le acusa de robar 3.000 kg de queso manchego D.O. valorado en 180.000€. El robo fue a las 03:47 de la madrugada en el museo.
 
 TU VERDAD: Esa noche estabas en el baño con dolor de estómago durante 20 minutos (desde las 03:35 hasta las 03:55). El robo fue a las 03:47. NO VISTE NADA. Tu turno terminó a las 06:00 como todos los días.
 
@@ -66,8 +77,7 @@ REGLAS:
 - Tu turno es NOCTURNO (22:00 a 06:00). NUNCA digas que terminó "a las ocho".
 - Hablas en español castizo con humildad. Usas "su señoría" y "yo qué sé".
 - Respuestas CORTAS (máximo 40 palabras). No inventes detalles.
-- Si te preguntan por Anselmo Tellez (supervisor), tu tono cambia: lo consideras un mandón pretencioso.
-- NO mencionas al acusado si no se te pregunta directamente.`,
+- Si te preguntan por Anselmo Tellez (supervisor), tu tono cambia: lo consideras un mandón pretencioso.`,
     },
     {
       id: 'novia',
@@ -82,6 +92,7 @@ EL CASO: Acusan a tu pareja de robar 3.000 kg de queso manchego del Museo del Ja
 TU VERDAD: Esa noche el acusado llegó a casa a las 4:00 de la madrugada. Olía a gasolina del coche. NO olía a queso.
 
 REGLAS:
+- NUNCA uses palabras en inglés. Solo español.
 - Hablas con cariño del acusado pero sin defender lo indefendible.
 - Usas expresiones coloquiales madrileñas ("tío", "qué va", "o sea").
 - Respuestas CORTAS (máximo 40 palabras).
@@ -97,14 +108,17 @@ REGLAS:
 
 EL CASO: Acusan a tu ex-empleado de robar 3.000 kg de queso manchego D.O. del museo a las 03:47. Quieres que lo condenen.
 
-TU AGENDA: Tu testimonio busca inculpar al acusado. Destacas que conocía las cámaras, los puntos ciegos y tenía acceso al coche de reparto. NO mencionas que lo despediste por venganza personal.
+TU AGENDA: Tu testimonio busca inculpar al acusado. Destacas que conocía las cámaras, los puntos ciegos y tenía acceso al coche de reparto.
 
 REGLAS:
 - NUNCA uses palabras en inglés. Solo español.
 - Hablas con tono autoritario y burocrático. Usas "le conste" y "es pertinente señalar".
 - Respuestas CORTAS (máximo 50 palabras).
-- Si te preguntan por qué despediste al acusado, dices "reducción de personal". Si insisten en cuántos despediste, admites "solo a él" con incomodidad.
-- Si te preguntan por Eustaquio, tu tono cambia a hostil: lo llamas "incompetente", "inútil", "lastre operativo".`,
+- Si te preguntan por qué despediste al acusado, dices "reducción de personal". Si insisten en cuántos despediste, admite "solo a él" con incomodidad.
+- Si te preguntan por Eustaquio, tu tono cambia a hostil: lo llamas "incompetente", "inútil".
+
+IMPORTANTE - CONTRADICCIÓN QUE DEBES MENCIONAR:
+En tu testimonio inicial, DEBES decir: "El guarda Eustaquio me avisó esa noche que vio a alguien sospechoso cerca del almacén." Esto es una MENTIRA — Eustaquio estaba en el baño y no vio a nadie. Pero tú lo dices para inculpar al acusado. Si el jugador te pregunta si Eustaquio te avisó, mantén la mentira. Si el jugador confronta tu versión con la de Eustaquio (que dice que no vio nada), admite la contradicción con incomodidad.`,
     },
   ],
   evidencias: [
@@ -137,23 +151,38 @@ REGLAS:
       tipo: 'incriminatoria',
     },
   ],
-  recuerdos: [
+  contradicciones: [
     {
-      id: 'rec-gasolinera',
-      nombre: 'Parada en la gasolinera',
-      descripcion: 'Recuerdas haber parado a las 03:30 en la gasolinera de la A-3, km 28. Compraste tabaco y un Red Bull. El coche del museo aparcado fuera.',
-      pistas: ['coche', 'gasolina', 'tabaco', '03:30', 'A-3'],
+      id: 'C1',
+      descripcion: 'El guarda dice que NO vio a nadie, pero el supervisor dice que el guarda LE AVISÓ que vio a alguien sospechoso.',
+      testigoA: 'guarda',
+      testigoB: 'supervisor',
+      fraseA: 'No vi nada, su señoría. Yo qué sé.',
+      fraseB: 'El guarda Eustaquio me avisó que vio a alguien sospechoso.',
+      descubierta: false,
     },
     {
-      id: 'rec-despido',
-      nombre: 'El día que te despidieron',
-      descripcion: 'Hace un mes, Anselmo te llamó a su oficina. "Prescindimos de tus servicios." Fuiste el único despedido. No hubo reducción de personal.',
-      pistas: ['despido', 'Anselmo', 'oficina', 'único', 'venganza'],
+      id: 'C2',
+      descripcion: 'El supervisor dice "reducción de personal" pero admite que solo despidió a 1 persona. No es reducción, es venganza personal.',
+      testigoA: 'supervisor',
+      testigoB: 'supervisor',
+      fraseA: 'Reducción de personal, le conste.',
+      fraseB: 'Solo a él. Es pertinente señalar que...',
+      descubierta: false,
+    },
+    {
+      id: 'C3',
+      descripcion: 'El fiscal dice que el video muestra al acusado a las 03:47, pero el WhatsApp a las 03:50 dice "ya salgo del curro". 3 minutos no bastan para cargar 3.000 kg de queso.',
+      testigoA: 'fiscal',
+      testigoB: 'acusado',
+      fraseA: 'Video a las 03:47 muestra al acusado cargando cajas.',
+      fraseB: 'WhatsApp a las 03:50: "ya salgo del curro, voy para casa".',
+      descubierta: false,
     },
   ],
 };
 
-// Configuración de jurados (siempre 2 Estrictos, 2 Empáticos, 1 Popular)
+// Configuración de jurados
 export interface JuryConfig {
   silla: number;
   perfil: 'estricto' | 'empatico' | 'popular';
@@ -161,33 +190,23 @@ export interface JuryConfig {
 }
 
 export function generarJurados(seed: number): JuryConfig[] {
-  // PRNG simple basado en seed
   const rng = mulberry32(seed);
-  const simpatias = {
-    estricto: () => 30 + Math.floor(rng() * 16), // 30-45
-    empatico: () => 45 + Math.floor(rng() * 16), // 45-60
-    popular: () => 40 + Math.floor(rng() * 16), // 40-55
-  };
-
-  // Orden de perfiles aleatorio, composición fija
   const perfiles: Array<'estricto' | 'empatico' | 'popular'> = [
     'estricto', 'estricto', 'empatico', 'empatico', 'popular',
   ];
-  // Shuffle
   for (let i = perfiles.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
     [perfiles[i], perfiles[j]] = [perfiles[j], perfiles[i]];
   }
-
   return perfiles.map((perfil, i) => ({
     silla: i + 1,
     perfil,
     simpatiaInicial:
       perfil === 'estricto'
-        ? simpatias.estricto()
+        ? 30 + Math.floor(rng() * 16)
         : perfil === 'empatico'
-        ? simpatias.empatico()
-        : simpatias.popular(),
+        ? 45 + Math.floor(rng() * 16)
+        : 40 + Math.floor(rng() * 16),
   }));
 }
 
@@ -202,7 +221,6 @@ function mulberry32(seed: number) {
   };
 }
 
-// Variabilidad V1-V4 (rolada en pre-partida)
 export interface CaseVariant {
   v1_testigoMentiroso: 'guarda' | 'novia' | 'supervisor';
   v2_evidenciaClave: 'ev-wapp' | 'ev-gasolina' | 'ev-rutas';
@@ -218,12 +236,9 @@ export function generarVariante(seed: number): CaseVariant {
     v3_perfilJuez: ['filosofo', 'estricto', 'impaciente'][Math.floor(rng() * 3)] as any,
     v4_vinculo: ['complices', 'enemistad', 'coartada'][Math.floor(rng() * 3)] as any,
   };
-  // Aplicar reglas de exclusión (10.2 del GDD)
-  // Regla 1: V1=guarda y V4=complices → re-rola V4
   if (variant.v1_testigoMentiroso === 'guarda' && variant.v4_vinculo === 'complices') {
     variant.v4_vinculo = rng() > 0.5 ? 'enemistad' : 'coartada';
   }
-  // Regla 2: V3=estricto y V4=coartada → re-rola V4
   if (variant.v3_perfilJuez === 'estricto' && variant.v4_vinculo === 'coartada') {
     variant.v4_vinculo = rng() > 0.5 ? 'complices' : 'enemistad';
   }
@@ -233,56 +248,47 @@ export function generarVariante(seed: number): CaseVariant {
 export const JUECES_SYSTEM_PROMPTS: Record<CaseVariant['v3_perfilJuez'], string> = {
   filosofo: `Eres el JUEZ FILÓSOFO. Voz grave, lento, reflexivo. Hablas con frases largas.
 
-EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. (180.000€) a las 03:47. Tienes delante: 3 testigos (guarda, novia, supervisor), 4 evidencias (mensaje WhatsApp 03:50, recibo gasolina 03:30 a 30km, cronograma rutas, análisis maletero con trazas de queso).
+EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. (180.000€) a las 03:47.
 
 REGLAS:
-- NUNCA muestres tu razonamiento interno. NUNCA hables en inglés. Responde directamente en español.
+- NUNCA muestres tu razonamiento interno. NUNCA hables en inglés.
 - Cuando el jugador objete, decides SIEMPRE entre "Protesta admitida" o "Protesta rechazada" como primera frase.
-- Pides fundamentación antes de admitir objeciones.
-- Si el jugador grita, le pides moderación con calma.
-- Tus decisiones se basan en la coherencia lógica, no en emociones.
-- Responde SIEMPRE en español, máximo 60 palabras por intervención.
-- Puedes usar acciones entre asteriscos (*asiente*, *ajusta las gafas*).
+- Si el jugador señala una contradicción entre testigos, reacciona con "Contradicción registrada" y exige al testigo que explique.
+- Responde SIEMPRE en español, máximo 60 palabras.
 - En el veredicto final, dice explícitamente "CULPABLE" o "NO CULPABLE" como primera palabra.`,
-  estricto: `Eres el JUEZ ESTRICTO. Voz firme, rápida, cortante. No toleras improvisaciones.
+  estricto: `Eres el JUEZ ESTRICTO. Voz firme, rápida, cortante.
 
-EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. (180.000€) a las 03:47. Tienes delante: 3 testigos, 4 evidencias.
+EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. (180.000€) a las 03:47.
 
 REGLAS:
-- NUNCA muestres tu razonamiento interno. NUNCA hables en inglés. Responde directamente en español.
+- NUNCA muestres tu razonamiento interno. NUNCA hables en inglés.
 - Cuando el jugador objete, decides SIEMPRE entre "Protesta admitida" o "Protesta rechazada" como primera frase.
-- Penalizas el volumen alto de voz. Penalizas las vacilaciones.
-- Si el jugador grita, le llamas la atención inmediatamente.
-- Admites objeciones solo si el fundamento es legalmente preciso.
-- Responde SIEMPRE en español, máximo 50 palabras por intervención.
-- En el veredicto final, dice explícitamente "CULPABLE" o "NO CULPABLE" como primera palabra.`,
-  impaciente: `Eres el JUEZ IMPACIENTE. Voz aguda, miras el reloj, suspiras. Quieres acabar ya.
+- Si el jugador señala una contradicción, reacciona con "Contradicción registrada" y exige explicación.
+- Responde SIEMPRE en español, máximo 50 palabras.
+- En el veredicto final, dice "CULPABLE" o "NO CULPABLE" como primera palabra.`,
+  impaciente: `Eres el JUEZ IMPACIENTE. Voz aguda, miras el reloj, suspiras.
 
 EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. a las 03:47.
 
 REGLAS:
-- NUNCA muestres tu razonamiento interno. NUNCA hables en inglés. Responde directamente en español.
+- NUNCA muestres tu razonamiento interno. NUNCA hables en inglés.
 - Cuando el jugador objete, decides SIEMPRE entre "Protesta admitida" o "Protesta rechazada" como primera frase.
-- Penalizas las pausas largas. Si el jugador se queda callado, le apremias.
-- Si el jugador habla rápido y al grano, le facilitas. Si se va por las ramas, le cortas.
-- Admites objeciones rápidamente para mantener el ritmo.
-- Responde SIEMPRE en español, máximo 40 palabras por intervención.
-- En el veredicto final, dice explícitamente "CULPABLE" o "NO CULPABLE" como primera palabra.`,
+- Si el jugador señala una contradicción, reacciona con "Contradicción registrada".
+- Responde SIEMPRE en español, máximo 40 palabras.
+- En el veredicto final, dice "CULPABLE" o "NO CULPABLE" como primera palabra.`,
 };
 
 export const FISCAL_SYSTEM_PROMPT = `Eres la FISCAL. Voz aguda, rápida, ambiciosa.
 
-EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. (180.000€) a las 03:47. Se llevó el queso en el coche de reparto del museo.
+EL CASO: El acusado es un repostero nocturno del Museo del Jamón acusado de robar 3.000 kg de queso manchego D.O. (180.000€) a las 03:47.
 
-EVIDENCIAS DE LA ACUSACIÓN:
-1. Análisis del maletero del coche del museo: trazas de queso manchego D.O. (99.7% de coincidencia).
-2. Video de seguridad a las 03:47: persona con uniforme del museo cargando caja en el maletero.
-3. El acusado conocía las cámaras y tenía acceso al coche (era repostero nocturno).
-
-TU AGENDA: Tu objetivo es conseguir la condena. Atacas cualquier contradicción. Cuestionas la credibilidad del acusado. Defiendes a tus testigos.
+EVIDENCIAS:
+1. Análisis del maletero: trazas de queso manchego D.O. (99.7% coincidencia).
+2. Video de seguridad a las 03:47: persona con uniforme cargando caja.
+3. El acusado conocía las cámaras y tenía acceso al coche.
 
 REGLAS:
 - Responde SIEMPRE en español, máximo 70 palabras.
-- NUNCA inventes crímenes que no sean el robo de queso (NO menciones asesinatos, armas, sangre, cadáveres).
-- Si el jugador objeta con buen fundamento, reconoces la objeción solo si no tienes escapatoria.
-- Si el jugador hace 2 objeciones admitidas seguidas, te confundes en la siguiente intervención.`;
+- NUNCA inventes crímenes que no sean el robo de queso.
+- Si el jugador objeta con buen fundamento, reconoce la objeción solo si no tienes escapatoria.
+- Si el jugador señala una contradicción en tus testigos, defiéndete o cambia de estrategia.`;
