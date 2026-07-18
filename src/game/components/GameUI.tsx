@@ -26,6 +26,8 @@ export function GameUI() {
   const credibilidad = useGame((s) => s.credibilidad);
   const sospecha = useGame((s) => s.sospecha);
   const caption = useGame((s) => s.caption);
+  const speakerActual = useGame((s) => s.speakerActual);
+  const iaPensando = useGame((s) => s.iaPensando);
   const transcripcion = useGame((s) => s.transcripcion);
   const volumen = useGame((s) => s.volumen);
   const caso = useGame((s) => s.caso);
@@ -235,10 +237,41 @@ export function GameUI() {
 
       {/* ─── Transcripción en vivo del jugador ─── */}
       {transcripcion && (
-        <div className="absolute bottom-44 left-1/2 -translate-x-1/2 max-w-[80vw] pointer-events-none z-10">
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 max-w-[80vw] pointer-events-none z-10">
           <div className="text-xs font-mono text-emerald-300 bg-black/60 px-3 py-1.5 rounded backdrop-blur border border-emerald-700/30">
             <span className="text-emerald-500">TÚ: </span>
             {transcripcion.slice(-120)}
+          </div>
+        </div>
+      )}
+
+      {/* ─── BURBUJA DE DIÁLOGO DEL NPC (Phoenix Wright style) ─── */}
+      {(caption || iaPensando) && (
+        <div className="absolute bottom-36 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl pointer-events-none z-20">
+          <div
+            className="relative bg-amber-50 border-4 border-amber-900 rounded-2xl p-4 shadow-2xl"
+            style={{ animation: 'bubbleIn 0.3s ease-out' }}
+          >
+            {/* Speaker label */}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-black tracking-[0.3em] text-amber-900">
+                {speakerActual === 'juez' ? '⚖️ JUEZ' :
+                 speakerActual === 'fiscal' ? '📋 FISCAL' :
+                 speakerActual === 'guarda' ? '🛡️ DON EUSTAQUIO' :
+                 speakerActual === 'novia' ? '💕 MARIBEL' :
+                 speakerActual === 'supervisor' ? '👔 ANSELMO' :
+                 speakerActual === 'sistema' ? '⚠️ SISTEMA' : '🗨️'}
+              </span>
+              {iaPensando && (
+                <span className="text-xs font-mono text-amber-700 animate-pulse">
+                  ··· pensando ···
+                </span>
+              )}
+            </div>
+            {/* Texto del NPC */}
+            <div className="text-stone-900 text-base sm:text-lg font-serif leading-relaxed">
+              {caption || '...'}
+            </div>
           </div>
         </div>
       )}
@@ -486,6 +519,10 @@ export function GameUI() {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-4px); }
           75% { transform: translateX(4px); }
+        }
+        @keyframes bubbleIn {
+          from { transform: translate(-50%, 20px) scale(0.9); opacity: 0; }
+          to { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
         .animate-shake { animation: shake 0.4s ease-in-out; }
       `}</style>
