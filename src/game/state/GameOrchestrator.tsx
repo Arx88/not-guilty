@@ -167,21 +167,23 @@ export function GameOrchestrator() {
             'Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.',
             'TÚ ERES LA FISCAL. Hablas al tribunal. NUNCA hables como el acusado.',
             true
-          );
-          setSubfase('F2.window1');
+          ).then(() => {
+            // Buffer de lectura: 4s para que el jugador lea antes de que empiece el timer
+            setTimeout(() => setSubfase('F2.window1'), 4000);
+          });
         }, 1500);
         return () => clearTimeout(t);
       }
 
       case 'F2.window1': {
         setWindowObjecion(true);
-        setTimerSegundos(20); // 20s, no 6s
+        setTimerSegundos(30); // 20s, no 6s
         sndWindowOpen();
         const t = setTimeout(() => {
           setWindowObjecion(false);
           setTimerSegundos(null);
           setSubfase('F2.fiscal2');
-        }, 20000);
+        }, 30000);
         return () => clearTimeout(t);
       }
 
@@ -192,21 +194,22 @@ export function GameOrchestrator() {
             'Presenta la segunda evidencia: el video de seguridad del museo a las 03:47.',
             'TÚ ERES LA FISCAL. Hablas al tribunal. NUNCA hables como el acusado.',
             true
-          );
-          setSubfase('F2.window2');
+          ).then(() => {
+            setTimeout(() => setSubfase('F2.window2'), 4000);
+          });
         }, 2500);
         return () => clearTimeout(t);
       }
 
       case 'F2.window2': {
         setWindowObjecion(true);
-        setTimerSegundos(20);
+        setTimerSegundos(30);
         sndWindowOpen();
         const t = setTimeout(() => {
           setWindowObjecion(false);
           setTimerSegundos(null);
           setSubfase('F2.transicion');
-        }, 20000);
+        }, 30000);
         return () => clearTimeout(t);
       }
 
@@ -239,9 +242,12 @@ export function GameOrchestrator() {
             if (reply) {
               feedback('Testimonio del guarda registrado. ESCUCHA con atención — busca contradicciones.', 'info');
             }
+            // Buffer de lectura: 5s antes de que empiece el timer de contra-interrogatorio
+            setTimeout(() => {
+              setSubfase('F4.guarda_contra');
+              setTimerSegundos(90);
+            }, 5000);
           });
-          setSubfase('F4.guarda_contra');
-          setTimerSegundos(40);
         }, 1500);
         return () => clearTimeout(t);
       }
@@ -253,7 +259,7 @@ export function GameOrchestrator() {
             feedback('No contrainterrogaste al guarda. Sin información adicional.', 'info');
           }
           setSubfase('F4.supervisor_subida');
-        }, 40000);
+        }, 90000);
         return () => clearTimeout(t);
       }
 
@@ -272,9 +278,11 @@ export function GameOrchestrator() {
             if (reply) {
               feedback('Testimonio del supervisor registrado. COMPARA con lo que dijo el guarda.', 'info');
             }
+            setTimeout(() => {
+              setSubfase('F4.supervisor_contra');
+              setTimerSegundos(90);
+            }, 5000);
           });
-          setSubfase('F4.supervisor_contra');
-          setTimerSegundos(40);
         }, 1500);
         return () => clearTimeout(t);
       }
@@ -285,7 +293,7 @@ export function GameOrchestrator() {
             hablar('juez', 'Suficiente. Pasemos al alegato final.', undefined, true);
           }
           setSubfase('F4.transicion');
-        }, 40000);
+        }, 90000);
         return () => clearTimeout(t);
       }
 
@@ -295,7 +303,7 @@ export function GameOrchestrator() {
           hablar('juez', 'Defensa, tiene 60 segundos para su alegato final.', undefined, true);
           setFase('F5');
           setSubfase('F5.alegato');
-          setTimerSegundos(60);
+          setTimerSegundos(90);
         }, 1500);
         return () => clearTimeout(t);
       }
