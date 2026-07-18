@@ -86,15 +86,15 @@ export function GameUI() {
     subfaseActual === 'F4.supervisor_contra' ||
     subfaseActual === 'F5.alegato';
 
-  // Mensaje de qué debe hacer el jugador
+  // Mensaje de qué debe hacer el jugador — CLARO y CONTEXTUAL
   const hintJugador = () => {
-    if (windowObjecion) return 'Di "¡Protesto!" + tu fundamento AHORA';
-    if (subfaseActual === 'F1.espera') return 'Responde al juez (sí/no/libre)';
-    if (subfaseActual === 'F3.espera') return 'Di "sí" para presentar evidencia o "no"';
-    if (subfaseActual === 'F4.guarda_contra') return 'Contra-interroga al GUARDA (habla libre)';
-    if (subfaseActual === 'F4.supervisor_contra') return 'Contra-interroga al SUPERVISOR (habla libre)';
-    if (subfaseActual === 'F5.alegato') return 'ALEGATO FINAL: habla con fuerza';
-    return 'Escuchando al tribunal...';
+    if (windowObjecion) return '¡PROTESTA AHORA! Di "¡Protesto!" + por qué objetas. Ej: "¡Protesto! Esa prueba no demuestra que fui yo"';
+    if (subfaseActual === 'F1.espera') return 'El juez te preguntó algo. Responde "sí" o "no" (o lo que quieras decir)';
+    if (subfaseActual === 'F3.espera') return 'Click en una evidencia de abajo para presentarla, o di "no"';
+    if (subfaseActual === 'F4.guarda_contra') return 'Pregúntale al GUARDA lo que quieras. Ej: "¿A qué hora terminó su turno?"';
+    if (subfaseActual === 'F4.supervisor_contra') return 'Pregúntale al SUPERVISOR. Ej: "¿Por qué me despidió?"';
+    if (subfaseActual === 'F5.alegato') return 'ALEGATO FINAL: convence al juez de tu inocencia en 45 segundos';
+    return 'Esperando al tribunal...';
   };
 
   // Peor jurado para hint
@@ -343,14 +343,44 @@ export function GameUI() {
         </div>
       )}
 
-      {/* ─── Comandos ─── */}
+      {/* ─── Comandos contextuales ─── */}
       <div className="absolute bottom-6 left-3 pointer-events-none">
         <Card className="p-2 bg-black/60 border-amber-700/30 backdrop-blur">
-          <div className="text-[9px] font-mono text-amber-500 mb-1">COMANDOS</div>
+          <div className="text-[9px] font-mono text-amber-500 mb-1">
+            {fase === 'F1' && 'CÓMO RESPONDER'}
+            {fase === 'F2' && (windowObjecion ? '¡OBJETA AHORA!' : 'ESPERA TU TURNO')}
+            {fase === 'F3' && 'EVIDENCIAS'}
+            {fase === 'F4' && 'CONTRA-INTERROGATORIO'}
+            {fase === 'F5' && 'ALEGATO FINAL'}
+          </div>
           <div className="space-y-0.5 text-[10px] font-mono text-amber-300/80">
-            <div>"¡Protesto!" — objetar</div>
-            <div>"Recusación, jurado N"</div>
-            <div className="text-emerald-400/70 mt-1">F4/F5: habla libre</div>
+            {fase === 'F1' && (
+              <>
+                <div>Escribe o di tu respuesta</div>
+                <div className="text-amber-500/60">Ej: "sí, entiendo los cargos"</div>
+              </>
+            )}
+            {fase === 'F2' && windowObjecion && (
+              <>
+                <div className="text-red-400">Di "¡Protesto!" + tu razón</div>
+                <div className="text-amber-500/60">Ej: "¡Protesto! Esa prueba es circunstancial"</div>
+              </>
+            )}
+            {fase === 'F2' && !windowObjecion && (
+              <div className="text-amber-500/60">Espera a que el fiscal termine...</div>
+            )}
+            {fase === 'F3' && (
+              <div>Click una evidencia o di "no"</div>
+            )}
+            {fase === 'F4' && (
+              <>
+                <div>Habla o escribe preguntas</div>
+                <div className="text-amber-500/60">Ej: "¿Dónde estaba a las 03:47?"</div>
+              </>
+            )}
+            {fase === 'F5' && (
+              <div>Tu última oportunidad. Convence al juez.</div>
+            )}
           </div>
         </Card>
       </div>

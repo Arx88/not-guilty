@@ -127,10 +127,9 @@ export function GameOrchestrator() {
   }, [iniciarPartida]);
 
   // ── F1: Juez lee cargos al iniciar ──
-  const yaInicioAperturaRef = useRef(false);
+  // Sin ref guard — usar subfase como guard natural
   useEffect(() => {
-    if (fase === 'F1' && caso && subfase === 'F1.espera' && !intervencionJugador && !yaInicioAperturaRef.current) {
-      yaInicioAperturaRef.current = true;
+    if (fase === 'F1' && caso && subfase === 'F1.espera' && !intervencionJugador) {
       const t = setTimeout(() => {
         hablar(
           'juez',
