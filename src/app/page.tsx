@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Mic, Play, AlertTriangle } from 'lucide-react';
 
-// Three.js solo carga en cliente
-const CourtroomScene = dynamic(() => import('@/game/scene/CourtroomScene'), { ssr: false });
+// Escena 2D (sin WebGL) — no crashea el servidor
+const CourtroomScene2D = dynamic(() => import('@/game/components/CourtroomScene2D').then((m) => m.CourtroomScene2D), { ssr: false });
 const GameUI = dynamic(() => import('@/game/components/GameUI').then((m) => m.GameUI), { ssr: false });
 const GameOrchestrator = dynamic(
   () => import('@/game/state/GameOrchestrator').then((m) => m.GameOrchestrator),
@@ -81,7 +81,7 @@ export default function Home() {
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-stone-950">
       <GameOrchestrator />
-      <CourtroomScene />
+      <CourtroomScene2D />
       <GameUI />
     </div>
   );
