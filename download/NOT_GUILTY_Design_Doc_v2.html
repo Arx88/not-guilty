@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOT GUILTY — Design Document v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-panel: #141414;
+    --bg-card: #1a1a1a;
+    --text: #f0e4cf;
+    --text-muted: #8a8a8a;
+    --gold: #c69850;
+    --gold-dim: #8b6f3a;
+    --red: #c44545;
+    --green: #5a9e5a;
+    --blue: #5a7a9e;
+    --purple: #7a5a9e;
+    --border: #2a2a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.7; overflow-x: hidden; }
+  
+  /* PAGE SYSTEM */
+  .page { width: 100%; max-width: 900px; margin: 0 auto; padding: 60px 40px; min-height: 100vh; border-bottom: 1px solid var(--border); }
+  .page-num { position: fixed; bottom: 20px; right: 30px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); z-index: 100; }
+  
+  /* COVER */
+  .cover { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; text-align: center; background: radial-gradient(ellipse at center, #1a1410 0%, #0a0a0a 100%); }
+  .cover h1 { font-family: 'Playfair Display', serif; font-size: 96px; font-weight: 900; line-height: 0.9; color: var(--text); margin-bottom: 20px; }
+  .cover h1 em { font-style: italic; color: var(--gold); font-weight: 400; }
+  .cover .subtitle { font-size: 18px; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; }
+  .cover .meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gold-dim); }
+  
+  /* TYPOGRAPHY */
+  h1 { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.1; }
+  h2 { font-size: 28px; font-weight: 700; color: var(--gold); margin-top: 40px; margin-bottom: 16px; }
+  h3 { font-size: 20px; font-weight: 600; color: var(--text); margin-top: 30px; margin-bottom: 12px; }
+  h4 { font-size: 14px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; margin-bottom: 8px; }
+  p { font-size: 15px; color: var(--text); margin-bottom: 14px; max-width: 700px; }
+  p strong { color: var(--gold); }
+  .lead { font-size: 18px; color: var(--text-muted); font-weight: 300; line-height: 1.6; margin-bottom: 30px; }
+  
+  /* CARDS */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 20px 0; }
+  .card-gold { border-left: 4px solid var(--gold); }
+  .card-red { border-left: 4px solid var(--red); background: rgba(196,69,69,0.05); }
+  .card-green { border-left: 4px solid var(--green); background: rgba(90,158,90,0.05); }
+  .card-blue { border-left: 4px solid var(--blue); }
+  .card-purple { border-left: 4px solid var(--purple); }
+  
+  /* CALLOUT */
+  .callout { background: rgba(198,152,80,0.08); border: 1px solid var(--gold-dim); border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .callout-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  th { background: var(--bg-panel); color: var(--gold); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 10px; text-align: left; border-bottom: 2px solid var(--gold-dim); }
+  td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  td strong { color: var(--text); }
+  
+  /* LISTS */
+  ul, ol { margin: 12px 0 12px 24px; }
+  li { font-size: 14px; margin-bottom: 6px; color: var(--text); }
+  li strong { color: var(--gold); }
+  
+  /* UI MOCKUP */
+  .ui-mockup { background: #0d0d0d; border: 1px solid var(--border); border-radius: 12px; padding: 0; overflow: hidden; margin: 30px 0; position: relative; aspect-ratio: 16/9; }
+  .ui-mockup-label { position: absolute; top: 8px; left: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); }
+  .ui-zone { position: absolute; border: 1px dashed var(--gold-dim); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold-dim); }
+  
+  /* METRICS */
+  .metric { display: inline-block; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 6px; padding: 8px 16px; margin: 4px; }
+  .metric-val { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--gold); }
+  .metric-lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  
+  /* DIAGRAM */
+  .diagram { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 30px; margin: 20px 0; }
+  .flow-step { display: inline-block; background: var(--bg-card); border: 1px solid var(--gold-dim); border-radius: 6px; padding: 10px 16px; margin: 4px; font-size: 13px; color: var(--text); }
+  .flow-arrow { color: var(--gold); font-size: 18px; margin: 0 4px; }
+  
+  /* SECTION DIVIDER */
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); margin: 40px 0; }
+  
+  /* TAGS */
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin: 2px; }
+  .tag-red { background: rgba(196,69,69,0.15); color: var(--red); }
+  .tag-green { background: rgba(90,158,90,0.15); color: var(--green); }
+  .tag-gold { background: rgba(198,152,80,0.15); color: var(--gold); }
+  .tag-blue { background: rgba(90,122,158,0.15); color: var(--blue); }
+  
+  /* FUN METER */
+  .fun-meter { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+  .fun-bar { flex: 1; height: 8px; background: var(--bg-panel); border-radius: 4px; overflow: hidden; }
+  .fun-fill { height: 100%; border-radius: 4px; }
+  .fun-label { font-size: 12px; color: var(--text-muted); width: 150px; }
+  .fun-score { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gold); width: 30px; text-align: right; }
+  
+  /* ICON REFERENCE */
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin: 20px 0; }
+  .icon-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .icon-emoji { font-size: 32px; margin-bottom: 8px; }
+  .icon-name { font-size: 11px; color: var(--text); font-weight: 600; }
+  .icon-purpose { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+  
+  /* SCREENSHOT REF */
+  .ref-image { width: 100%; border: 2px solid var(--gold-dim); border-radius: 8px; margin: 20px 0; }
+  .ref-caption { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+  
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .page { padding: 30px 20px; }
+    .cover h1 { font-size: 56px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-num" id="pageNum"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 1: PORTADA -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="subtitle">Game Design Document</div>
+  <h1>NOT<br><em>Guilty</em></h1>
+  <div class="subtitle" style="margin-top: 20px;">Design Document v2.0 — Rediseño Completo</div>
+  <div style="margin-top: 40px;">
+    <div class="meta">TRIBUNAL · IA CONVERSACIONAL · VOZ · NAVEGADOR</div>
+    <div class="meta" style="margin-top: 8px;">STACK: NEXT.JS · THREE.JS · NVIDIA NEMOTRON ULTRA 550B</div>
+    <div class="meta" style="margin-top: 8px;">AUDITORÍA: EQUIPO SUPERCELL · 7 ESPECIALISTAS · SCORE ACTUAL: 3.9/10</div>
+    <div class="meta" style="margin-top: 8px;">OBJETIVO: 8/10</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 2: RESUMEN EJECUTIVO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Resumen Ejecutivo</h4>
+  <h1>Por qué el juego actual es un 3.9/10</h1>
+  <p class="lead">El juego actual tiene un motor de IA impresionante (Nemotron Ultra 550B genera diálogos coherentes en español con personalidades distintas) pero falla en TODO lo demás. La UI tapa el arte 3D, los tiempos no permiten leer, las mecánicas son "Press X to Continue" disfrazadas de juego, y el jugador no entiende qué hacer en ningún momento.</p>
+
+  <div class="card card-red">
+    <h4 style="color: var(--red); margin-top: 0;">Problemas Críticos Detectados</h4>
+    <table>
+      <tr><th>#</th><th>Problema</th><th>Quién lo reportó</th><th>Impacto</th></tr>
+      <tr><td>1</td><td><strong>UI tapa el arte 3D</strong> — la burbuja de diálogo ocupa el centro de la pantalla</td><td>Usuario</td><td><span class="tag tag-red">Crítico</span></td></tr>
+      <tr><td>2</td><td><strong>Tiempos insuficientes</strong> — 20s para leer + pensar + escribir objeción</td><td>Usuario + LiveOps</td><td><span class="tag tag-red">Crítico</span></td></tr>
+      <tr><td>3</td><td><strong>Input no envía</strong> — el texto se queda en el campo sin procesarse</td><td>Usuario</td><td><span class="tag tag-red">Crítico</span></td></tr>
+      <tr><td>4</td><td><strong>Role confusion</strong> — el juez responde como acusado</td><td>Usuario + Narrative</td><td><span class="tag tag-red">Crítico</span></td></tr>
+      <tr><td>5</td><td><strong>Intro llena de texto</strong> — nadie quiere leer 4 paneles antes de jugar</td><td>UX/UI Lead</td><td><span class="tag tag-red">Alto</span></td></tr>
+      <tr><td>6</td><td><strong>Sin feedback de progreso</strong> — no sabes si vas bien o mal</td><td>Player Psychology</td><td><span class="tag tag-red">Alto</span></td></tr>
+      <tr><td>7</td><td><strong>Mecánicas sin skill</strong> — protestar es un QTE, no una decisión</td><td>Game Design Director</td><td><span class="tag tag-red">Alto</span></td></tr>
+      <tr><td>8</td><td><strong>Sin audio ambiente</strong> — silencio total rompe inmersión</td><td>Audio Director</td><td><span class="tag tag-gold">Medio</span></td></tr>
+      <tr><td>9</td><td><strong>Jerarquía visual plana</strong> — todo compite por atención</td><td>UX/UI Lead</td><td><span class="tag tag-gold">Medio</span></td></tr>
+      <tr><td>10</td><td><strong>Caso estático</strong> — sin variabilidad entre partidas</td><td>LiveOps</td><td><span class="tag tag-gold">Medio</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card card-green">
+    <h4 style="color: var(--green); margin-top: 0;">Lo que SÍ funciona (no tocar)</h4>
+    <ul>
+      <li><strong>Motor de IA</strong> — Nemotron Ultra genera diálogos coherentes, personajes con personalidad, decisiones judiciales lógicas</li>
+      <li><strong>Contradicciones</strong> — el supervisor miente sobre el guarda, el jugador puede descubrirlo. Momento "aha" real.</li>
+      <li><strong>Objeciones limitadas</strong> — 3 total crea tensión de recurso. Cada una importa.</li>
+      <li><strong>Escena 3D</strong> — tribunal con personajes low-poly, luces spotlight, cámara reactiva</li>
+      <li><strong>Veredicto con fórmula</strong> — Credibilidad - Sospecha = absuelto/culpable. Predecible y justo.</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Objetivo del rediseño</div>
+    <p style="margin: 0;">Convertir un <strong>3.9/10</strong> (demo técnica con UI de tribunal) en un <strong>8/10</strong> (juego divertido, rejugable, que un streamer quiera jugar en directo). Este documento define EXACTAMENTE cómo, con justificación para cada decisión.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 3: FILOSOFÍA DE DISEÑO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Filosofía</h4>
+  <h1>Por qué el juego actual no divierte</h1>
+  
+  <p class="lead">Un juego no es "interactividad". Un juego es <strong>decisiones significativas bajo tensión</strong>. El juego actual tiene interactividad (botones, micrófono, texto) pero NO tiene decisiones significativas. Protestar es un reflejo, no un pensamiento. Elegir evidencia es un click, no un dilema. El veredicto es una fórmula matemática que ignora lo que dijiste.</p>
+
+  <h2>Los 5 pilares del rediseño</h2>
+  
+  <div class="card card-gold">
+    <h3 style="margin-top: 0;">Pilar 1: El arte es el foco, la UI no estorba</h3>
+    <p><strong>Por qué:</strong> El jugador necesita VER el tribunal, los personajes, sus reacciones. Si la UI tapa el arte, la inmersión muere. <strong>Regla:</strong> La UI ocupa máximo 30% de la pantalla. El 70% es tribunal 3D visible.</p>
+    <p><strong>Cómo:</strong> Paneles laterales semi-transparentes, burbuja de diálogo en zona inferior (no central), medidores como iconos pequeños en esquinas.</p>
+  </div>
+
+  <div class="card card-gold">
+    <h3 style="margin-top: 0;">Pilar 2: Cada decisión tiene costo y recompensa visible</h3>
+    <p><strong>Por qué:</strong> Si no hay costo, no hay tensión. Si no hay recompensa visible, no hay satisfacción. <strong>Regla:</strong> Cada acción del jugador muestra inmediatamente qué ganó o perdió, con número y explicación.</p>
+    <p><strong>Cómo:</strong> "+8 Credibilidad: El juez reconoce que el acceso compartido debilita la prueba" (no solo "+8 Credibilidad").</p>
+  </div>
+
+  <div class="card card-gold">
+    <h3 style="margin-top: 0;">Pilar 3: El tiempo es un recurso, no un castigo</h3>
+    <p><strong>Por qué:</strong> El timer debe crear urgencia, no pánico. 20s para leer + pensar + escribir es pánico. 30s con 5s de buffer es urgencia. <strong>Regla:</strong> El jugador SIEMPRE tiene tiempo de leer lo que el NPC dijo antes de tener que actuar.</p>
+    <p><strong>Cómo:</strong> Buffer de 5s después de que el NPC habla. Timer empieza DESPUÉS del buffer, no durante.</p>
+  </div>
+
+  <div class="card card-gold">
+    <h3 style="margin-top: 0;">Pilar 4: El jugador ES el acusado, no un observador</h3>
+    <p><strong>Por qué:</strong> Si el juez responde como acusado, la fantasía se rompe. Si el jugador no siente que SUS palabras importan, no hay inversión emocional. <strong>Regla:</strong> Los NPCs NUNCA hablan como el acusado. Lo que el jugador dice cambia la respuesta del NPC.</p>
+    <p><strong>Cómo:</strong> System prompts con "TÚ ERES EL JUEZ/FISCAL/TESTIGO. NUNCA hables como el acusado" en la primera línea.</p>
+  </div>
+
+  <div class="card card-gold">
+    <h3 style="margin-top: 0;">Pilar 5: Enseñar jugando, no leyendo</h3>
+    <p><strong>Por qué:</strong> Nadie quiere leer 4 paneles de tutorial antes de jugar. La intro actual es un muro de texto. <strong>Regla:</strong> El tutorial dura 15 segundos y enseña UNA cosa: "habla o escribe para responder". El resto se aprende en el juego.</p>
+    <p><strong>Cómo:</strong> Onboarding contextual: el juego te dice qué hacer EN EL MOMENTO, no antes.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 4: MECÁNICAS CORE -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Mecánicas</h4>
+  <h1>Mecánicas Core Rediseñadas</h1>
+  <p class="lead">Cada mecánica explicada con: qué es, por qué divierte, cómo se muestra en UI, y cuál es el skill involucrado.</p>
+
+  <h2>Mecánica 1: Objeciones Limitadas (3 total)</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> Tienes 3 objeciones en todo el juicio. Cada una que gastas mal te deja más débil para el resto.</p>
+    <p><strong>Por qué divierte:</strong> Hay tensión real. ¿Gasto mi última objeción aquí o la guardo para después? Es como un juego de cartas: cada carta es valiosa. Si fueran infinitas, no importaría cuándo las usas.</p>
+    <p><strong>Skill involucrado:</strong> El jugador debe identificar CUÁL evidencia del fiscal tiene un fallo lógico y CUÁL es el fundamento correcto. No es "protestar todo", es "protestar bien".</p>
+    <p><strong>Cómo se muestra:</strong> Tres iconos de mazo (🔨) en la esquina superior derecha. Los usados se atenúan. Cuando quedan 0, el botón PROTESTO se desactiva con tooltip "Sin objeciones".</p>
+  </div>
+  <div class="fun-meter">
+    <span class="fun-label">Tensión</span>
+    <div class="fun-bar"><div class="fun-fill" style="width: 80%; background: var(--red);"></div></div>
+    <span class="fun-score">8/10</span>
+  </div>
+  <div class="fun-meter">
+    <span class="fun-label">Maestría</span>
+    <div class="fun-bar"><div class="fun-fill" style="width: 70%; background: var(--green);"></div></div>
+    <span class="fun-score">7/10</span>
+  </div>
+
+  <h2>Mecánica 2: Detección de Contradicciones</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> Los testigos tienen mentiras REALES entre sus testimonios. El guarda dice "no vi a nadie". El supervisor dice "el guarda me avisó que vio a alguien". Uno miente. El jugador debe ESCUCHAR, COMPARAR y SEÑALAR.</p>
+    <p><strong>Por qué divierte:</strong> Es el momento "aha" de Phoenix Wright. Cuando conectas dos piezas y descubres la mentira, te sientes un genio. No es reflejo, es deducción.</p>
+    <p><strong>Skill involucrado:</strong> Escucha activa + memoria + comparación lógica. El jugador debe recordar lo que dijo cada testigo y encontrar la inconsistencia.</p>
+    <p><strong>Cómo se muestra:</strong> Panel izquierdo "📝 TESTIMONIOS" muestra lo que cada testigo dijo (texto resumido). Cuando hay 2+ testimonios, aparece el botón "⚡ CONTRADICCIÓN" en púrpura. El jugador escribe qué notó.</p>
+  </div>
+  <div class="fun-meter">
+    <span class="fun-label">Satisfacción</span>
+    <div class="fun-bar"><div class="fun-fill" style="width: 90%; background: var(--gold);"></div></div>
+    <span class="fun-score">9/10</span>
+  </div>
+  <div class="fun-meter">
+    <span class="fun-label">Maestría</span>
+    <div class="fun-bar"><div class="fun-fill" style="width: 85%; background: var(--green);"></div></div>
+    <span class="fun-score">8.5/10</span>
+  </div>
+
+  <h2>Mecánica 3: Contra-interrogatorio Libre</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> Pregúntale al testigo lo que quieras por voz o texto. La IA responde EN PERSONAJE. Si haces la pregunta correcta, el testigo se contradice o admite algo que no quería.</p>
+    <p><strong>Por qué divierte:</strong> Es la mecánica con mayor skill ceiling. Un jugador experto puede destrozar a un testigo en 20 segundos con la pregunta correcta. Un novato puede flirtear con el testigo para que cambie de bando. La IA improvisa, cada partida es única.</p>
+    <p><strong>Skill involucrado:</strong> Pensamiento estratégico + improvisación + empatía (leer al personaje).</p>
+    <p><strong>Cómo se muestra:</strong> El testigo activo tiene un highlight dorado. El jugador escribe o habla libremente. Las respuestas se guardan en el panel de testimonios para comparar después.</p>
+  </div>
+  <div class="fun-meter">
+    <span class="fun-label">Agencia</span>
+    <div class="fun-bar"><div class="fun-fill" style="width: 95%; background: var(--blue);"></div></div>
+    <span class="fun-score">9.5/10</span>
+  </div>
+
+  <h2>Mecánica 4: Evidencias con Tipo Visible</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> 4 evidencias disponibles, cada una con tipo visible: <span class="tag tag-green">EXCULPATORIA</span> <span class="tag tag-gold">AMBIGUA</span> <span class="tag tag-red">INCRIMINATORIA</span></p>
+    <p><strong>Por qué divierte:</strong> Hay dilema. ¿Presentas la evidencia ambigua que podría ir en tu contra? ¿O juegas seguro con la exculpatoria? Si no leíste las descripciones, puedes elegir la incriminatoria por error.</p>
+    <p><strong>Cómo se muestra:</strong> 4 botones en la parte inferior (no central). Color codificado: verde, ámbar, rojo. Descripción breve visible SIN necesidad de hover.</p>
+  </div>
+
+  <h2>Mecánica 5: Alegato Final con Stakes</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> 90 segundos para convencer al juez. Lo que digas se envía a la IA que ya conoce todo el contexto del juicio. Si usas las contradicciones que descubriste, el juez las cita en el veredicto.</p>
+    <p><strong>Por qué divierte:</strong> Es tu momento. Todo lo que hiciste antes se acumula. Si encontraste la mentira del supervisor, puedes usarla aquí. Si no, llegas desnudo. La IA reacciona a TU argumento, no a un guion.</p>
+    <p><strong>Cómo se muestra:</strong> Timer grande pero no intrusivo (esquina superior). Sin botones de por medio — solo habla o escribe. La burbuja del juez aparece cuando termina con el veredicto.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 5: LOOP DE JUEGO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Game Loop</h4>
+  <h1>Loop de Juego y Curva de Tensión</h1>
+  
+  <p class="lead">El loop actual es lineal: F1→F2→F3→F4→F5→Veredicto. El problema: no hay loop, solo una línea recta. Un juego necesita un CICLO donde lo que aprendes en una partida te hace mejor en la siguiente.</p>
+
+  <h2>Loop por partida (micro)</h2>
+  <div class="diagram">
+    <div style="text-align: center;">
+      <span class="flow-step">F1: Escuchar cargos</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">F2: Objeciones (recurso limitado)</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">F3: Elegir evidencia</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">F4: Interrogar + detectar mentiras</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">F5: Alegato final</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Veredicto</span>
+    </div>
+    <div style="text-align: center; margin-top: 16px;">
+      <span class="flow-arrow">↻</span>
+      <span class="flow-step">Nueva partida con caso distinto + variabilidad interna</span>
+    </div>
+  </div>
+
+  <h2>Curva de tensión objetivo</h2>
+  <div class="card">
+    <table>
+      <tr><th>Fase</th><th>Duración</th><th>Tensión</th><th>Por qué</th></tr>
+      <tr><td>F1 Apertura</td><td>30-60s</td><td>30/100</td><td>El juez lee cargos. Tensión baja, el jugador se ambienta.</td></tr>
+      <tr><td>F2 Fiscal</td><td>2-3 min</td><td>60/100</td><td>El fiscal ataca. Tienes que decidir si objetar (recurso limitado). Tensión sube.</td></tr>
+      <tr><td>F3 Evidencia</td><td>30-60s</td><td>40/100</td><td>Valle estratégico. El jugador elige evidencia. Respira antes de F4.</td></tr>
+      <tr><td>F4 Testigos</td><td>3-4 min</td><td>80/100</td><td>Pico de tensión. Contrainterrogatorio + contradicciones. El jugador está activo.</td></tr>
+      <tr><td>F5 Alegato</td><td>1.5 min</td><td>95/100</td><td>Clímax. Todo lo que descubriste se usa aquí. Una última oportunidad.</td></tr>
+      <tr><td>Veredicto</td><td>10s</td><td>100→0/100</td><td>Caída catártica. Absuelto = alivio. Culpable = tensión que se libera.</td></tr>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Principio clave</div>
+    <p style="margin: 0;">La tensión sube por DECISIONES del jugador (objeta, interroga, señala contradicción), no por timers. El timer es urgencia, no tensión. La tensión viene de "¿gasté mi última objeción bien?".</p>
+  </div>
+
+  <h2>Loop entre partidas (macro)</h2>
+  <div class="diagram">
+    <div style="text-align: center;">
+      <span class="flow-step">Partida 1: Caso Queso (aprendes mecánicas)</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Partida 2: Mismo caso, variante distinta (dominas mecánicas)</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Partida 3+: Nuevo caso (aplicas lo aprendido)</span>
+      <span class="flow-arrow">↻</span>
+    </div>
+  </div>
+  <p>Cada caso tiene <strong>27 variantes internas</strong> (testigo mentiroso, evidencia clave, perfil del juez, vínculo entre testigos). El jugador que juega el mismo caso 3 veces se enfrenta a configuraciones distintas. Esto da rejugabilidad sin escribir 27 casos.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 6: UX/UI DESIGN -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>UX/UI Design</h4>
+  <h1>Diseño de UX/UI Completo</h1>
+  <p class="lead">Basado en la captura de referencia del usuario. El arte 3D es el foco. La UI no estorba. Cada elemento tiene un por qué.</p>
+
+  <h2>Referencia del usuario</h2>
+  <img src="../upload/pasted_image_1784366031304.png" class="ref-image" alt="UI Reference">
+  <div class="ref-caption">Referencia de UI proporcionada por el usuario. Tribunal 3D central, paneles laterales con información, medidores compactos.</div>
+
+  <h2>Análisis de la referencia</h2>
+  <div class="card card-blue">
+    <p>La referencia muestra <strong>5 zonas funcionales claras</strong>:</p>
+    <ol>
+      <li><strong>Centro:</strong> Tribunal 3D visible (el foco visual principal, ~60% de la pantalla)</li>
+      <li><strong>Superior izquierda:</strong> "CASO ACTUAL" — fase + tipo de juez (mínimo, no estorba)</li>
+      <li><strong>Superior derecha:</strong> Medidores Credibilidad/Sospecha + botones de acción (Notas, Pruebas, Datos)</li>
+      <li><strong>Inferior centro:</strong> Diálogo del NPC activo + waveform + input del jugador</li>
+      <li><strong>Lateral izquierdo:</strong> Panel del tribunal (jurados) + tips de defensa</li>
+      <li><strong>Lateral derecho:</strong> Historial de diálogo</li>
+    </ol>
+    <p><strong>Por qué funciona esta jerarquía:</strong> El ojo va al centro (tribunal 3D con personajes), luego a la zona inferior (quién está hablando y qué decir), y solo cuando necesita información va a los paneles laterales. La UI es REFERENCIA, no protagonista.</p>
+  </div>
+
+  <h2>Layout propuesto — zona por zona</h2>
+  
+  <h3>Zona 1: Centro (60% de pantalla) — Tribunal 3D</h3>
+  <div class="card card-gold">
+    <p><strong>Qué se ve:</strong> Escena 3D del tribunal con juez, fiscal, acusado, testigo y jurados. Cámara reactiva que cambia de ángulo según quién habla.</p>
+    <p><strong>Por qué aquí:</strong> Es el foco emocional. El jugador necesita VER las reacciones de los personajes. Si la UI tapa esto, la inmersión muere.</p>
+    <p><strong>Jerarquía:</strong> Primaria. Es lo primero que el ojo busca.</p>
+  </div>
+
+  <h3>Zona 2: Inferior centro (25% de ancho) — Diálogo + Input</h3>
+  <div class="card card-gold">
+    <p><strong>Qué se ve:</strong> Burbuja de diálogo con speaker label (icono + nombre) + texto del NPC. Debajo: input de texto SIEMPRE visible con placeholder contextual.</p>
+    <p><strong>Por qué aquí:</strong> El diálogo es la segunda prioridad visual. El ojo baja del tribunal 3D al diálogo naturalmente. El input está justo debajo para que el jugador responda sin mover el ojo.</p>
+    <p><strong>Por qué NO en el centro:</strong> El centro es para el arte. El diálogo en la zona inferior no tapa los personajes. Phoenix Wright pone el diálogo abajo por esta razón.</p>
+    <p><strong>Jerarquía:</strong> Secundaria. Es lo segundo que el ojo busca.</p>
+  </div>
+
+  <h3>Zona 3: Superior derecha — Medidores + Objeciones</h3>
+  <div class="card card-gold">
+    <p><strong>Qué se ve:</strong> Credibilidad (verde) + Sospecha (rojo) como barras compactas. Debajo: 3 iconos de mazo (objeciones restantes). Cuando hay window de objeción, el icono de mazo parpadea.</p>
+    <p><strong>Por qué aquí:</strong> Los medidores son información de estado, no foco. Van en la periferia donde el ojo los consulta sin distraerse. La esquina superior derecha es donde la gente busca "stats" por convención de juegos.</p>
+    <p><strong>Jerarquía:</strong> Terciaria. Se consulta, no se mira continuamente.</p>
+  </div>
+
+  <h3>Zona 4: Superior izquierda — Caso + Fase</h3>
+  <div class="card card-gold">
+    <p><strong>Qué se ve:</strong> "EXPEDIENTE 2026/NOTG-001 · FASE F2 · JUEZ: Impaciente" en una sola línea. Mínimo.</p>
+    <p><strong>Por qué aquí:</strong> Contexto, no foco. El jugador lo mira una vez al empezar y olvida. La esquina superior izquierda es donde la gente busca "dónde estoy" por convención.</p>
+    <p><strong>Jerarquía:</strong> Cuaternaria. Casi invisible.</p>
+  </div>
+
+  <h3>Zona 5: Lateral izquierdo (solo F4) — Testimonios</h3>
+  <div class="card card-purple">
+    <p><strong>Qué se ve:</strong> Panel púrpura con lo que cada testigo dijo (resumen). Solo aparece en F4 cuando hay testimonios que comparar.</p>
+    <p><strong>Por qué aquí:</strong> Es información de referencia para detectar contradicciones. Va a la izquierda porque es "información del pasado" (lo que ya escuchaste). El jugador la consulta cuando busca contradicciones.</p>
+    <p><strong>Por qué NO siempre visible:</strong> Si siempre está, el jugador no ESCUCHA. Lo lee del panel en vez de prestar atención. Debe aparecer DESPUÉS de que el testigo hable, como "nota mental".</p>
+    <p><strong>Jerarquía:</strong> Contextual. Solo visible cuando aplica.</p>
+  </div>
+
+  <h3>Zona 6: Inferior centro (cuando aplica) — Botones de acción</h3>
+  <div class="card card-red">
+    <p><strong>Qué se ve:</strong> Botón "¡PROTESTO!" rojo (solo F2 window) o panel de evidencias (solo F3) o botón "⚡ CONTRADICCIÓN" púrpura (solo F4 con 2+ testimonios).</p>
+    <p><strong>Por qué aquí:</strong> Los botones de acción van CERCA del input, no en el centro. El ojo ya está en la zona inferior (diálogo + input). Los botones aparecen ahí para que la acción sea inmediata.</p>
+    <p><strong>Por qué NO siempre visible:</strong> Si PROTESTO está siempre, el jugador lo spamea. Si CONTRADICCIÓN está siempre, el jugador la usa sin pensar. La aparición contextual crea el momento "¡AHORA puedo actuar!".</p>
+    <p><strong>Jerarquía:</strong> Acción. Aparece cuando el jugador DEBE actuar.</p>
+  </div>
+
+  <h3>Zona 7: Esquina inferior derecha — Jurado</h3>
+  <div class="card card-gold">
+    <p><strong>Qué se ve:</strong> 5 círculos pequeños (numerados 1-5) con color según simpatía: verde (favorable), ámbar (neutral), rojo (hostil). Un círculo atenuado = recusado.</p>
+    <p><strong>Por qué aquí:</strong> El jurado es información pasiva. El jugador lo consulta para decidir si recusar, pero no lo mira continuamente. La esquina inferior derecha es el lugar menos intrusivo.</p>
+    <p><strong>Jerarquía:</strong> Referencial. Mínima.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 7: ICONOS Y COLORES -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Iconografía</h4>
+  <h1>Sistema de Iconos y Colores</h1>
+  <p class="lead">Cada icono tiene un propósito. Cada color tiene un significado. Nada es decorativo.</p>
+
+  <h2>Paleta de colores</h2>
+  <div class="card">
+    <table>
+      <tr><th>Color</th><th>Hex</th><th>Significado</th><th>Dónde se usa</th></tr>
+      <tr><td><span style="color: var(--gold);">●</span> Dorado</td><td>#c69850</td><td>Identidad del juego, autoridad</td><td>Juez, marco de diálogo, acentos</td></tr>
+      <tr><td><span style="color: var(--green);">●</span> Verde</td><td>#5a9e5a</td><td>Positivo, credibilidad, favorable</td><td>Medidor credibilidad, jurado favorable, feedback positivo</td></tr>
+      <tr><td><span style="color: var(--red);">●</span> Rojo</td><td>#c44545</td><td>Peligro, sospecha, alerta</td><td>Medidor sospecha, botón PROTESTO, jurado hostil, feedback negativo</td></tr>
+      <tr><td><span style="color: var(--purple);">●</span> Púrpura</td><td>#7a5a9e</td><td>Deducción, contradicción, misterio</td><td>Botón CONTRADICCIÓN, panel de testimonios</td></tr>
+      <tr><td><span style="color: var(--blue);">●</span> Azul</td><td>#5a7a9e</td><td>Información, contexto</td><td>Historial, tips, información neutral</td></tr>
+      <tr><td><span style="color: var(--text);">●</span> Crema</td><td>#f0e4cf</td><td>Texto principal, fondo de diálogo</td><td>Texto, burbuja de diálogo</td></tr>
+      <tr><td><span style="color: var(--text-muted);">●</span> Gris</td><td>#8a8a8a</td><td>Texto secundario, metadatos</td><td>Fase, timestamps, captions</td></tr>
+    </table>
+  </div>
+
+  <h2>Iconos</h2>
+  <div class="icon-grid">
+    <div class="icon-item">
+      <div class="icon-emoji">⚖️</div>
+      <div class="icon-name">JUEZ</div>
+      <div class="icon-purpose">Autoridad, balance</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">📋</div>
+      <div class="icon-name">FISCAL</div>
+      <div class="icon-purpose">Acusación, documento legal</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">🛡️</div>
+      <div class="icon-name">GUARDA</div>
+      <div class="icon-purpose">Seguridad, protección</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">👔</div>
+      <div class="icon-name">SUPERVISOR</div>
+      <div class="icon-purpose">Autoridad corporativa</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">🔨</div>
+      <div class="icon-name">OBJECIÓN</div>
+      <div class="icon-purpose">Mazo del juez, gastar recurso</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">⚡</div>
+      <div class="icon-name">CONTRADICCIÓN</div>
+      <div class="icon-purpose">Descubrimiento, insight</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">🎤</div>
+      <div class="icon-name">MICRÓFONO</div>
+      <div class="icon-purpose">Input de voz, activo/pulsante</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">⌨️</div>
+      <div class="icon-name">TEXTO</div>
+      <div class="icon-purpose">Input alternativo</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">📝</div>
+      <div class="icon-name">TESTIMONIOS</div>
+      <div class="icon-purpose">Notas, registro</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">⏱️</div>
+      <div class="icon-name">TIMER</div>
+      <div class="icon-purpose">Urgencia, countdown</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-emoji">⚖</div>
+      <div class="icon-name">VEREDICTO</div>
+      <div class="icon-purpose">Decisión final, balanza</div>
+    </div>
+  </div>
+
+  <h2>Por qué estos iconos y no otros</h2>
+  <div class="card card-blue">
+    <ul>
+      <li><strong>⚖️ Juez:</strong> La balanza es el símbolo universal de justicia. No necesita texto para entenderse.</li>
+      <li><strong>📋 Fiscal:</strong> El portapapeles sugiere "tengo pruebas contra ti". Es amenazante pero burocrático.</li>
+      <li><strong>🛡️ Guarda:</strong> El escudo sugiere protección pero también debilidad (es un guarda nocturno asustadizo).</li>
+      <li><strong>👔 Supervisor:</strong> La corbata sugiere autoridad corporativa. Es el único con "poder" real en el museo.</li>
+      <li><strong>🔨 Objeción:</strong> El mazo del juez es el símbolo de "parar el juicio". Es un objeto físico, no un concepto abstracto.</li>
+      <li><strong>⚡ Contradicción:</strong> El rayo sugiere insight repentino. Es el momento "¡aha!" visualizado.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 8: ONBOARDING -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Onboarding</h4>
+  <h1>Onboarding: 15 segundos, no 4 paneles</h1>
+  <p class="lead">La intro actual es un muro de texto. Nadie la lee. El onboarding debe enseñar jugando, no leyendo.</p>
+
+  <h2>Intro actual (PROBLEMA)</h2>
+  <div class="card card-red">
+    <ul>
+      <li>4 paneles de texto con instrucciones</li>
+      <li>Colores múltiples que compiten</li>
+      <li>Demasiada información antes de empezar</li>
+      <li>El jugador quiere JUGAR, no leer</li>
+    </ul>
+  </div>
+
+  <h2>Intro rediseñada (SOLUCIÓN)</h2>
+  <div class="card card-green">
+    <h3 style="margin-top: 0;">Pantalla 1: Título (3 segundos)</h3>
+    <p>"NOT GUILTY" en grande sobre fondo oscuro. Un botón: <strong>"JUGAR"</strong>. Nada más.</p>
+    <p><strong>Por qué:</strong> El título genera curiosidad. El botón invita a actuar. No hay texto que leer. El jugador hace click inmediatamente.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3 style="margin-top: 0;">Pantalla 2: Setup mínimo (5 segundos)</h3>
+    <p>Una sola pregunta: <strong>"¿Cómo quieres responder?"</strong> con dos opciones grandes:</p>
+    <ul>
+      <li>🎤 <strong>Micrófono</strong> — "Habla para defenderte"</li>
+      <li>⌨️ <strong>Teclado</strong> — "Escribe para defenderte"</li>
+    </ul>
+    <p><strong>Por qué:</strong> Una decisión, no instrucciones. El jugador ELIGE cómo jugar. Esto le da agencia desde el segundo 1. Si elige micrófono y no funciona, el juego le ofrece teclado automáticamente.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3 style="margin-top: 0;">Pantalla 3: El juicio empieza (0 segundos)</h3>
+    <p>Directo al tribunal 3D. El juez habla. Aparece la burbuja de diálogo abajo. El input está listo. El primer hint contextual dice: <strong>"Responde al juez. Ej: 'sí'"</strong>.</p>
+    <p><strong>Por qué:</strong> El jugador aprende que (1) hay un juez que habla, (2) puede responder, (3) la respuesta va al juez. Todo en 5 segundos. Sin leer.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3 style="margin-top: 0;">Tutorial contextual (durante el juego, no antes)</h3>
+    <p>Cada mecánica se enseña EN EL MOMENTO en que se necesita:</p>
+    <table>
+      <tr><th>Cuándo</th><th>Qué aparece</th><th>Qué enseña</th></tr>
+      <tr><td>F1: Juez pregunta</td><td>"💬 Responde al juez. Ej: 'sí'"</td><td>Que puedes responder</td></tr>
+      <tr><td>F2: Fiscal presenta evidencia</td><td>Botón rojo "¡PROTESTO! (3)" aparece</td><td>Que puedes objetar + tienes 3</td></tr>
+      <tr><td>F2: Tras primera objeción</td><td>Feedback "+8 Cred, -10 Sosp"</td><td>Que objetar bien te ayuda</td></tr>
+      <tr><td>F3: Juez pregunta evidencia</td><td>4 botones de evidencia aparecen abajo</td><td>Que puedes elegir evidencia</td></tr>
+      <tr><td>F4: Segundo testigo habla</td><td>Panel púrpura "📝 TESTIMONIOS" aparece</td><td>Que puedes comparar testimonios</td></tr>
+      <tr><td>F4: 2+ testimonios</td><td>Botón "⚡ CONTRADICCIÓN" aparece</td><td>Que puedes señalar mentiras</td></tr>
+    </table>
+    <p><strong>Por qué:</strong> El jugador aprende haciendo, no leyendo. Cada mecánica se enseña 5 segundos antes de necesitarla, no 5 minutos antes. Esto es como Portal: te enseña con la mano, no con un manual.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 9: PSICOLOGÍA -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Psicología</h4>
+  <h1>Psicología del Jugador: Por qué engancha</h1>
+  <p class="lead">Un juego engancha cuando activa 5 motores psicológicos. El juego actual activa 0. El rediseño activa los 5.</p>
+
+  <h2>1. Autonomía (Teoría de la Autodeterminación)</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> El jugador siente que SUS decisiones importan, no que sigue un guion.</p>
+    <p><strong>Actual:</strong> ❌ F1 es "sí/no" sin consecuencia. F5 veredicto es fórmula matemática.</p>
+    <p><strong>Rediseño:</strong> ✅ Objeciones limitadas = cada una es una decisión real. Contradicciones = el jugador DESCUBRE, no se le dice. Alegato = la IA cita lo que dijiste en el veredicto.</p>
+    <p><strong>Cómo potenciar:</strong> El veredicto del juez debe REFERENCIAR específicamente lo que el jugador dijo. "El WhatsApp a las 03:50 que el acusado mencionó crea una ventana temporal incompatible..."</p>
+  </div>
+
+  <h2>2. Maestría (Mastery)</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> El jugador mejora con práctica. Hay skill involucrado.</p>
+    <p><strong>Actual:</strong> ❌ No hay skill. Protestar es un QTE. No hay forma de "jugar mejor".</p>
+    <p><strong>Rediseño:</strong> ✅ Detectar contradicciones requiere escucha activa + memoria. Contra-interrogatorio requiere hacer la pregunta correcta. Objeciones requieren identificar el fallo lógico de la prueba. Un jugador experto gana más rápido que un novato.</p>
+    <p><strong>Cómo potenciar:</strong> Mostrar al final de la partida QUÉ contradicciones perdiste. "No descubriste: El supervisor mintió sobre el guarda". Esto da información para mejorar la próxima vez.</p>
+  </div>
+
+  <h2>3. Sorpresa (Novelty)</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> Cosas inesperadas que rompen la predicción.</p>
+    <p><strong>Actual:</strong> ❌ Todo es predecible. F1→F2→F3→F4→F5 siempre igual.</p>
+    <p><strong>Rediseño:</strong> ✅ 27 variantes internas por caso. El testigo mentiroso cambia. El vínculo cambia. El juez cambia. No puedes memorizar el caso. Además, la IA improvisa respuestas, así que cada contra-interrogatorio es único.</p>
+    <p><strong>Cómo potenciar:</strong> Eventos sorpresa: el fiscal llama a un testigo que no esperabas. El juez se impacienta y corta tu tiempo. Un jurado se duerme y no escucha tu argumento.</p>
+  </div>
+
+  <h2>4. Recompensa (Reward)</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> Sensación de logro cuando haces algo bien.</p>
+    <p><strong>Actual:</strong> ❌ Los medidores suben/bajan pero no sabes por qué ni cuánto.</p>
+    <p><strong>Rediseño:</strong> ✅ Cada acción muestra feedback inmediato con número Y explicación: "+8 Credibilidad: El juez reconoce acceso compartido". Cuando descubres una contradicción: flash verde + sonido + "+12 Credibilidad".</p>
+    <p><strong>Cómo potenciar:</strong> El juez reacciona verbalmente: "Excelente punto, defensa" cuando objetas bien. El jurado asiente. Sonido de éxito. Esto es recompensa triple: visual + numérica + narrativa.</p>
+  </div>
+
+  <h2>5. Tensión (Flow)</h2>
+  <div class="card">
+    <p><strong>Qué es:</strong> El jugador está en el borde entre "puedo hacerlo" y "no puedo".</p>
+    <p><strong>Actual:</strong> ❌ F1 es demasiado fácil (sí/no). F2 es demasiado difícil (20s para leer + pensar + escribir). No hay flow.</p>
+    <p><strong>Rediseño:</strong> ✅ Timers más largos (30s objeción, 90s contra). Buffer de lectura (5s después de NPC habla). El desafío está en PENSAR, no en ser rápido.</p>
+    <p><strong>Cómo potenciar:</strong> La tensión viene del RECURSO limitado (3 objeciones), no del timer. Cuando te quedan 0 objeciones y el fiscal presenta una prueba dañina, la tensión es real: "no puedo hacer nada".</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 10: SONIDO Y EFECTOS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Audio & VFX</h4>
+  <h1>Diseño Sonoro y Efectos Visuales</h1>
+  <p class="lead">El silencio no es minimalismo, es abandono. Un juego de tribunal necesita SONIDO de tribunal.</p>
+
+  <h2>Audio ambiente (siempre activo)</h2>
+  <div class="card">
+    <table>
+      <tr><th>Sonido</th><th>Cuándo</th><th>Por qué</th><th>Implementación</th></tr>
+      <tr><td>HVAC bajo (55Hz)</td><td>Siempre</td><td>Sala de tribunal tiene aire acondicionado. Crea "presencia" del espacio.</td><td>OscillatorNode sine 55Hz, gain 0.015</td></tr>
+      <tr><td>Murmullo lejano</td><td>Siempre (muy bajo)</td><td>El público susurra. Hace que la sala se sienta viva.</td><td>BufferSource noise, lowpass 300Hz, gain 0.02</td></tr>
+      <tr><td>Tos ocasional</td><td>Random cada 30-60s</td><td>Realismo. Un tribunal real tiene toses. Rompe la monotonía del murmullo.</td><td>Synth burst corto, pitch random</td></tr>
+    </table>
+  </div>
+
+  <h2>Feedback sonoro por evento</h2>
+  <div class="card">
+    <table>
+      <tr><th>Evento</th><th>Sonido</th><th>Por qué</th></tr>
+      <tr><td>Juez habla</td><td>Golpe de mazo (thud grave + ruido filtrado)</td><td>El mazo es el símbolo del juez. Cada vez que habla, el jugador sabe que es autoridad.</td></tr>
+      <tr><td>Objeción admitida</td><td>Acorde ascendente C5-E5-G5 (do-mi-sol)</td><td>Triunfo. Es la misma progresión que "correcto" en juegos de quiz.</td></tr>
+      <tr><td>Objeción rechazada</td><td>Acorde descendente A4-F4-C4</td><td>Fracaso. Tensión no resuelta.</td></tr>
+      <tr><td>Contradicción válida</td><td>Sting de descubrimiento (tono agudo + eco)</td><td>El momento "aha" necesita un sonido que diga "¡lo encontraste!".</td></tr>
+      <tr><td>Window objeción abre</td><td>Beep ascendente (440→660→880Hz)</td><td>Urgencia. Algo está pasando y tienes que actuar.</td></tr>
+      <tr><td>Timer último 5s</td><td>Tick cada segundo (880Hz square)</td><td>Presión. El tiempo se acaba.</td></tr>
+      <tr><td>Veredicto</td><td>Acorde solemne C3-G3-C4 (lento)</td><td>Gravedad. Es el momento más importante del juego.</td></tr>
+      <tr><td>Absuelto</td><td>Acorde mayor sostenido + campana</td><td>Alivio. Liberación de tensión.</td></tr>
+      <tr><td>Condena</td><td>Acorde menor descendente + gong</td><td>Derrota. Pesadumbre.</td></tr>
+    </table>
+  </div>
+
+  <h2>Efectos visuales</h2>
+  <div class="card">
+    <table>
+      <tr><th>Efecto</th><th>Cuándo</th><th>Por qué</th></tr>
+      <tr><td>Flash verde en medidor</td><td>Credibilidad sube</td><td>Recompensa visual inmediata. El ojo percibe el cambio.</td></tr>
+      <tr><td>Flash rojo + shake</td><td>Sospecha sube</td><td>Castigo visual. El shake comunica "esto te dañó".</td></tr>
+      <tr><td>Feedback flash centrado</td><td>Cualquier acción del jugador</td><td>"+8 Credibilidad: acceso compartido debilita la prueba". Número + explicación.</td></tr>
+      <tr><td>Vigñeta roja pulsante</td><td>Sospecha > 70</td><td>Señal diegética de peligro. El jugador siente que está al borde.</td></tr>
+      <tr><td>Highlight dorado en NPC activo</td><td>Quien está hablando</td><td>El ojo sabe a quién mirar. No hay confusión de quién habla.</td></tr>
+      <tr><td>Animación burbuja entrada</td><td>Texto del NPC aparece</td><td>Transición suave. No aparece de golpe.</td></tr>
+      <tr><td>Partículas en objeción admitida</td><td>Triunfo</td><td>Celebración visual. Estrellas doradas que se disipan.</td></tr>
+      <tr><td>Escala de tiempo lento</td><td>Veredicto se anuncia</td><td>Gravedad del momento. Todo se ralentiza menos el juez.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 11: BALANCE Y REJUGABILIDAD -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Balance</h4>
+  <h1>Balance, Progresión y Rejugabilidad</h1>
+
+  <h2>Balance de medidores</h2>
+  <div class="card">
+    <table>
+      <tr><th>Acción</th><th>Credibilidad</th><th>Sospecha</th><th>Por qué</th></tr>
+      <tr><td>Objeción admitida</td><td style="color: var(--green);">+8</td><td style="color: var(--green);">-10</td><td>Gran recompensa. El jugador encontró el fallo.</td></tr>
+      <tr><td>Objeción rechazada</td><td style="color: var(--red);">-3</td><td style="color: var(--red);">+5</td><td>Castigo moderado. No tan severo para desanimar.</td></tr>
+      <tr><td>Contradicción válida</td><td style="color: var(--green);">+12</td><td style="color: var(--green);">-8</td><td>Mayor recompensa. Descubrir una mentira es el clímax del juego.</td></tr>
+      <tr><td>Contradicción inválida</td><td style="color: var(--red);">-5</td><td>0</td><td>Castigo por desperdiciar tiempo del tribunal.</td></tr>
+      <tr><td>Evidencia exculpatoria</td><td style="color: var(--green);">+8</td><td style="color: var(--green);">-10</td><td>Recompensa por elegir bien.</td></tr>
+      <tr><td>Evidencia ambigua</td><td style="color: var(--green);">+4</td><td style="color: var(--green);">-3</td><td>Recompensa moderada. No es la mejor pero ayuda.</td></tr>
+      <tr><td>Evidencia incriminatoria</td><td>0</td><td style="color: var(--red);">+8</td><td>Castigo por no leer la descripción.</td></tr>
+      <tr><td>Renunciar a evidencia</td><td style="color: var(--red);">-5</td><td>0</td><td>Castigo por pasividad.</td></tr>
+      <tr><td>Exponer móvil de venganza</td><td style="color: var(--green);">+5</td><td style="color: var(--green);">-5</td><td>Recompensa por contra-interrogatorio inteligente.</td></tr>
+      <tr><td>Guarda admite que no vio nada</td><td>0</td><td style="color: var(--green);">-3</td><td>Refuerza que el caso del fiscal es débil.</td></tr>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Veredicto</div>
+    <p style="margin: 0;">Si Credibilidad ≥ Sospecha al final → <strong style="color: var(--green);">NO CULPABLE</strong>. Si no → <strong style="color: var(--red);">CULPABLE</strong>. Un jugador que objetó bien (2 admitidas) + encontró la contradicción + presentó la evidencia correcta llega a ~91 Credibilidad / ~7 Sospecha = absuelto holgado. Un jugador que no hizo nada llega a 45/47 = culpable ajustado.</p>
+  </div>
+
+  <h2>Rejugabilidad</h2>
+  <div class="card card-purple">
+    <h3 style="margin-top: 0;">Variabilidad por caso (27 configuraciones)</h3>
+    <table>
+      <tr><th>Eje</th><th>Valores</th><th>Qué cambia</th></tr>
+      <tr><td>V1: Testigo mentiroso</td><td>Guarda / Novia / Supervisor</td><td>Quién miente cambia. Tienes que descubrir quién cada vez.</td></tr>
+      <tr><td>V2: Evidencia clave</td><td>WhatsApp / Gasolina / Rutas</td><td>Qué evidencia es exculpatoria cambia. No puedes elegir la misma siempre.</td></tr>
+      <tr><td>V3: Perfil del juez</td><td>Filósofo / Estricto / Impaciente</td><td>El juez reacciona distinto a tu tono de voz. Estricto penaliza volumen alto.</td></tr>
+      <tr><td>V4: Vínculo entre testigos</td><td>Cómplices / Enemistad / Coartada</td><td>La relación entre testigos cambia. Cada vínculo tiene pistas distintas.</td></tr>
+    </table>
+    <p><strong>Total:</strong> 3 × 3 × 3 × 3 = 81 teóricas, 27 válidas (tras reglas de exclusión). Cada partida es distinta.</p>
+  </div>
+
+  <h2>Progresión entre partidas</h2>
+  <div class="card">
+    <table>
+      <tr><th>Nivel</th><th>Qué se desbloquea</th><th>Por qué motiva volver</th></tr>
+      <tr><td>Partida 1-3</td><td>Caso del queso (aprendes mecánicas)</td><td>Descubres que hay mentiras que encontrar.</td></tr>
+      <tr><td>Partida 4-10</td><td>Mismo caso, variantes distintas</td><td>Dominas las mecánicas. Encuentras contradicciones más rápido.</td></tr>
+      <tr><td>Partida 10+</td><td>Nuevo caso (robo de jamón)</td><td>Aplicas lo aprendido en un contexto nuevo.</td></tr>
+      <tr><td>Partida 20+</td><td>Desbloqueas modo Juez</td><td>Inviertes el rol. Ahora TÚ diriges el juicio.</td></tr>
+      <tr><td>Partida 30+</td><td>Casos generados proceduralmente</td><td>Contenido infinito.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 12: STREAMER VIRAL -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Streamer</h4>
+  <h1>Potencial Streamer y Viral</h1>
+  <p class="lead">Un juego que ningún streamer quiere jugar no existe. El potencial viral está en los MOMENTOS, no en la mecánica.</p>
+
+  <h2>Momentos clippeables por fase</h2>
+  <div class="card card-gold">
+    <table>
+      <tr><th>Fase</th><th>Momento clippeable</th><th>Por qué se comparte</th></tr>
+      <tr><td>F1</td><td>El juez lee "3.000 kg de queso manchego" en serio</td><td>El contraste entre lo absurdo del delito y la seriedad del juez</td></tr>
+      <tr><td>F2</td><td>El streamer grita "¡PROTESTO!" y el juez dice "Protesta admitida"</td><td>El streamer se siente un genio legal</td></tr>
+      <tr><td>F2</td><td>El streamer protesta con un fundamento estúpido y el juez lo destroza</td><td>Humor por vergüenza ajena</td></tr>
+      <tr><td>F4</td><td>El streamer descubre que el supervisor MINTIÓ sobre el guarda</td><td>Momento "aha" que el chat ve antes que el streamer</td></tr>
+      <tr><td>F4</td><td>El streamer le dice al guarda "¿qué cenaste?" y el guarda responde con detalle</td><td>La IA improvisa de forma inesperada</td></tr>
+      <tr><td>F5</td><td>El veredicto: "NO CULPABLE" después de un alegato terrible</td><td>Sorpresa. ¿Cómo ganó con ese argumento?</td></tr>
+      <tr><td>F5</td><td>El veredicto: "CULPABLE" después de un alegato brillante</td><td>Injusticia percibida. El chat se indigna.</td></tr>
+    </table>
+  </div>
+
+  <h2>Integración con chat de Twitch</h2>
+  <div class="card card-blue">
+    <h3 style="margin-top: 0;">Modo "Jurado del Chat" (futuro)</h3>
+    <p>Cuando el streamer llega al veredicto, el chat de Twitch vota "Culpable" o "No Culpable" en tiempo real. El voto del chat cuenta como 1 de los 5 jurados. Si el chat vota en contra del streamer, el veredicto puede cambiar.</p>
+    <p><strong>Por qué es viral:</strong> El chat tiene poder real sobre el resultado del streamer. "El chat mandó a la cárcel al streamer" es un clip que se comparte solo.</p>
+  </div>
+
+  <h2>Densidad de clips objetivo</h2>
+  <div class="card">
+    <p>Un clippeable cada 60-90 segundos. En una partida de 10 minutos: <strong>7-10 momentos clippeables</strong>.</p>
+    <p>Comparación: Among Us tiene 1 cada 2-3 minutos. Jackbox tiene 1 cada 1 minuto. Nuestro objetivo está entre ambos.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PÁGINA 13: ROADMAP -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page">
+  <h4>Roadmap</h4>
+  <h1>Roadmap de Implementación</h1>
+  <p class="lead">Priorizado por impacto en la experiencia del jugador. Cada fase tiene un objetivo medible.</p>
+
+  <h2>Fase 1: Fundamentos (objetivo: 6/10)</h2>
+  <div class="card card-red">
+    <ol>
+      <li><strong>UI sin superposiciones</strong> — layout vertical: arte centro, diálogo abajo, medidores esquina. Sin burbuja central que tape el 3D.</li>
+      <li><strong>Input siempre visible</strong> — campo de texto fijo en barra inferior. Enter SIEMPRE envía. Botón Send explícito.</li>
+      <li><strong>Timers con buffer</strong> — 30s objeción, 90s contra, 90s alegato. Buffer de 5s después de NPC habla.</li>
+      <li><strong>Identidad NPC</strong> — "TÚ ERES EL JUEZ" en system prompt. Nunca responde como acusado.</li>
+      <li><strong>Feedback con números</strong> — "+8 Credibilidad: acceso compartido debilita la prueba" no solo "+8".</li>
+    </ol>
+  </div>
+
+  <h2>Fase 2: Experiencia (objetivo: 7/10)</h2>
+  <div class="card card-gold">
+    <ol>
+      <li><strong>Onboarding rediseñado</strong> — 1 pantalla título + 1 elección (mic/texto) + directo al juego. Sin muro de texto.</li>
+      <li><strong>Audio ambiente</strong> — HVAC + murmullo + toses ocasionales. Tribunal se siente vivo.</li>
+      <li><strong>Feedback sonoro</strong> — mazo del juez, acordes de éxito/fracaso, sting de contradicción, veredicto solemne.</li>
+      <li><strong>Panel de testimonios</strong> — solo en F4, lateral izquierdo, púrpura. Compara lo que dijo cada testigo.</li>
+      <li><strong>Highlight en NPC activo</strong> — borde dorado en el personaje que habla. El ojo sabe a quién mirar.</li>
+    </ol>
+  </div>
+
+  <h2>Fase 3: Profundidad (objetivo: 8/10)</h2>
+  <div class="card card-green">
+    <ol>
+      <li><strong>27 variantes por caso</strong> — testigo mentiroso, evidencia clave, juez, vínculo. Cada partida distinta.</li>
+      <li><strong>Veredicto que cita tus acciones</strong> — el juez referencia específicamente lo que dijiste. "El WhatsApp que el acusado mencionó..."</li>
+      <li><strong>Post-partida</strong> — muestra qué contradicciones perdiste, qué evidencia era la mejor, compara con partida óptima.</li>
+      <li><strong>Animaciones de personajes</strong> — el supervisor se incomoda cuando le preguntas del despido. El guarda tiembla.</li>
+      <li><strong>Efectos visuales</strong> — partículas en objeción admitida, escala de tiempo lento en veredicto, shake en sospecha alta.</li>
+    </ol>
+  </div>
+
+  <h2>Fase 4: Viralidad (objetivo: 9/10)</h2>
+  <div class="card card-blue">
+    <ol>
+      <li><strong>Twitch chat integration</strong> — el chat vota como jurado en F5.</li>
+      <li><strong>Modo 2 acusados</strong> — dos streamers en el mismo juicio. Pueden traicionarse.</li>
+      <li><strong>Casos generados proceduralmente</strong> — contenido infinito. El streamer nunca juega el mismo caso.</li>
+      <li><strong>Modo juez</strong> — inviertes el rol. Tú diriges el juicio. La IA es el acusado.</li>
+      <li><strong>Replays</strong> — guarda la partida completa como video compartible.</li>
+    </ol>
+  </div>
+
+  <div class="callout" style="margin-top: 40px;">
+    <div class="callout-label">Conclusión</div>
+    <p style="margin: 0; font-size: 16px;">El juego actual es un <strong>3.9/10</strong>: un motor de IA impresionante envuelto en una UX que lo malgasta. Con las mejoras de Fase 1 y 2, alcanza <strong>7/10</strong>: un juego divertido que se entiende y se juega bien. Con Fase 3, llega a <strong>8/10</strong>: un juego con profundidad y rejugabilidad. Con Fase 4, <strong>9/10</strong>: un juego que los streamers quieren jugar porque genera momentos que se comparten solos.</p>
+  </div>
+
+  <div style="text-align: center; margin-top: 60px; padding: 40px; border-top: 1px solid var(--gold-dim);">
+    <p style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--gold);">NOT GUILTY</p>
+    <p style="font-size: 12px; color: var(--text-muted);">Design Document v2.0 — Fin del documento</p>
+  </div>
+</div>
+
+<script>
+  // Page counter
+  let currentPage = 1;
+  const totalPages = document.querySelectorAll('.page').length;
+  const pageNum = document.getElementById('pageNum');
+  
+  function updatePageNum() {
+    const pages = document.querySelectorAll('.page');
+    const scrollPos = window.scrollY + window.innerHeight / 2;
+    for (let i = 0; i < pages.length; i++) {
+      if (pages[i].offsetTop <= scrollPos && pages[i].offsetTop + pages[i].offsetHeight > scrollPos) {
+        currentPage = i + 1;
+        break;
+      }
+    }
+    pageNum.textContent = `${currentPage} / ${totalPages}`;
+  }
+  
+  window.addEventListener('scroll', updatePageNum);
+  updatePageNum();
+</script>
+</body>
+</html>
