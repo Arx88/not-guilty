@@ -129,14 +129,21 @@ export function GameOrchestrator() {
   // ── F1: Juez lee cargos al iniciar ──
   // Sin ref guard — usar subfase como guard natural
   useEffect(() => {
+    console.log('[F1-EFFECT] fase:', fase, 'caso:', !!caso, 'subfase:', subfase, 'interv:', !!intervencionJugador);
     if (fase === 'F1' && caso && subfase === 'F1.espera' && !intervencionJugador) {
+      console.log('[F1-EFFECT] ✅ Condición cumplida, disparando juez en 800ms');
       const t = setTimeout(() => {
+        console.log('[F1-EFFECT] Llamando a hablar()...');
         hablar(
           'juez',
           `Inicia el juicio. Acusado, se le imputa: ${caso.cargos}. Lugar: ${caso.lugar}, hora: ${caso.hora}. ¿Entiende los cargos?`
-        );
+        ).then(() => console.log('[F1-EFFECT] Juez respondió OK'))
+         .catch((e) => console.error('[F1-EFFECT] Error juez:', e));
       }, 800);
-      return () => clearTimeout(t);
+      return () => {
+        console.log('[F1-EFFECT] Cleanup (timeout cancelado)');
+        clearTimeout(t);
+      };
     }
   }, [fase, caso, subfase, hablar, intervencionJugador]);
 
