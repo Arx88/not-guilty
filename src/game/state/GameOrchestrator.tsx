@@ -18,6 +18,7 @@ import { useGame } from '../state/store';
 import { llamarNPC } from '../state/npc-client';
 import { useMic } from '../hooks/useMic';
 import { CASE_QUESO } from '../data/case-queso';
+import { sndSuccess, sndFail, sndGavel, sndTick, sndWindowOpen, sndWindowClose, sndVerdict, sndClick, initAudio } from './sounds';
 
 type Subfase =
   | 'F1.espera'           // Esperando respuesta del jugador a "¿entiende los cargos?"
@@ -96,6 +97,9 @@ export function GameOrchestrator() {
     ) => {
       setIaPensando(true);
       setNpcActual(npc);
+      // Sonido según NPC
+      if (npc === 'juez') sndGavel();
+      else sndClick();
       try {
         const result = await llamarNPC({ npc, userMessage: mensaje, contextoExtra });
         setCaption(result.reply, npc);
@@ -109,6 +113,7 @@ export function GameOrchestrator() {
       } catch (err: any) {
         setError(err.message);
         setCaption('— ERROR: ' + err.message, 'sistema');
+        sndFail();
       } finally {
         setIaPensando(false);
       }
@@ -172,6 +177,7 @@ export function GameOrchestrator() {
       case 'F2.window1': {
         setWindowObjecion(true);
         setTimerSegundos(6);
+        sndWindowOpen();
         const t = setTimeout(() => {
           setWindowObjecion(false);
           setTimerSegundos(null);
@@ -195,6 +201,7 @@ export function GameOrchestrator() {
       case 'F2.window2': {
         setWindowObjecion(true);
         setTimerSegundos(6);
+        sndWindowOpen();
         const t = setTimeout(() => {
           setWindowObjecion(false);
           setTimerSegundos(null);
@@ -298,18 +305,22 @@ export function GameOrchestrator() {
       case 'F5.veredicto': {
         const t = setTimeout(() => {
           // Fórmula del GDD: score = Credibilidad - Sospecha
-          // Si score >= 0, absuelto. Si no, culpable.
           const score = credibilidad - sospecha;
           const veredicto: 'absuelto' | 'culpable' = score >= 0 ? 'absuelto' : 'culpable';
           const veredictoTexto = veredicto === 'absuelto' ? 'NO CULPABLE' : 'CULPABLE';
 
+          sndVerdict();
           hablar(
             'juez',
             `Emite veredicto. Credibilidad final: ${credibilidad}/100. Sospecha final: ${sospecha}/100. Tu veredicto es: ${veredictoTexto}.`,
             `Es el momento del VEREDICTO FINAL. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto OBLIGATORIO es: ${veredictoTexto}. Empieza tu respuesta SIEMPRE con "${veredictoTexto}." y luego explica en máximo 50 palabras por qué llegas a ese veredicto basándote en las pruebas y testimonios del juicio.`
           );
           // Forzar veredicto en el estado aunque la IA tarde
-          setTimeout(() => setVeredicto(veredicto), 4000);
+          setTimeout(() => {
+            setVeredicto(veredicto);
+            if (veredicto === 'absuelto') sndSuccess();
+            else sndFail();
+          }, 4000);
           setSubfase('done');
         }, 1500);
         return () => clearTimeout(t);
@@ -342,6 +353,7 @@ export function GameOrchestrator() {
       ) {
         setWindowObjecion(false);
         setTimerSegundos(null);
+        sndWindowClose();
         hablar(
           'juez',
           `El acusado ha protestado: "${fullText}". Evalúa la objeción y decide: "Protesta admitida" o "Protesta rechazada".`,
@@ -350,9 +362,11 @@ export function GameOrchestrator() {
           if (reply && reply.toLowerCase().includes('admitida')) {
             ajustarMedidor('credibilidad', +8);
             ajustarMedidor('sospecha', -10);
+            sndSuccess();
           } else if (reply && reply.toLowerCase().includes('rechazada')) {
             ajustarMedidor('credibilidad', -3);
             ajustarMedidor('sospecha', +5);
+            sndFail();
           }
         });
       }
@@ -396,20 +410,60 @@ export function GameOrchestrator() {
 
       // F3: respuesta a "¿desea presentar evidencia?"
       if (sf === 'F3.espera') {
-        if (text.toLowerCase().includes('sí') || text.toLowerCase().includes('si') || text.toLowerCase().includes('quiero')) {
-          hablar(
-            'juez',
-            `El acusado solicita presentar evidencia: "${text}".`,
-            `El jugador dice: "${text}". Admite la presentación simbólicamente (no hay UI de evidencia aún) y pasa a testigos.`
-          );
-          ajustarMedidor('credibilidad', +3);
-        } else {
+        const lower = text.toLowerCase();
+        // Si el jugador presenta una evidencia específica (viene con "Presento la evidencia:")
+        if (lower.includes('presento la evidencia') || lower.includes('evidencia')) {
+          // Buscar qué evidencia es
+          const evidencias = caso.evidencias;
+          let evidenciaPresentada = null;
+          for (const ev of evidencias) {
+            if (lower.includes(ev.nombre.toLowerCase()) || lower.includes(ev.id)) {
+              evidenciaPresentada = ev;
+              break;
+            }
+          }
+          if (evidenciaPresentada) {
+            // Bonus según tipo
+            if (evidenciaPresentada.tipo === 'exculpatoria') {
+              ajustarMedidor('credibilidad', +8);
+              ajustarMedidor('sospecha', -10);
+              sndSuccess();
+            } else if (evidenciaPresentada.tipo === 'ambigua') {
+              ajustarMedidor('credibilidad', +4);
+              ajustarMedidor('sospecha', -3);
+            } else if (evidenciaPresentada.tipo === 'incriminatoria') {
+              ajustarMedidor('sospecha', +8);
+              sndFail();
+            }
+            hablar(
+              'juez',
+              `El acusado presenta: ${evidenciaPresentada.nombre}. ${evidenciaPresentada.descripcion}. ¿Fiscal, objeta?`,
+              `El jugador presenta la evidencia "${evidenciaPresentada.nombre}" (${evidenciaPresentada.tipo}). Admítela brevemente y pasa a testigos.`
+            );
+          } else {
+            hablar(
+              'juez',
+              `El acusado solicita presentar evidencia. Admitida. Pasemos a los testigos.`,
+              `El jugador dice: "${text}". Admite y pasa a testigos.`
+            );
+            ajustarMedidor('credibilidad', +3);
+          }
+        } else if (lower.includes('no') || lower.includes('renuncio') || lower.includes('pasar')) {
           hablar(
             'juez',
             `La defensa renuncia a presentar evidencia. Pasemos a los testigos.`,
             `El jugador dice: "${text}". Si no quiere presentar evidencia, pasa a testigos.`
           );
           ajustarMedidor('credibilidad', -5);
+          sndFail();
+        } else {
+          // Respuesta ambigua, interpretar como sí
+          hablar(
+            'juez',
+            `El acusado solicita presentar evidencia. Admitida. Pasemos a los testigos.`,
+            `El jugador dice: "${text}". Admite y pasa a testigos.`
+          );
+          ajustarMedidor('credibilidad', +3);
         }
         setSubfase('F3.transicion');
         return;

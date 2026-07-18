@@ -92,9 +92,11 @@ export function useMic(options: UseMicOptions = {}) {
     recognition.interimResults = true;
 
     let finalTranscript = '';
+    let interimTimer: ReturnType<typeof setTimeout> | null = null;
 
     recognition.onresult = (event: any) => {
       let interim = '';
+      let latestTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
@@ -107,11 +109,39 @@ export function useMic(options: UseMicOptions = {}) {
             }
           }
           optionsRef.current.onFinalTranscript?.(transcript);
+          // Limpiar debounce si hay
+          if (interimTimer) {
+            clearTimeout(interimTimer);
+            interimTimer = null;
+          }
         } else {
           interim += transcript;
+          latestTranscript = transcript;
         }
       }
       setTranscripcion(finalTranscript + interim);
+
+      // DEBOUNCE: si hay texto interim y pasa 1.5s sin nueva entrada,
+      // considerarlo final y enviarlo. Esto arregla el bug "hablo y no pasa nada"
+      if (interim && latestTranscript) {
+        if (interimTimer) clearTimeout(interimTimer);
+        interimTimer = setTimeout(() => {
+          const text = latestTranscript.trim();
+          if (text.length >= 2) {
+            console.log('[MIC] Debounce final:', text);
+            const lower = text.toLowerCase();
+            for (const kw of KEYWORDS) {
+              if (lower.includes(kw)) {
+                optionsRef.current.onKeyword?.(kw, text);
+                break;
+              }
+            }
+            optionsRef.current.onFinalTranscript?.(text);
+            finalTranscript += text + ' ';
+          }
+          interimTimer = null;
+        }, 1500);
+      }
     };
 
     recognition.onerror = (event: any) => {
@@ -159,7 +189,8 @@ export function useMic(options: UseMicOptions = {}) {
     setListening(false);
     setEscuchando(false);
     setVolumen(0);
-  }, [setEscuchando, setVolumen]);
+    setTranscripcion('');
+  }, [setEscuchando, setVolumen, setTranscripcion]);
 
   return { supported, listening, start, stop };
 }

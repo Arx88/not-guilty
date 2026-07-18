@@ -10,10 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Mic, MicOff, AlertTriangle, Gavel, Send } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { initAudio, sndClick, sndTick } from '../state/sounds';
 
-// Exponer el enviarMensaje al window para que GameUI pueda usarlo sin pasar por el orquestador
-// Mejor: usar un evento custom
 const PLAYER_INPUT_EVENT = 'notguilty-player-input';
 
 export function sendPlayerInput(text: string) {
@@ -44,7 +43,23 @@ export function GameUI() {
   const [showTextInput, setShowTextInput] = useState(false);
   const mic = useMic({});
 
+  // Flash visual basado en el valor del medidor (sin state, sin effect)
+  const flashCred = credibilidad > 60 ? 'good' : credibilidad < 30 ? 'bad' : null;
+  const flashSosp = sospecha > 70 ? 'bad' : sospecha < 30 ? 'good' : null;
+  const shake = sospecha > 70;
+
+  // Tick del timer (efecto secundario permitido en effect)
+  const timerAnterior = useRef(timerSegundos);
+  useEffect(() => {
+    if (timerSegundos !== null && timerSegundos !== timerAnterior.current && timerSegundos > 0 && timerSegundos <= 3) {
+      sndTick();
+    }
+    timerAnterior.current = timerSegundos;
+  }, [timerSegundos]);
+
   const toggleMic = () => {
+    initAudio(); // Inicializar audio en interacción del usuario
+    sndClick();
     if (micActive) {
       mic.stop();
       setMicActive(false);
@@ -56,6 +71,7 @@ export function GameUI() {
 
   const submitText = () => {
     if (!textInput.trim()) return;
+    sndClick();
     sendPlayerInput(textInput);
     setTextInput('');
   };
@@ -110,24 +126,54 @@ export function GameUI() {
         </Card>
       </div>
 
-      {/* ─── Top-right: medidores ─── */}
-      <div className="absolute top-3 right-3 w-64 pointer-events-auto">
+      {/* ─── Top-right: medidores con flash ─── */}
+      <div
+        className={`absolute top-3 right-3 w-64 pointer-events-auto ${shake ? 'animate-shake' : ''}`}
+      >
         <Card className="p-2.5 bg-black/70 border-amber-700/40 backdrop-blur space-y-1.5">
-          <div>
+          <div className={flashCred === 'good' ? 'scale-105 transition-transform' : 'transition-transform'}>
             <div className="flex justify-between text-[10px] font-mono mb-0.5">
               <span className="text-emerald-400">CREDIBILIDAD</span>
-              <span className={credibilidad >= 50 ? 'text-emerald-300' : 'text-red-300'}>{credibilidad}</span>
-            </div>
-            <Progress value={credibilidad} className="h-2 bg-emerald-950" />
-          </div>
-          <div>
-            <div className="flex justify-between text-[10px] font-mono mb-0.5">
-              <span className="text-red-400">SOSPECHA</span>
-              <span className={sospecha > 70 ? 'text-red-300 animate-pulse' : 'text-red-300'}>
-                {sospecha} {sospecha > 70 && '⚠'}
+              <span
+                className={
+                  flashCred === 'good'
+                    ? 'text-emerald-300 font-bold'
+                    : flashCred === 'bad'
+                    ? 'text-red-400 font-bold animate-pulse'
+                    : 'text-emerald-300'
+                }
+              >
+                {credibilidad} {flashCred === 'good' && '★'}
               </span>
             </div>
-            <Progress value={sospecha} className="h-2 bg-red-950" />
+            <Progress
+              value={credibilidad}
+              className={`h-2 ${
+                flashCred === 'good' ? 'bg-emerald-600' : flashCred === 'bad' ? 'bg-red-900' : 'bg-emerald-950'
+              }`}
+            />
+          </div>
+          <div className={flashSosp === 'bad' ? 'scale-105 transition-transform' : 'transition-transform'}>
+            <div className="flex justify-between text-[10px] font-mono mb-0.5">
+              <span className="text-red-400">SOSPECHA</span>
+              <span
+                className={
+                  flashSosp === 'bad'
+                    ? 'text-red-300 font-bold animate-pulse'
+                    : flashSosp === 'good'
+                    ? 'text-emerald-300 font-bold'
+                    : 'text-red-300'
+                }
+              >
+                {sospecha} {flashSosp === 'bad' && '⚠'}
+              </span>
+            </div>
+            <Progress
+              value={sospecha}
+              className={`h-2 ${
+                flashSosp === 'bad' ? 'bg-red-600' : flashSosp === 'good' ? 'bg-emerald-900' : 'bg-red-950'
+              }`}
+            />
           </div>
           <div>
             <div className="flex justify-between text-[9px] font-mono mb-0.5">
@@ -266,6 +312,37 @@ export function GameUI() {
         </div>
       )}
 
+      {/* ─── PANEL DE EVIDENCIAS en F3 ─── */}
+      {fase === 'F3' && subfaseActual === 'F3.espera' && (
+        <div className="absolute bottom-44 left-1/2 -translate-x-1/2 w-[800px] max-w-[95vw] pointer-events-auto z-30">
+          <Card className="p-4 bg-black/85 border-amber-600/50 backdrop-blur">
+            <div className="text-[10px] font-mono text-amber-400 tracking-widest mb-2 text-center">
+              EVIDENCIAS DE LA DEFENSA — Click para presentar
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {caso?.evidencias?.map((ev) => (
+                <button
+                  key={ev.id}
+                  onClick={() => sendPlayerInput(`Presento la evidencia: ${ev.nombre}. ${ev.descripcion}`)}
+                  className="bg-stone-900 hover:bg-amber-900/40 border border-amber-700/40 hover:border-amber-500 rounded p-2 text-left transition-all hover:scale-105"
+                >
+                  <div className="text-[10px] font-bold text-amber-300 mb-1">{ev.nombre}</div>
+                  <div className="text-[9px] text-amber-100/70 leading-tight line-clamp-3">
+                    {ev.descripcion.slice(0, 80)}...
+                  </div>
+                  <div className="text-[8px] font-mono mt-1 text-amber-500/60">
+                    {ev.tipo.toUpperCase()}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="text-[9px] font-mono text-amber-500/60 mt-2 text-center">
+              También puedes decir "no" para no presentar evidencia (penalización: -5 credibilidad)
+            </div>
+          </Card>
+        </div>
+      )}
+
       {/* ─── Comandos ─── */}
       <div className="absolute bottom-6 left-3 pointer-events-none">
         <Card className="p-2 bg-black/60 border-amber-700/30 backdrop-blur">
@@ -375,6 +452,12 @@ export function GameUI() {
           0%, 100% { opacity: 0.5; }
           50% { opacity: 1; }
         }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-4px); }
+          75% { transform: translateX(4px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
       `}</style>
     </div>
   );
