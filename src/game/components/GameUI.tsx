@@ -212,10 +212,13 @@ export function GameUI() {
           -webkit-backdrop-filter: blur(8px);
         }
         .ng-header {
-          color: ${GOLD};
+          background: ${GOLD};
+          color: #1a1a1a;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.06em;
+          padding: 4px 8px;
+          border-radius: 3px;
         }
         .ng-mono {
           font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
@@ -266,9 +269,14 @@ export function GameUI() {
 
           {/* TRIBUNAL */}
           <div className="ng-panel p-2.5 flex-1 min-h-0 flex flex-col">
-            <div className="flex items-center gap-1.5 mb-2">
-              <Users className="h-3.5 w-3.5" style={{ color: BODY }} />
-              <div className="ng-header text-[14px]">TRIBUNAL</div>
+            <div
+              className="flex items-center gap-1.5 mb-2 px-2 py-1 rounded"
+              style={{ background: GOLD }}
+            >
+              <Users className="h-3.5 w-3.5 text-stone-900" />
+              <div className="text-[14px] font-bold uppercase tracking-wider text-stone-900">
+                TRIBUNAL
+              </div>
             </div>
             <div className="flex-1 overflow-y-auto ng-scroll space-y-1.5">
               {jurados.length === 0 && (
@@ -504,28 +512,19 @@ export function GameUI() {
                 {/* Gold header bar */}
                 <div
                   className="px-3 py-1.5 flex items-center justify-between"
-                  style={{
-                    background: `linear-gradient(90deg, ${GOLD}33, ${GOLD}11)`,
-                    borderBottom: '1px solid rgba(100,100,100,0.25)',
-                  }}
+                  style={{ background: GOLD }}
                 >
-                  <span
-                    className="text-[12px] font-black tracking-widest"
-                    style={{ color: GOLD }}
-                  >
+                  <span className="text-[12px] font-black tracking-widest text-stone-900">
                     {speakerLabel}
                   </span>
                   {iaPensando && (
-                    <span
-                      className="text-[11px] ng-mono animate-pulse"
-                      style={{ color: GOLD }}
-                    >
+                    <span className="text-[11px] ng-mono animate-pulse text-stone-900 font-bold">
                       ···
                     </span>
                   )}
                 </div>
                 {/* Dialogue body */}
-                <div className="px-3 py-2.5 text-[14px] leading-snug">
+                <div className="px-3 py-2.5 text-[14px] leading-snug bg-[#1a1a1a] text-stone-100">
                   {caption || '...'}
                 </div>
               </div>
@@ -685,9 +684,14 @@ export function GameUI() {
 
           {/* HISTORIAL */}
           <div className="ng-panel p-2.5 flex-1 min-h-0 flex flex-col">
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <HistoryIcon className="h-3.5 w-3.5" style={{ color: BODY }} />
-              <div className="ng-header text-[14px]">HISTORIAL</div>
+            <div
+              className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded"
+              style={{ background: GOLD }}
+            >
+              <HistoryIcon className="h-3.5 w-3.5 text-stone-900" />
+              <div className="text-[14px] font-bold uppercase tracking-wider text-stone-900">
+                HISTORIAL
+              </div>
             </div>
             <div className="flex-1 overflow-y-auto ng-scroll space-y-1">
               {historial.length === 0 && (
