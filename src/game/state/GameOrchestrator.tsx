@@ -469,5 +469,29 @@ export function GameOrchestrator() {
   // ── Hook de micrófono ──
   useMic({ onKeyword, onFinalTranscript });
 
+  // ── Listener para input de texto (botón PROTESTO + campo de texto) ──
+  // Esto garantiza que el juego funcione sin micrófono
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const text = (e as CustomEvent<string>).detail;
+      if (!text || text.trim().length < 1) return;
+      console.log('[UI INPUT]', text);
+
+      // Procesar como keyword si aplica
+      const lower = text.toLowerCase();
+      for (const kw of ['protesto', 'protesta', 'objeción', 'objecion', 'recusación', 'recusacion', 'sí', 'si', 'no']) {
+        if (lower.includes(kw)) {
+          onKeyword(kw, text);
+          break;
+        }
+      }
+
+      // Procesar como final transcript
+      onFinalTranscript(text);
+    };
+    window.addEventListener('notguilty-player-input', handler);
+    return () => window.removeEventListener('notguilty-player-input', handler);
+  }, [onKeyword, onFinalTranscript]);
+
   return null;
 }

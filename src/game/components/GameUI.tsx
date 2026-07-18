@@ -9,9 +9,18 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Mic, MicOff, AlertTriangle, Gavel } from 'lucide-react';
-import { useState } from 'react';
-import { CASE_QUESO } from '../data/case-queso';
+import { Mic, MicOff, AlertTriangle, Gavel, Send } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+
+// Exponer el enviarMensaje al window para que GameUI pueda usarlo sin pasar por el orquestador
+// Mejor: usar un evento custom
+const PLAYER_INPUT_EVENT = 'notguilty-player-input';
+
+export function sendPlayerInput(text: string) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent(PLAYER_INPUT_EVENT, { detail: text }));
+  }
+}
 
 export function GameUI() {
   const fase = useGame((s) => s.fase);
@@ -31,6 +40,8 @@ export function GameUI() {
   const subfaseActual = useGame((s) => s.subfaseActual);
 
   const [micActive, setMicActive] = useState(false);
+  const [textInput, setTextInput] = useState('');
+  const [showTextInput, setShowTextInput] = useState(false);
   const mic = useMic({});
 
   const toggleMic = () => {
@@ -41,6 +52,12 @@ export function GameUI() {
       mic.start();
       setMicActive(true);
     }
+  };
+
+  const submitText = () => {
+    if (!textInput.trim()) return;
+    sendPlayerInput(textInput);
+    setTextInput('');
   };
 
   if (fase === 'pre') return null;
@@ -180,23 +197,74 @@ export function GameUI() {
         </div>
       )}
 
-      {/* ─── Botón micrófono ─── */}
+      {/* ─── Botón micrófono + Input de texto (fallback) ─── */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto flex flex-col items-center gap-2">
-        <Button
-          onClick={toggleMic}
-          size="lg"
-          className={`rounded-full h-14 w-14 p-0 border-2 ${
-            micActive
-              ? 'bg-red-700 hover:bg-red-800 border-red-400 animate-pulse'
-              : 'bg-amber-700 hover:bg-amber-800 border-amber-300/40'
-          }`}
-        >
-          {micActive ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-        </Button>
+        <div className="flex gap-2 items-center">
+          <Button
+            onClick={toggleMic}
+            size="lg"
+            className={`rounded-full h-14 w-14 p-0 border-2 ${
+              micActive
+                ? 'bg-red-700 hover:bg-red-800 border-red-400 animate-pulse'
+                : 'bg-amber-700 hover:bg-amber-800 border-amber-300/40'
+            }`}
+            title={micActive ? 'Apagar micrófono' : 'Activar micrófono'}
+          >
+            {micActive ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+          </Button>
+
+          {/* Botón para mostrar/ocultar input de texto */}
+          <Button
+            onClick={() => setShowTextInput(!showTextInput)}
+            size="sm"
+            className="bg-stone-700 hover:bg-stone-800 border border-amber-700/40 text-amber-200 text-xs"
+            title="Escribir en lugar de hablar"
+          >
+            ⌨ Texto
+          </Button>
+        </div>
+
+        {/* Input de texto cuando está activo */}
+        {showTextInput && (
+          <div className="flex gap-2 w-[500px] max-w-[90vw]">
+            <input
+              type="text"
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') submitText();
+              }}
+              placeholder="Escribe lo que quieres decir y pulsa Enter..."
+              className="flex-1 bg-black/80 border border-amber-700/50 text-amber-100 px-3 py-2 rounded text-sm font-mono focus:outline-none focus:border-amber-500"
+              autoFocus
+            />
+            <Button
+              onClick={submitText}
+              size="sm"
+              className="bg-amber-700 hover:bg-amber-800 text-amber-50"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
         <div className="text-[9px] font-mono text-amber-400/80">
-          {micActive ? 'ESCUCHANDO · habla claro' : 'click para hablar'}
+          {micActive ? 'ESCUCHANDO · habla claro' : 'click micrófono o usa ⌨ Texto'}
         </div>
       </div>
+
+      {/* ─── BOTÓN PROTESTO clickable cuando hay window ─── */}
+      {windowObjecion && (
+        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 pointer-events-auto z-40">
+          <Button
+            onClick={() => sendPlayerInput('¡Protesto!')}
+            className="bg-red-700 hover:bg-red-800 text-red-50 px-8 py-4 text-lg font-black animate-pulse border-2 border-red-400"
+          >
+            <Gavel className="mr-2 h-5 w-5" />
+            ¡PROTESTO!
+          </Button>
+        </div>
+      )}
 
       {/* ─── Comandos ─── */}
       <div className="absolute bottom-6 left-3 pointer-events-none">
