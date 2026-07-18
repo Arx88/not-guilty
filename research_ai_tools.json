@@ -1,0 +1,56 @@
+[
+  {
+    "url": "https://inworld.ai",
+    "name": "Inworld AI – The #1 Realtime Voice AI",
+    "snippet": "#1 realtime TTS by real users on the Artificial Analysis Speech Arena. Sub-130ms first-chunk latency, down to $10 per million characters. Clone, design, steer, ...",
+    "host_name": "inworld.ai",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=gUCahPSAut4",
+    "name": "Give Your NPCs Feelings and Personality Using Inworld AI - Unity",
+    "snippet": "Inworld AI website: https://bit.ly/BinaryLunar-Inworld Inworld AI Youtube Channel: https://www.youtube.com/@inworldai Hey there, ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://convai.com",
+    "name": "Convai - Conversational AI for Virtual Worlds",
+    "snippet": "Convai provides integrations with all popular game engines, such as Unreal Engine, Unity, 3JS, and more, with its plugins, open APIs, tutorials, extensive ...",
+    "host_name": "convai.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@jschomay/adding-inworld-ai-characters-to-an-existing-game-part-1-planning-and-design-57e6a86ffaf0",
+    "name": "Adding Inworld AI Characters to an Existing Game, Part 1 - Medium",
+    "snippet": "In the next part, I'll cover some of the more technical aspects of integrating Inworld AI characters into my existing game framework. Missing: Convai | Show results with: Convai",
+    "host_name": "medium.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Unity3D/comments/155ddq0/connecting_open_source_aidriven_npcs_to_unity_3d",
+    "name": "Connecting Open Source AI-driven NPCs to Unity 3d Characters. - Reddit",
+    "snippet": "I am working on a series of NPC characters in Unity that are connected to conversational AI. So far I have used 3rd party AI providers Inworld and Convai who ...",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blogs.nvidia.com/blog/generative-ai-npcs",
+    "name": "Bringing Personality to Pixels, Inworld Levels Up Game Characters Using",
+    "snippet": "Inworld AI is changing the game by using generative AI to drive NPC behaviors that are dynamic and responsive to player actions.",
+    "host_name": "blogs.nvidia.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  }
+]
