@@ -192,7 +192,7 @@ def draw_header_footer(canvas, doc):
     # Header: title left, accent rule
     canvas.setFont('FreeSerif', 7.5)
     canvas.setFillColor(TEXT_MUTED)
-    canvas.drawString(LEFT_M, PAGE_H - 14 * mm, 'NOT GUILTY  ·  Game Design Document v0.1')
+    canvas.drawString(LEFT_M, PAGE_H - 14 * mm, 'NOT GUILTY  ·  Game Design Document v0.2')
     canvas.setFillColor(TEXT_MUTED)
     canvas.setStrokeColor(BORDER)
     canvas.setLineWidth(0.5)

@@ -26,6 +26,40 @@ story.append(Paragraph(
     'Comenzamos." La escena 3D carga: tribunal con madera oscura, juez al centro, fiscal '
     'a la izquierda, banquillo del acusado a la derecha. Cinco jurados en semicírculo.', STY['body']))
 
+story.append(Paragraph(
+    'Composición del jurado (siempre 2 Estrictos, 2 Empáticos, 1 Popular; el orden visual '
+    'cambia según seed del caso). En esta partida:', STY['body']))
+
+jury_case_data = [
+    [Paragraph('<b>Silla</b>', STY['th_c']), Paragraph('<b>Perfil</b>', STY['th']),
+     Paragraph('<b>Simpatía inicial</b>', STY['th_c']),
+     Paragraph('<b>Estado del avatar al inicio</b>', STY['th'])],
+    [Paragraph('1', STY['td_c']), Paragraph('Estricto', STY['td']),
+     Paragraph('38', STY['td_mono']),
+     Paragraph('Serio, postura rígida. Ya mira mal al acusado.', STY['td'])],
+    [Paragraph('2', STY['td_c']), Paragraph('Empático', STY['td']),
+     Paragraph('52', STY['td_mono']),
+     Paragraph('Neutral, postura relajada.', STY['td'])],
+    [Paragraph('3', STY['td_c']), Paragraph('Popular', STY['td']),
+     Paragraph('47', STY['td_mono']),
+     Paragraph('Neutral, postura relajada.', STY['td'])],
+    [Paragraph('4', STY['td_c']), Paragraph('Estricto', STY['td']),
+     Paragraph('42', STY['td_mono']),
+     Paragraph('Serio, postura rígida.', STY['td'])],
+    [Paragraph('5', STY['td_c']), Paragraph('Empático', STY['td']),
+     Paragraph('55', STY['td_mono']),
+     Paragraph('Neutral, postura relajada.', STY['td'])],
+]
+story.append(make_table(jury_case_data, [0.10, 0.18, 0.20, 0.52]))
+story.append(Paragraph('Tabla 6.1 · Composición del jurado en esta partida. La silla 3 '
+                       '(Popular) es la swing vote: si la pierdes, condena 2-3.', STY['caption']))
+
+story.append(Paragraph(
+    'Medidores agregados iniciales: Credibilidad 50, Sospecha 50, Simpatía media 46.8. '
+    'El sistema interno del caso (no visible para el jugador) define que hay un vínculo '
+    'de tipo <i>enemistad</i> entre el testigo 1 (guarda de seguridad) y el testigo 2 '
+    '(supervisor del museo). El jugador no lo sabe todavía.', STY['body']))
+
 story.append(add_heading('6.2 Fase 1 · Apertura (0:00 - 1:30)', STY['h2'], level=1))
 story.append(Paragraph(
     '<b>0:00.</b> Juez (perfil: <i>Filósofo</i>, voz grave, lento): "Abre la sesión. '
@@ -157,16 +191,54 @@ story.append(Paragraph(
     '<b>7:10.</b> Sube el segundo testigo: el supervisor del museo. Perfil: <i>Vengativo</i>, '
     'lealtad baja al acusado (lo despidió hace un mes). Supervisor: "El acusado conocía '
     'el sistema de cámaras porque él mismo lo instaló. Sabía dónde estaban los puntos '
-    'ciegos. Y tenía acceso al coche de reparto". Aquí el jugador puede recusar si '
-    'detecta motivación personal. Pero no tiene evidencia directa de venganza. Decide '
-    'contrainterrogar. Jugador (15 s): "¿Cuándo me despidió?". Supervisor: "Hace un '
-    'mes". Jugador: "¿Por qué?". Supervisor: "Reducción de personal". Jugador: "¿Y '
-    'cuántas personas despidió?". Supervisor: "Solo a usted". El juez interviene: '
-    'Fiscal,¿este testigo tiene algún conflicto de interés con el acusado?". Fiscal '
-    '(intentando tapar): "No relevante, su señoría". Juez (perfil Filósofo, no se deja): '
-    '"Lo relevante lo decido yo. Testigo, ¿hay algún motivo personal para su testimonio?". '
-    'Supervisor: "No, señor". Pero el medidor de lealtad interno baja a 0 y el jurado '
-    'lo nota. Medidores: Simpatía +4 = 57. <b>Pico de tensión: 85.</b>', STY['body']))
+    'ciegos. Y tenía acceso al coche de reparto". Aquí el jugador puede contrainterrogar. '
+    'Jugador (15 s): "¿Cuándo me despidió?". Supervisor: "Hace un mes". Jugador: "¿Por '
+    'qué?". Supervisor: "Reducción de personal". Jugador: "¿Y cuántas personas despidió?". '
+    'Supervisor: "Solo a usted". El juez interviene: "Fiscal, ¿este testigo tiene algún '
+    'conflicto de interés con el acusado?". Fiscal (intentando tapar): "No relevante, '
+    'su señoría". Juez (perfil Filósofo, no se deja): "Lo relevante lo decido yo. Testigo, '
+    '¿hay algún motivo personal para su testimonio?". Supervisor: "No, señor". Pero el '
+    'medidor de lealtad interno del testigo baja a 0.', STY['body']))
+
+story.append(Paragraph(
+    '<b>7:35.</b> Aquí entra la mecánica de vínculos. El jugador había notado (en F2, '
+    'cuando el guarda declaró) que el guarda y el supervisor se miraron mal al cruzarse. '
+    'El system prompt del caso incluye el atributo "vínculo = enemistad" entre estos dos '
+    'testigos. Si el jugador pregunta al supervisor por el guarda, la IA del supervisor '
+    'reacciona con hostilidad manifiesta. Jugador: "Supervisor, ¿conoce al guarda de '
+    'seguridad que declaró antes?". Supervisor (cambiando tono, más agresivo): "Ese '
+    'inútil. Lleva años holgazaneando en el baño cuando debería vigilar. Si alguien '
+    'pudo entrar y robar sin ser visto, fue por su incompetencia". El cambio de tono '
+    'es detectable: el sistema marca el evento en el log. El jugador ahora puede exponer '
+    'el vínculo: "Su señoría, el testigo tiene enemistad manifiesta con el guarda. Si '
+    'el guarda mintió para cubrir su propia incompetencia, este testimonio no es '
+    'objetivo, es revancha". Juez: "Proceda con cautela, defensa. ¿Tiene evidencia '
+    'directa de que el guarda mintió?". Jugador: "El guarda admitió haber estado 20 '
+    'minutos en el baño durante el robo". Juez: "Vínculo admitido. Jurados, tomen nota." '
+    'Medidores: Credibilidad +6 = 73, Sospecha -10 = 5. La simpatía de los jurados '
+    'Empáticos sube 5 puntos cada uno (silla 2: 57, silla 5: 60). El Estricto de la '
+    'silla 1 sube 2 (40), el Estricto de la silla 4 no se mueve (42). El Popular sube '
+    '3 (50). <b>Pico de tensión: 85.</b>', STY['body']))
+
+story.append(Paragraph(
+    '<b>7:55.</b> El jugador observa que el jurado de la silla 1 (Estricto) sigue con '
+    'simpatía 40, justo en su zona dudosa (40-60). Su avatar sigue serio, brazos cruzados. '
+    'El jugador decide gastar su única recusación. Grita: "¡Recusación, jurado uno!". '
+    'Juez: "Fundamente su recusación". Jugador (10 s): "El jurado uno ha mostrado '
+    'hostilidad desde el inicio. No ha reaccionado a ninguna evidencia exculpatoria. '
+    'Su sesgo manifiesto compromete su objetividad". El sistema verifica: el jurado 1 '
+    'tiene sesgo manifiesto = 65 (por encima del umbral 60, debido a que frunció el '
+    'ceño 3 veces durante evidencia exculpatoria y no asintió ni una vez). Juez: "El '
+    'tribunal acepta la recusación. Jurado uno, puede retirarse". El jurado 1 abandona '
+    'la sala. El voto final será sobre 4 jurados en lugar de 5.', STY['body']))
+
+story.append(callout_box(
+    'Este es el momento más clippeable de la partida. El streamer ha leído al jurado por '
+    'su cara, ha decidido arriesgar su única recusación, y ha ganado. Si hubiera fallado, '
+    'el jurado 1 se habría quedado con simpatía -10 (de 40 a 30) y casi seguro habría '
+    'votado culpable. La asimetría de riesgo/recompensa es lo que hace la mecánica '
+    'tensa.',
+    label='CLIP POTENCIAL MÁXIMO'))
 
 story.append(add_heading('6.6 Fase 5 · Alegato y veredicto (8:00 - 10:00)', STY['h2'], level=1))
 story.append(Paragraph(
@@ -180,24 +252,65 @@ story.append(Paragraph(
     'por falta de prueba directa".', STY['body']))
 
 story.append(Paragraph(
-    '<b>9:05.</b> Juez retira la palabra. "Jurado, deliberen". Los 5 jurados IA votan '
-    'en 30 segundos. 3 absuelven (los perfiles Empático, Popular y Filósofo), 1 condena '
-    '(perfil Estricto), 1 se abstiene (perfil Dudoso). Voto del jurado: 60% absolución.', STY['body']))
+    '<b>9:05.</b> Juez retira la palabra. "Jurado, deliberen". Los 4 jurados restantes '
+    '(se retira el 1 por recusación) votan individualmente en 30 segundos, cada uno '
+    'según su simpatía final y su umbral de perfil:', STY['body']))
+
+vote_data = [
+    [Paragraph('<b>Silla</b>', STY['th_c']), Paragraph('<b>Perfil</b>', STY['th']),
+     Paragraph('<b>Simpatía final</b>', STY['th_c']),
+     Paragraph('<b>Umbral</b>', STY['th_c']), Paragraph('<b>Voto</b>', STY['th_c']),
+     Paragraph('<b>Razón</b>', STY['th'])],
+    [Paragraph('1', STY['td_c']), Paragraph('<i>(recusado)</i>', STY['td']),
+     Paragraph('—', STY['td_mono']), Paragraph('—', STY['td_mono']),
+     Paragraph('—', STY['td_c']), Paragraph('No vota.', STY['td'])],
+    [Paragraph('2', STY['td_c']), Paragraph('Empático', STY['td']),
+     Paragraph('62', STY['td_mono']), Paragraph('Absuelve > 45', STY['td_mono']),
+     Paragraph('Absuelve', STY['td_c']),
+     Paragraph('Simpatía 62 > 45, voto directo.', STY['td'])],
+    [Paragraph('3', STY['td_c']), Paragraph('Popular', STY['td']),
+     Paragraph('55', STY['td_mono']), Paragraph('Absuelve > 50', STY['td_mono']),
+     Paragraph('Absuelve', STY['td_c']),
+     Paragraph('Simpatía 55 > 50, voto directo.', STY['td'])],
+    [Paragraph('4', STY['td_c']), Paragraph('Estricto', STY['td']),
+     Paragraph('45', STY['td_mono']), Paragraph('Dudoso 40-60', STY['td_mono']),
+     Paragraph('Tirada', STY['td_c']),
+     Paragraph('En zona dudosa. Tirada ponderada: 55% absuelve, 45% condena. Sale absuelve.', STY['td'])],
+    [Paragraph('5', STY['td_c']), Paragraph('Empático', STY['td']),
+     Paragraph('65', STY['td_mono']), Paragraph('Absuelve > 45', STY['td_mono']),
+     Paragraph('Absuelve', STY['td_c']),
+     Paragraph('Simpatía 65 > 45, voto directo.', STY['td'])],
+]
+story.append(make_table(vote_data, [0.07, 0.13, 0.13, 0.16, 0.13, 0.38]))
+story.append(Paragraph('Tabla 6.2 · Votación individual del jurado. Resultado: 3-1 absolución '
+                       '(75% absolución).', STY['caption']))
 
 story.append(Paragraph(
     '<b>9:40.</b> Juez (perfil Filósofo, decide): "La defensa ha demostrado suficientes '
     'inconsistencias en la línea temporal de la acusación. La identificación del video '
     'es circunstancial. El testigo de cargo tiene motivación personal. En aplicación '
     'del principio in dubio pro reo, el tribunal absuelve al acusado. Quede libre. '
-    'Sin costas". Pantalla final: <b>VEREDICTO · NO CULPABLE</b>. Medidores finales: '
-    'Credibilidad 78, Sospecha 18, Simpatía 62. Fórmula: (0.4 × 78) + (0.3 × 82) + '
-    '(0.15 × 100) + (0.15 × 60) = 31.2 + 24.6 + 15 + 9 = <b>79.8 / 100</b>. Absolución.', STY['body']))
+    'Sin costas". Pantalla final: <b>VEREDICTO · NO CULPABLE</b>.', STY['body']))
+
+story.append(Paragraph(
+    'Medidores finales: Credibilidad 78, Sospecha 18, Simpatía media 56.75 (sobre 4 '
+    'jurados). Voto del juez: absolución (100). Voto del jurado: 75% absolución. '
+    'Fórmula: (0.4 × 78) + (0.3 × 82) + (0.15 × 100) + (0.15 × 75) = 31.2 + 24.6 + '
+    '15 + 11.25 = <b>82.05 / 100</b>. Absolución holgada. Si el jugador no hubiera '
+    'recusado al jurado 1, este habría votado culpable (simpatía 40 en zona dudosa, '
+    'tirada 35% absuelve). El resultado habría sido 3-2 absolución, fórmula final '
+    '76.65. Recusación no cambió el veredicto pero sí el margen. Esto es deliberado: '
+    'la recusación es para casos más ajustados donde 1 voto decide.', STY['body']))
 
 story.append(callout_box(
-    'Duración total: 10:00. Clippeable moments: 4 (frase del juez al inicio, caída del '
-    'guarda, recuerdo gasolinera, veredicto). Si este caso se jugara 100 veces, esperaríamos '
-    '60% absoluciones, 30% condenas, 10% "modo apelación" por empate. El caso se considera '
-    'balanceado cuando el winrate en playtests está entre 50% y 70%.',
+    'Duración total: 10:00. Clippeable moments: 5 (frase del juez al inicio, caída del '
+    'guarda, vínculo expuesto, recusación del jurado 1, veredicto). Si este caso se '
+    'jugara 100 veces, esperaríamos 60% absoluciones, 30% condenas, 10% "modo apelación" '
+    'por empate. El caso se considera balanceado cuando el winrate en playtests está '
+    'entre 50% y 70%. La recusación acertada debería aumentar el winrate en unos 8 '
+    'puntos porcentuales (de 55% base a 63% con recusación óptima). Si el aumento es '
+    'menor a 3 puntos, la recusación no tiene impacto suficiente y hay que revisar '
+    'umbrales.',
     label='POST-MORTEM DE CASO'))
 
 print("Parte 5 (Capítulo 6) lista")

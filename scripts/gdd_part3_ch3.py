@@ -224,4 +224,119 @@ story.append(Paragraph('<b>Por qué es divertida.</b> Es la mecánica más innov
     'clips genera en stream: los momentos donde el streamer grita y la IA le dice '
     '"Señor, modere su tono" son oro.', STY['body']))
 
+# ── 3.6 Recusación de jurado ──────────────────────────────
+story.append(add_heading('3.6 Mecánica 6 · Recusación de jurado <i>(nueva en v0.2)</i>', STY['h2'], level=1))
+
+story.append(Paragraph('<b>Qué hace el jugador.</b> En cualquier momento de F4 (testigos), '
+    'el jugador puede gritar "¡Recusación!" seguido del número de silla del jurado que '
+    'quiere recusar (por ejemplo, "¡Recusación, jurado tres!"). Solo tiene 1 recusación '
+    'por partida. La recusación es gratuita: no hay penalización si falla. Tras la '
+    'recusación, el juez pide al jugador que fundamente (10 segundos de habla libre) '
+    'y decide si retira al jurado o lo mantiene.', STY['body']))
+
+story.append(Paragraph('<b>Qué hace la IA.</b> El juez evalúa el fundamento contra el '
+    'estado real del jurado. Cada jurado tiene un atributo oculto llamado <i>sesgo manifiesto</i> '
+    'que sube cuando el jurado ha hecho algo observable incompatible con su rol '
+    '(reírse cuando el acusado tropieza, fruncir el ceño ante evidencia exculpatoria, '
+    'susurrar al jurado vecino). Si el sesgo manifiesto del jurado recusado está por '
+    'encima de 60, el juez retira al jurado. Si está por debajo, lo mantiene.', STY['body']))
+
+story.append(Paragraph('<b>Qué cambian los medidores.</b> Recusación acertada: el jurado '
+    'se retira, su voto en F5 se elimina (necesitas 2 de 4 en lugar de 3 de 5). '
+    'Recusación fallida: el jurado se queda pero su simpatía individual baja 10 puntos '
+    '(se siente atacado). En ambos casos, la simpatía de los otros jurados no cambia: '
+    'saben que era tu derecho recusar.', STY['body']))
+
+story.append(Paragraph('<b>Modos de fallo.</b> El jugador puede gritar "¡Recusación!" '
+    'sin número de silla. El sistema pide aclaración: "¿A qué jurado se refiere?". Si '
+    'el jugador no responde en 5 segundos, la recusación se anula sin consumo (no '
+    'cuenta como usada). El jugador puede intentar recusar al juez (no al jurado): el '
+    'juez responde "Señor acusado, no soy yo quien está siendo evaluado" y aplica '
+    'Sospecha +5 por pérdida de tiempo. La recusación se consume en este caso.', STY['body']))
+
+story.append(Paragraph('<b>Cómo se calibra.</b> El atributo "sesgo manifiesto" es un '
+    'contador numérico que se incrementa con eventos predefinidos (risa = +20, ceño '
+    'fruncido = +10, susurro = +15). El umbral de 60 es ajustable: si en playtests el '
+    'winrate de recusaciones acertadas es menor al 40%, subir el umbral a 70 (más '
+    'difícil). Si es mayor al 70%, bajar a 50 (más fácil). Test automatizado: generar '
+    '100 casos, en cada uno forzar un jurado con sesgo manifiesto = 80, verificar que '
+    'el bot óptimo acierte la recusación el 90% de las veces.', STY['body']))
+
+story.append(Paragraph('<b>Por qué es divertida.</b> Es la mecánica con mayor riesgo '
+    'y mayor recompensa: gastas tu única recusación en el jurado equivocado y pierdes '
+    'el caso. Pero si aciertas, el momento de "leí al jurado, sabía que me odiaba" es '
+    'de los más satisfactorios del juego. En stream, los momentos donde el streamer '
+    'delibera en voz alta "este jurado tres me miró mal cuando presenté la evidencia, '
+    'lo recuso" son oro clippeable. La información está en el entorno visual (animación '
+    'del jurado), no en un menú: el jugador tiene que mirar a los jurados, no a la UI.', STY['body']))
+
+# ── 3.7 Vínculos entre testigos ───────────────────────────
+story.append(add_heading('3.7 Mecánica 7 · Vínculos entre testigos <i>(nueva en v0.2)</i>', STY['h2'], level=1))
+
+story.append(Paragraph('<b>Qué hace el jugador.</b> Cada caso tiene exactamente 1 par '
+    'de testigos con un vínculo entre ellos. El jugador puede descubrir el vínculo '
+    'haciendo preguntas a un testigo sobre el otro. Si lo expone correctamente durante '
+    'F4, gana un bonus en credibilidad. Si no lo descubre, no pasa nada (no hay '
+    'penalización por no encontrarlo). El vínculo es de uno de tres tipos, fijo por '
+    'caso y generado como atributo del caso, no como runtime emergente.', STY['body']))
+
+vinc_data = [
+    [Paragraph('<b>Tipo de vínculo</b>', STY['th']),
+     Paragraph('<b>Qué significa</b>', STY['th']),
+     Paragraph('<b>Bonus si se expone</b>', STY['th_c']),
+     Paragraph('<b>Pista observable</b>', STY['th'])],
+    [Paragraph('Cómplices', STY['td']),
+     Paragraph('Mienten juntos para protegerse mutuamente. Sus testimonios se confirman '
+               'sospechosamente.', STY['td']),
+     Paragraph('Credibilidad +10<br/>Sospecha -8<br/>Ambos jurados pierden lealtad al fiscal', STY['td_c']),
+     Paragraph('Usan las mismas frases exactas. Un testigo responde "no recuerdo" a '
+               'preguntas que el otro respondió en detalle.', STY['td'])],
+    [Paragraph('Enemistad', STY['td']),
+     Paragraph('Se odian. Cada uno intenta inculpar al otro.', STY['td']),
+     Paragraph('Credibilidad +6<br/>Simpatía +5 (jurado ve al acusado como víctima de una trampa)', STY['td_c']),
+     Paragraph('Cuando un testigo menciona al otro, su tono de voz cambia (la IA lo '
+               'detecta y lo marca en su respuesta).', STY['td'])],
+    [Paragraph('Coartada mutua', STY['td']),
+     Paragraph('Se confirman el uno al otro. Pero la coartada es falsa y se contradice '
+               'con un detalle menor.', STY['td']),
+     Paragraph('Credibilidad +12<br/>Sospecha -10', STY['td_c']),
+     Paragraph('Ambos mencionan la misma hora exacta sin que se la hayan preguntado. '
+               'Demasiado ensayado.', STY['td'])],
+]
+story.append(make_table(vinc_data, [0.16, 0.30, 0.24, 0.30]))
+story.append(Paragraph('Tabla 3.3 · Tipos de vínculos entre testigos. Solo 1 vínculo por caso.', STY['caption']))
+
+story.append(Paragraph('<b>Qué hace la IA.</b> El atributo del caso "vínculo = cómplices" '
+    'se inyecta en el system prompt de ambos testigos. La IA ya no razona sobre un '
+    'grafo: solo lee una etiqueta. Si el jugador pregunta al testigo A sobre el testigo B, '
+    'la IA del testigo A responde según el tipo de vínculo (confirma, ataca, o coartada). '
+    'La IA del testigo B hace lo simétrico si se le pregunta sobre A.', STY['body']))
+
+story.append(Paragraph('<b>Qué cambian los medidores.</b> Exponer el vínculo correctamente '
+    'aplica los bonus de la tabla 3.3. Exponerlo incorrectamente (decir "son cómplices" '
+    'cuando son enemigos): Credibilidad -5 (parece que improvisas). No exponerlo: 0.', STY['body']))
+
+story.append(Paragraph('<b>Modos de fallo.</b> El jugador puede intentar exponer vínculos '
+    'que no existen. El juez responde "Señor acusado, no veo la conexión. ¿Tiene evidencia '
+    'de lo que afirma?". Si el jugador no presenta evidencia en 10 segundos, el juez '
+    'descarta la afirmación sin penalización (para no desincentivar el intento). Solo '
+    'se permiten 2 afirmaciones de vínculo por partida: la tercera se ignora sin '
+    'penalización ni respuesta.', STY['body']))
+
+story.append(Paragraph('<b>Cómo se calibra.</b> El vínculo es un atributo del caso '
+    'generado en pre-partida, no un sistema emergente. La IA lee la etiqueta del caso '
+    'y actúa en consecuencia. Test automatizado: para cada tipo de vínculo, generar 50 '
+    'casos, hacer que un bot juegue óptimamente, verificar que el bonus se aplica '
+    'correctamente cuando el bot expone y no se aplica cuando no expone. Las pistas '
+    'observables (frases repetidas, cambio de tono, hora exacta mencionada sin preguntar) '
+    'son patrones explícitos en el system prompt del testigo, no inferencias runtime.', STY['body']))
+
+story.append(Paragraph('<b>Por qué es divertida.</b> Es la mecánica que más se siente '
+    'a "sé un detective" en el juego. El jugador tiene que escuchar con atención y '
+    'conectar pistas que están en el habla de los testigos, no en un menú. La recompensa '
+    'es grande cuando aciertas. El costo de equivocarte es bajo (no hay penalización '
+    'fuerte) para animar a intentarlo. El streamer que nota el vínculo antes que su '
+    'chat se siente un genio; el chat que lo nota antes que el streamer se siente '
+    'partícipe. Ambos casos son clips.', STY['body']))
+
 print("Parte 3 (Capítulo 3) lista")

@@ -11,14 +11,14 @@ exec(open('/home/z/my-project/scripts/gdd_part1_setup.py').read(), globals())
 # DOCUMENTO
 # ──────────────────────────────────────────────────────────
 OUTPUT_BODY = '/home/z/my-project/scripts/gdd_body.pdf'
-OUTPUT_FINAL = '/home/z/my-project/download/NOT_GUILTY_GDD_v0.1.pdf'
+OUTPUT_FINAL = '/home/z/my-project/download/NOT_GUILTY_GDD_v0.2.pdf'
 
 doc = TocDocTemplate(
     OUTPUT_BODY,
     pagesize=A4,
     leftMargin=LEFT_M, rightMargin=RIGHT_M,
     topMargin=TOP_M, bottomMargin=BOT_M,
-    title='NOT GUILTY — Game Design Document v0.1',
+    title='NOT GUILTY — Game Design Document v0.2',
     author='Z.ai',
     creator='Z.ai',
     subject='Game Design Document para NOT GUILTY — Acusado vs IA judicial',
@@ -41,6 +41,17 @@ story.append(PageBreak())
 # CAPÍTULO 1 — PILARES Y ALCANCE
 # ══════════════════════════════════════════════════════════
 story.append(add_heading('1. Pilares y alcance de este documento', STY['h1'], level=0))
+
+story.append(callout_box(
+    'v0.2 incorporó tres cambios respecto a v0.1, todos validados contra un filtro de '
+    'calibrabilidad: (1) sistema de jurados individualizado con 3 perfiles fijos y '
+    'composición 2-2-1 en cada caso, (2) retroalimentación diegética de nerviosismo '
+    'mediante temblor del avatar + latido de corazón, en lugar de un cuarto medidor '
+    'visible, (3) vínculos entre pares de testigos como atributo del caso. Se descartaron '
+    'explícitamente: 6 perfiles de jurado (imposible de balancear), grafo de relaciones '
+    'entre testigos (imposible de debugguear en runtime), y reputación previa del acusado '
+    '(requiere persistencia entre partidas, pospuesto a v0.3).',
+    label='NOTA DE VERSIÓN · v0.2'))
 
 story.append(Paragraph(
     'Este documento no vende el juego. Define mecánicamente cómo se juega una partida '
@@ -84,9 +95,16 @@ pilar_data = [
      Paragraph('Cada 60 a 90 segundos hay un momento con potencial de clip: una objeción '
                'gritada, una recusación, una frase absurda del juez, un veredicto inesperado.', STY['td']),
      Paragraph('Prohíbe relleno narrativo. Si una fase no tiene clip potencial, se rediseña.', STY['td'])],
+    [Paragraph('<b>P5 · Calibrabilidad obligatoria</b> <i>(nuevo en v0.2)</i>', STY['td']),
+     Paragraph('Toda mecánica debe poder medirse con un número, debugguearse con un log, '
+               'y balancearse con un test automatizado. Si no, no entra al juego.', STY['td']),
+     Paragraph('Prohíbe sistemas emergentes no acotados: grafos de relaciones arbitrarias, '
+               '6+ perfiles de NPCs combinables, medidores sin umbral claro.', STY['td'])],
 ]
 story.append(make_table(pilar_data, [0.22, 0.48, 0.30]))
-story.append(Paragraph('Tabla 1.1 · Pilares de diseño y lo que excluyen.', STY['caption']))
+story.append(Paragraph('Tabla 1.1 · Pilares de diseño y lo que excluyen. P5 añadido en v0.2 '
+                       'tras constatar que sin él, el diseño deriva hacia mecánicas impresionantes '
+                       'en papel pero imposibles de mantener en producción.', STY['caption']))
 
 story.append(add_heading('1.2 Alcance de este v0.1', STY['h2'], level=1))
 story.append(Paragraph(

@@ -14,7 +14,7 @@ def normalize_page_to_a4(page):
 
 COVER = '/home/z/my-project/scripts/cover.pdf'
 BODY = '/home/z/my-project/scripts/gdd_body.pdf'
-OUT = '/home/z/my-project/download/NOT_GUILTY_GDD_v0.1.pdf'
+OUT = '/home/z/my-project/download/NOT_GUILTY_GDD_v0.2.pdf'
 
 writer = PdfWriter()
 
@@ -28,7 +28,7 @@ for page in body_reader.pages:
     writer.add_page(normalize_page_to_a4(page))
 
 writer.add_metadata({
-    '/Title': 'NOT GUILTY — Game Design Document v0.1',
+    '/Title': 'NOT GUILTY — Game Design Document v0.2',
     '/Author': 'Z.ai',
     '/Creator': 'Z.ai',
     '/Subject': 'Game Design Document para NOT GUILTY — Acusado vs IA judicial',

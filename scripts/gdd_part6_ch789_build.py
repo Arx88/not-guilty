@@ -50,11 +50,27 @@ fun_data = [
      Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
      Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
      Paragraph('Sí', STY['td_c']), Paragraph('Sí', STY['td_c'])],
+    [Paragraph('Recusación de jurado <i>(v0.2)</i>', STY['td']),
+     Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('-', STY['td_c'])],
+    [Paragraph('Vínculos entre testigos <i>(v0.2)</i>', STY['td']),
+     Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('Sí', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('-', STY['td_c'])],
+    [Paragraph('Retroalimentación diegética <i>(v0.2)</i>', STY['td']),
+     Paragraph('Sí', STY['td_c']), Paragraph('Sí', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('-', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('-', STY['td_c']),
+     Paragraph('-', STY['td_c']), Paragraph('-', STY['td_c'])],
 ]
-story.append(make_table(fun_data, [0.20] + [0.10]*8))
+story.append(make_table(fun_data, [0.22] + [0.0975]*8))
 story.append(Paragraph('Tabla 7.1 · Mapeo de mecánicas a los 8 tipos de diversión (LeBlanc). '
                        '"Compañ." = Compañerismo, "Descubri." = Descubrimiento, "Expres." = Expresión, '
-                       '"Someti." = Sometimiento (submission).', STY['caption']))
+                       '"Someti." = Sometimiento (submission). Las 3 últimas filas son nuevas en v0.2.',
+                       STY['caption']))
 
 story.append(add_heading('7.1 Por qué este juego no se sostiene sin el micrófono', STY['h2'], level=1))
 story.append(Paragraph(
@@ -173,9 +189,22 @@ risk_data = [
     [Paragraph('El streamer no lo juega porque no se siente "seguro"', STY['td']),
      Paragraph('Media', STY['td_c']), Paragraph('Crítico', STY['td_c']),
      Paragraph('Modo "sin contenido ofensivo" configurable. Lista blanca de temas. Casos pre-aprobados para primer stream.', STY['td'])],
+    [Paragraph('Sesgo manifiesto de jurados no es perceptible (v0.2)', STY['td']),
+     Paragraph('Alta', STY['td_c']), Paragraph('Alto', STY['td_c']),
+     Paragraph('5 animaciones de avatar por silla. Test A/B con 10 jugadores: si menos del 60% aciertan la recusación con sesgo 65+, subir umbral a 70 o intensificar animación.', STY['td'])],
+    [Paragraph('Vínculos entre testigos se sienten forzados (v0.2)', STY['td']),
+     Paragraph('Media', STY['td_c']), Paragraph('Medio', STY['td_c']),
+     Paragraph('Pistas observables escritas en system prompt del testigo, no emergentes. Test automatizado: en 50 casos con vínculo, las pistas aparecen textualmente el 100% de las veces.', STY['td'])],
+    [Paragraph('Recusación gratuita se spamea con hopelessness', STY['td']),
+     Paragraph('Baja', STY['td_c']), Paragraph('Medio', STY['td_c']),
+     Paragraph('Solo 1 recusación por partida. Test: en 100 partidas de un bot óptimo, recusación se usa en el 95%+ de los casos (siempre hay un jurado Estricto que odia al acusado).', STY['td'])],
+    [Paragraph('Temblor del avatar se siente ridicule o roto', STY['td']),
+     Paragraph('Media', STY['td_c']), Paragraph('Bajo', STY['td_c']),
+     Paragraph('Fórmula lineal simple. Si se ve mal, sustituir por temblor solo en manos (no en todo el cuerpo). Coste: 1 shader, no curvas.', STY['td'])],
 ]
 story.append(make_table(risk_data, [0.30, 0.12, 0.12, 0.46]))
-story.append(Paragraph('Tabla 8.2 · Riesgos conocidos y mitigaciones.', STY['caption']))
+story.append(Paragraph('Tabla 8.2 · Riesgos conocidos y mitigaciones. Las 4 últimas filas son nuevas en v0.2.',
+                       STY['caption']))
 
 # ══════════════════════════════════════════════════════════
 # CAPÍTULO 9 — PRÓXIMOS PASOS
@@ -183,8 +212,12 @@ story.append(Paragraph('Tabla 8.2 · Riesgos conocidos y mitigaciones.', STY['ca
 story.append(add_heading('9. Próximos pasos: qué validar antes de seguir', STY['h1'], level=0))
 
 story.append(Paragraph(
-    'Este documento es v0.1. Antes de escribir código de producción, hay tres validaciones '
-    'que deben hacerse en orden, cada una con su criterio de salida claro:', STY['body']))
+    'Este documento es v0.2. Antes de escribir código de producción, hay tres validaciones '
+    'que deben hacerse en orden, cada una con su criterio de salida claro. Las validaciones '
+    'no cambian respecto a v0.1: lo que cambia es que v0.2 incorpora mecánicas (recusación, '
+    'vínculos, retroalimentación diegética) que deben testearse dentro del paso 3, no como '
+    'validaciones independientes. Si las mecánicas nuevas no pasan el filtro del paso 3, '
+    'se rediseñan o eliminan antes de production.', STY['body']))
 
 steps_data = [
     [Paragraph('<b>Paso</b>', STY['th_c']), Paragraph('<b>Qué hacer</b>', STY['th']),
@@ -201,12 +234,18 @@ steps_data = [
                'no seguir.', STY['td'])],
     [Paragraph('3', STY['td_c']),
      Paragraph('Prototipo "juicio completo": Three.js con escena 3D básica, 1 caso '
-               'completo de 5 fases, 3 NPCs.', STY['td']),
+               'completo de 5 fases, 3 NPCs, sistema de jurados con 3 perfiles, recusación, '
+               'vínculos entre testigos, retroalimentación diegética (temblor + latido).', STY['td']),
      Paragraph('Partida completa de 10 min jugable de extremo a extremo sin crash. '
-               'Medición de curva de tensión real vs objetivo (fig. 2.2) con desviación < 25%.', STY['td'])],
+               'Medición de curva de tensión real vs objetivo (fig. 2.2) con desviación < 25%. '
+               'Test de recusación: 60% de jugadores aciertan con sesgo manifiesto = 65+. '
+               'Test de vínculos: 50% de jugadores detectan el vínculo con pistas solas. '
+               'Test de retroalimentación: 4 de 5 jugadores reportan nerviosismo sin que se les explique.', STY['td'])],
 ]
 story.append(make_table(steps_data, [0.07, 0.50, 0.43]))
-story.append(Paragraph('Tabla 9.1 · Plan de validación en tres pasos antes de producción.', STY['caption']))
+story.append(Paragraph('Tabla 9.1 · Plan de validación en tres pasos antes de producción. '
+                       'El paso 3 ahora incluye criterios específicos para las 3 mecánicas nuevas de v0.2.',
+                       STY['caption']))
 
 story.append(callout_box(
     'Si el paso 1 no se supera, todo lo demás (micrófono, 3D, multiplayer, chat integration) '
@@ -215,10 +254,12 @@ story.append(callout_box(
     label='PRUEBA DE FUEGO'))
 
 story.append(Paragraph(
-    'Una vez superados los tres pasos, el siguiente documento (v0.2) debe cubrir: '
+    'Una vez superados los tres pasos, el siguiente documento (v0.3) debe cubrir: '
     'sistema de generación procedural de casos, progresión de jugador, jueces y jurados '
-    'desbloqueables, integración con Twitch chat, y el modo juez como contenido '
-    'endgame. Cada uno en su propio capítulo, con la misma profundidad que este v0.1.', STY['body']))
+    'desbloqueables, integración con Twitch chat, reputación previa del acusado (limpio / '
+    'manchado / ex-convicto, pospuesto desde v0.2), y el modo juez como contenido '
+    'endgame. Cada uno en su propio capítulo, con la misma profundidad que este v0.2.',
+    STY['body']))
 
 # ──────────────────────────────────────────────────────────
 # BUILD
