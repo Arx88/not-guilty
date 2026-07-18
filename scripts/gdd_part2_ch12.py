@@ -11,14 +11,14 @@ exec(open('/home/z/my-project/scripts/gdd_part1_setup.py').read(), globals())
 # DOCUMENTO
 # ──────────────────────────────────────────────────────────
 OUTPUT_BODY = '/home/z/my-project/scripts/gdd_body.pdf'
-OUTPUT_FINAL = '/home/z/my-project/download/NOT_GUILTY_GDD_v0.2.pdf'
+OUTPUT_FINAL = '/home/z/my-project/download/NOT_GUILTY_GDD_v0.3.pdf'
 
 doc = TocDocTemplate(
     OUTPUT_BODY,
     pagesize=A4,
     leftMargin=LEFT_M, rightMargin=RIGHT_M,
     topMargin=TOP_M, bottomMargin=BOT_M,
-    title='NOT GUILTY — Game Design Document v0.2',
+    title='NOT GUILTY — Game Design Document v0.3',
     author='Z.ai',
     creator='Z.ai',
     subject='Game Design Document para NOT GUILTY — Acusado vs IA judicial',
@@ -43,15 +43,14 @@ story.append(PageBreak())
 story.append(add_heading('1. Pilares y alcance de este documento', STY['h1'], level=0))
 
 story.append(callout_box(
-    'v0.2 incorporó tres cambios respecto a v0.1, todos validados contra un filtro de '
-    'calibrabilidad: (1) sistema de jurados individualizado con 3 perfiles fijos y '
-    'composición 2-2-1 en cada caso, (2) retroalimentación diegética de nerviosismo '
-    'mediante temblor del avatar + latido de corazón, en lugar de un cuarto medidor '
-    'visible, (3) vínculos entre pares de testigos como atributo del caso. Se descartaron '
-    'explícitamente: 6 perfiles de jurado (imposible de balancear), grafo de relaciones '
-    'entre testigos (imposible de debugguear en runtime), y reputación previa del acusado '
-    '(requiere persistencia entre partidas, pospuesto a v0.3).',
-    label='NOTA DE VERSIÓN · v0.2'))
+    'v0.3 cierra los dos agujeros de diseño que v0.2 dejaba abiertos: (1) sistema de '
+    'variabilidad por caso que multiplica la rejugabilidad de 1 a 27 partidas distintas '
+    'por caso, y (2) sistema de momentos cómicos garantizados que sube la densidad de '
+    'risas de 1 a 3-4 por partida. Lo que se pospone explícitamente: dirección artística '
+    'y voz del juez, que se decidirán con prototipo funcionando enfrente, no en abstracto. '
+    'v0.3 mantiene todo lo de v0.2 (jurados individualizados, recusación, vínculos, '
+    'retroalimentación diegética) sin cambios.',
+    label='NOTA DE VERSIÓN · v0.3'))
 
 story.append(Paragraph(
     'Este documento no vende el juego. Define mecánicamente cómo se juega una partida '
@@ -100,11 +99,22 @@ pilar_data = [
                'y balancearse con un test automatizado. Si no, no entra al juego.', STY['td']),
      Paragraph('Prohíbe sistemas emergentes no acotados: grafos de relaciones arbitrarias, '
                '6+ perfiles de NPCs combinables, medidores sin umbral claro.', STY['td'])],
+    [Paragraph('<b>P6 · Densidad de recompensa alta</b> <i>(nuevo en v0.3)</i>', STY['td']),
+     Paragraph('Cada 30 segundos el jugador recibe una recompensa: risa, revelación, '
+               'victoria parcial, clip potencial. La tensión sola no sostiene sesiones largas.', STY['td']),
+     Paragraph('Prohíbe fases de más de 60 s sin recompensa. Prohíbe recompensas solo al final.', STY['td'])],
+    [Paragraph('<b>P7 · Variabilidad within-case</b> <i>(nuevo en v0.3)</i>', STY['td']),
+     Paragraph('Cada caso tiene atributos rolados en pre-partida. El mismo expediente puede '
+               'generar 27 partidas distintas. Sin esto, rejugabilidad = 3-5 por caso.', STY['td']),
+     Paragraph('Prohíbe casos con estructura fija de testigos y evidencia. Lo fijo es el '
+               'expediente; lo variable es la configuración interna.', STY['td'])],
 ]
 story.append(make_table(pilar_data, [0.22, 0.48, 0.30]))
 story.append(Paragraph('Tabla 1.1 · Pilares de diseño y lo que excluyen. P5 añadido en v0.2 '
                        'tras constatar que sin él, el diseño deriva hacia mecánicas impresionantes '
-                       'en papel pero imposibles de mantener en producción.', STY['caption']))
+                       'en papel pero imposibles de mantener en producción. P6 y P7 añadidos en v0.3 '
+                       'tras identificar que v0.2 optimizaba para tensión pero no para risa ni '
+                       'rejugabilidad.', STY['caption']))
 
 story.append(add_heading('1.2 Alcance de este v0.1', STY['h2'], level=1))
 story.append(Paragraph(
