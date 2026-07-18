@@ -518,7 +518,7 @@ export function GameOrchestrator() {
         return;
       }
     },
-    [hablar, ajustarMedidor, credibilidad, sospecha]
+    [hablar, ajustarMedidor, credibilidad, sospecha, caso]
   );
 
   // ── Hook de micrófono ──
