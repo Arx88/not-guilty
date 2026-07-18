@@ -59,10 +59,11 @@ export async function llamarNPC({ npc, userMessage, contextoExtra, isStageDirect
   // Estado actual del juego como contexto
   const estadoCtx = `Fase actual: ${state.fase}. Credibilidad del acusado: ${state.credibilidad}/100. Sospecha: ${state.sospecha}/100. Vínculo expuesto: ${state.vinculoExpuesto ? 'sí' : 'no'}.`;
 
-  // Si es dirección de escena, el mensaje es una instrucción para el NPC, no del jugador
+  // Si es dirección de escena, el mensaje es una instrucción PARA el NPC
+  // Si no, es el jugador/acusado hablándole al NPC
   const userContent = isStageDirection
-    ? `${estadoCtx}\n\n[DIRECCIÓN DE ESCENA]: ${userMessage}`
-    : `${estadoCtx}\n\nJugador/acusado dice: "${userMessage}"`;
+    ? `${estadoCtx}\n\n[INSTRUCCIÓN PARA TI]: ${userMessage}`
+    : `${estadoCtx}\n\nEl ACUSADO (jugador) te dice: "${userMessage}"`;
 
   const response = await fetch('/api/chat', {
     method: 'POST',

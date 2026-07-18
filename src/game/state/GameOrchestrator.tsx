@@ -130,7 +130,7 @@ export function GameOrchestrator() {
       const t = setTimeout(() => {
         hablar(
           'juez',
-          `El juez abre la sesión y lee los cargos: "${caso.cargos}". Lugar: ${caso.lugar}, hora: ${caso.hora}. Luego pregunta: ¿Entiende los cargos?`,
+          `Abre la sesión. Lee los cargos en voz alta: "${caso.cargos}". Lugar: ${caso.lugar}, hora: ${caso.hora}. Luego pregunta al acusado: ¿Entiende los cargos?`,
           undefined,
           true
         );
@@ -149,7 +149,7 @@ export function GameOrchestrator() {
         const t = setTimeout(() => {
           hablar(
             'juez',
-            `El acusado dijo: "${intervencionJugador}". Reacciona brevemente y pasa la palabra al fiscal.`,
+            `El acusado acaba de decir: "${intervencionJugador}". Como juez, reacciona brevemente y pasa la palabra al fiscal.`,
             undefined,
             true
           );
@@ -165,7 +165,7 @@ export function GameOrchestrator() {
           hablar(
             'fiscal',
             'Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.',
-            undefined,
+            'TÚ ERES LA FISCAL. Hablas al tribunal. NUNCA hables como el acusado.',
             true
           );
           setSubfase('F2.window1');
@@ -190,7 +190,7 @@ export function GameOrchestrator() {
           hablar(
             'fiscal',
             'Presenta la segunda evidencia: el video de seguridad del museo a las 03:47.',
-            undefined,
+            'TÚ ERES LA FISCAL. Hablas al tribunal. NUNCA hables como el acusado.',
             true
           );
           setSubfase('F2.window2');
@@ -235,7 +235,7 @@ export function GameOrchestrator() {
 
       case 'F4.guarda_testimonio': {
         const t = setTimeout(() => {
-          hablar('guarda', 'Cuéntale al tribunal qué pasó esa noche.', undefined, true).then((reply) => {
+          hablar('guarda', 'Cuéntale al tribunal qué pasó esa noche.', 'TÚ ERES DON EUSTAQUIO, el guardia. NUNCA hables como el acusado o el juez.', true).then((reply) => {
             if (reply) {
               feedback('Testimonio del guarda registrado. ESCUCHA con atención — busca contradicciones.', 'info');
             }
@@ -268,7 +268,7 @@ export function GameOrchestrator() {
 
       case 'F4.supervisor_testimonio': {
         const t = setTimeout(() => {
-          hablar('supervisor', 'Cuéntale al tribunal lo que sabes del acusado.', undefined, true).then((reply) => {
+          hablar('supervisor', 'Cuéntale al tribunal lo que sabes del acusado.', 'TÚ ERES ANSELMO TELLEZ, el supervisor. NUNCA hables como el acusado o el juez.', true).then((reply) => {
             if (reply) {
               feedback('Testimonio del supervisor registrado. COMPARA con lo que dijo el guarda.', 'info');
             }
@@ -308,8 +308,8 @@ export function GameOrchestrator() {
           sndVerdict();
           hablar(
             'juez',
-            `Emite veredicto. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Veredicto: ${veredictoTexto}.`,
-            `VEREDICTO FINAL. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto OBLIGATORIO es: ${veredictoTexto}. Empieza con "${veredictoTexto}." y explica en máximo 50 palabras.`,
+            `Emite tu veredicto final. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto es: ${veredictoTexto}.`,
+            `TÚ ERES EL JUEZ. Es el momento del VEREDICTO FINAL. Credibilidad: ${credibilidad}/100. Sospecha: ${sospecha}/100. Tu veredicto OBLIGATORIO es: ${veredictoTexto}. Empieza tu respuesta con "${veredictoTexto}." y explica en máximo 50 palabras por qué.`,
             true
           );
           setTimeout(() => {
