@@ -526,6 +526,12 @@ export function GameOrchestrator() {
 
   // ── Listener para input de texto (botón PROTESTO + campo de texto) ──
   // Esto garantiza que el juego funcione sin micrófono
+  // Usamos refs para evitar registrar el listener múltiples veces
+  const onKeywordRef = useRef(onKeyword);
+  const onFinalTranscriptRef = useRef(onFinalTranscript);
+  onKeywordRef.current = onKeyword;
+  onFinalTranscriptRef.current = onFinalTranscript;
+
   useEffect(() => {
     const handler = (e: Event) => {
       const text = (e as CustomEvent<string>).detail;
@@ -536,17 +542,17 @@ export function GameOrchestrator() {
       const lower = text.toLowerCase();
       for (const kw of ['protesto', 'protesta', 'objeción', 'objecion', 'recusación', 'recusacion', 'sí', 'si', 'no']) {
         if (lower.includes(kw)) {
-          onKeyword(kw, text);
+          onKeywordRef.current(kw, text);
           break;
         }
       }
 
       // Procesar como final transcript
-      onFinalTranscript(text);
+      onFinalTranscriptRef.current(text);
     };
     window.addEventListener('notguilty-player-input', handler);
     return () => window.removeEventListener('notguilty-player-input', handler);
-  }, [onKeyword, onFinalTranscript]);
+  }, []); // Sin dependencias = se registra una sola vez
 
   return null;
 }
