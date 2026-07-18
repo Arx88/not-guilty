@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Fases de la partida</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f7f5f1; color: #1d1c1a; padding: 30px; width: 1200px; }
+  .container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; position: relative; }
+  .phase {
+    border: 1px solid #c2bba5;
+    background: white;
+    padding: 16px;
+    border-top: 4px solid;
+    position: relative;
+  }
+  .phase.f1 { border-top-color: #8d8a83; }
+  .phase.f2 { border-top-color: #866f2c; }
+  .phase.f3 { border-top-color: #44945f; }
+  .phase.f4 { border-top-color: #884d47; }
+  .phase.f5 { border-top-color: #1d1c1a; }
+  .phase-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #8d8a83;
+    margin-bottom: 6px;
+  }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1d1c1a;
+    line-height: 1.25;
+  }
+  .phase-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #866f2c;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .phase-body {
+    font-size: 11px;
+    color: #1d1c1a;
+    line-height: 1.55;
+    opacity: 0.85;
+  }
+  .phase-body b { color: #1d1c1a; opacity: 1; font-weight: 700; }
+  .mechanics {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #c2bba5;
+  }
+  .mech-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #8d8a83;
+    margin-bottom: 6px;
+  }
+  .mech {
+    font-size: 10.5px;
+    color: #1d1c1a;
+    margin-bottom: 3px;
+    padding-left: 8px;
+    border-left: 2px solid #866f2c;
+    line-height: 1.4;
+  }
+  .arrows {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    pointer-events: none;
+  }
+  .legend {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: white;
+    border: 1px solid #c2bba5;
+    font-size: 11px;
+    line-height: 1.6;
+    color: #1d1c1a;
+    opacity: 0.85;
+  }
+  .legend b { color: #884d47; }
+  .title-bar {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid #1d1c1a;
+    padding-bottom: 10px;
+  }
+  .title-bar h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .title-bar .src {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #8d8a83;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="title-bar">
+  <h2>Flujo de una partida · 5 fases · 8&ndash;12 min</h2>
+  <span class="src">NOT GUILTY &middot; GDD v0.1 &middot; FIG. 2</span>
+</div>
+
+<div class="container">
+
+  <div class="phase f1">
+    <div class="phase-num">FASE 01</div>
+    <div class="phase-title">Apertura del juicio</div>
+    <div class="phase-time">0:00 &ndash; 1:30</div>
+    <div class="phase-body">
+      El juez lee los cargos en voz alta. El fiscal presenta la teoría del caso.
+      El jugador <b>escucha sin poder hablar</b>, salvo para decir "Entendido".
+    </div>
+    <div class="mechanics">
+      <div class="mech-label">Inputs jugador</div>
+      <div class="mech">Reconocer cargos (sí/no)</div>
+      <div class="mech">Tomar notas mentales</div>
+    </div>
+  </div>
+
+  <div class="phase f2">
+    <div class="phase-num">FASE 02</div>
+    <div class="phase-title">Testimonio del fiscal</div>
+    <div class="phase-time">1:30 &ndash; 3:30</div>
+    <div class="phase-body">
+      El fiscal narra la versión acusadora y presenta <b>3 piezas de evidencia inicial</b>.
+      Aquí abren las ventanas de objeción (3 s cada una).
+    </div>
+    <div class="mechanics">
+      <div class="mech-label">Mecánicas activas</div>
+      <div class="mech">Objeción por voz</div>
+      <div class="mech">Contra-interrogatorio libre</div>
+      <div class="mech">Medidor Sospecha &uarr;</div>
+    </div>
+  </div>
+
+  <div class="phase f3">
+    <div class="phase-num">FASE 03</div>
+    <div class="phase-title">Evidencia de la defensa</div>
+    <div class="phase-time">3:30 &ndash; 5:30</div>
+    <div class="phase-body">
+      El jugador arrastra objetos 3D al estrado y los explica. <b>Valle estratégico</b>:
+      la tensión baja para permitir planificación.
+    </div>
+    <div class="mechanics">
+      <div class="mech-label">Mecánicas activas</div>
+      <div class="mech">Drag &amp; drop evidencia 3D</div>
+      <div class="mech">Explicación por voz</div>
+      <div class="mech">Medidor Credibilidad &uarr;</div>
+    </div>
+  </div>
+
+  <div class="phase f4">
+    <div class="phase-num">FASE 04</div>
+    <div class="phase-title">Testigos y recusaciones</div>
+    <div class="phase-time">5:30 &ndash; 8:00</div>
+    <div class="phase-body">
+      Suben 2&ndash;3 testigos IA con agendas ocultas. El jugador puede <b>recusar</b>
+      gritando "¡Recusación!" si detecta contradicciones con sus recuerdos.
+    </div>
+    <div class="mechanics">
+      <div class="mech-label">Mecánicas activas</div>
+      <div class="mech">Contra-interrogatorio testigos</div>
+      <div class="mech">Recusación por voz</div>
+      <div class="mech">Memoria del acusado</div>
+    </div>
+  </div>
+
+  <div class="phase f5">
+    <div class="phase-num">FASE 05</div>
+    <div class="phase-title">Alegato final y veredicto</div>
+    <div class="phase-time">8:00 &ndash; 10:00</div>
+    <div class="phase-body">
+      El jugador tiene <b>60 segundos</b> para su alegato. Luego el juez y los 5 jurados
+      deliberan y emiten veredicto. Si hay empate, juega "modo apelación".
+    </div>
+    <div class="mechanics">
+      <div class="mech-label">Mecánicas activas</div>
+      <div class="mech">Alegato cronometrado</div>
+      <div class="mech">Votación jurados IA</div>
+      <div class="mech">Veredicto + epílogo</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <b>Principio de flujo:</b> Cada fase dura entre 90 s y 2 min 30 s. Las transiciones
+  las dispara el juez IA, no el jugador, para mantener ritmo. La única excepción es F3:
+  el jugador puede pedir "Receso" una vez por partida para pensar (cuesta 5 puntos de Credibilidad).
+</div>
+
+</body>
+</html>

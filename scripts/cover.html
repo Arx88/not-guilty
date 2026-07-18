@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>NOT GUILTY - GDD v0.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-bg: #f7f5f1;
+    --c-primary: #1d1c1a;
+    --c-muted: #8d8a83;
+    --c-accent: #866f2c;
+    --c-accent-2: #884d47;
+    --c-line: #696149;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: 794px 1123px; margin: 0; }
+  html, body {
+    width: 794px;
+    height: 1123px;
+    background: var(--c-bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--c-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  .cover-page {
+    position: relative;
+    width: 794px;
+    height: 1123px;
+    border: none !important;
+    outline: none !important;
+  }
+
+  /* ───── LAYER 1: Background grid + watermark ───── */
+  .layer-1 {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(105, 97, 73, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(105, 97, 73, 0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .watermark {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 260px;
+    color: var(--c-accent);
+    opacity: 0.05;
+    letter-spacing: -8px;
+    line-height: 0.85;
+  }
+
+  /* ───── LAYER 2: Structure ───── */
+  .layer-2 {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+  .anchor-line {
+    position: absolute;
+    left: 95px;       /* 0.12 * 794 = 95.28 */
+    top: 112px;       /* 0.10 * 1123 = 112.3 */
+    width: 6px;
+    height: 899px;    /* 0.80 * 1123 = 898.4 */
+    background: var(--c-line);
+  }
+  .corner-tl {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    width: 28px;
+    height: 28px;
+    border-top: 1.5px solid var(--c-primary);
+    border-left: 1.5px solid var(--c-primary);
+  }
+  .corner-br {
+    position: absolute;
+    bottom: 60px;
+    right: 60px;
+    width: 28px;
+    height: 28px;
+    border-bottom: 1.5px solid var(--c-primary);
+    border-right: 1.5px solid var(--c-primary);
+  }
+  .stamp {
+    position: absolute;
+    top: 130px;
+    right: 80px;
+    border: 1.5px solid var(--c-accent-2);
+    color: var(--c-accent-2);
+    padding: 10px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+    background: rgba(247, 245, 241, 0.6);
+  }
+
+  /* ───── LAYER 3: Content ───── */
+  .layer-3 {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    padding-left: 165px;   /* 95 + 30 + a bit */
+    padding-right: 80px;
+  }
+  .kicker {
+    position: absolute;
+    top: 168px;            /* 0.15 * 1123 */
+    left: 165px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--c-primary);
+    opacity: 0.6;
+  }
+  .case-no {
+    position: absolute;
+    top: 195px;
+    left: 165px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--c-muted);
+    letter-spacing: 2px;
+  }
+  .hero-title {
+    position: absolute;
+    top: 270px;            /* moved up slightly */
+    left: 165px;
+    right: 80px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 84px;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    color: var(--c-primary);
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--c-accent-2);
+    font-weight: 400;
+  }
+  .subtitle {
+    position: absolute;
+    top: 470px;
+    left: 165px;
+    right: 80px;
+    font-family: 'Inter', sans-serif;
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.35;
+    color: var(--c-primary);
+    opacity: 0.85;
+    max-width: 540px;
+  }
+  .subtitle b {
+    font-weight: 700;
+    color: var(--c-accent);
+  }
+
+  .summary {
+    position: absolute;
+    top: 580px;            /* 0.55 * 1123 */
+    left: 165px;
+    right: 80px;
+    max-width: 510px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--c-primary);
+    opacity: 0.82;
+  }
+  .summary::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: var(--c-accent);
+    margin-bottom: 14px;
+  }
+
+  /* Stat block */
+  .stats {
+    position: absolute;
+    top: 810px;            /* moved down */
+    left: 165px;
+    right: 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+    max-width: 540px;
+  }
+  .stat {
+    border-top: 1.5px solid var(--c-primary);
+    padding-top: 12px;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 36px;
+    color: var(--c-primary);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* Meta block bottom */
+  .meta {
+    position: absolute;
+    bottom: 95px;          /* 0.92 * 1123 */
+    left: 165px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    max-width: 540px;
+  }
+  .meta-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--c-muted);
+    line-height: 1.6;
+  }
+  .meta-left b {
+    color: var(--c-primary);
+    font-weight: 500;
+  }
+  .meta-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--c-primary);
+    opacity: 0.7;
+    text-align: right;
+  }
+
+  /* Decorative quotes — kept inside Layer 1 to avoid line-overlap detection */
+  .quote-deco {
+    position: absolute;
+    top: 230px;
+    left: 130px;
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    color: var(--c-accent);
+    opacity: 0.15;
+    line-height: 1;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="cover-page">
+
+  <!-- Layer 1: background -->
+  <div class="layer-1">
+    <div class="grid-bg"></div>
+    <div class="watermark">NG</div>
+    <div class="quote-deco">&ldquo;</div>
+  </div>
+
+  <!-- Layer 2: structure -->
+  <div class="layer-2">
+    <div class="anchor-line"></div>
+    <div class="corner-tl"></div>
+    <div class="corner-br"></div>
+    <div class="stamp">CONFIDENTIAL / DRAFT</div>
+  </div>
+
+  <!-- Layer 3: content -->
+  <div class="layer-3">
+
+    <div class="kicker">Game Design Document &middot; v0.1</div>
+    <div class="case-no">EXPEDIENTE N&deg; 2026/NOTG-001</div>
+
+    <h1 class="hero-title">NOT<br><em>Guilty</em></h1>
+
+    <div class="subtitle">
+      Un tribunal donde <b>tú eres el acusado</b>, el juez es una IA<br>
+      y tu única arma es tu voz.
+    </div>
+
+    <p class="summary">
+      Documento de diseño centrado en el loop de una partida de 8 a 12 minutos.
+      Define las cinco mecánicas core, los tres medidores vivos, el modelo de fallos
+      del jugador, un playtest mental completo y la teoría de la diversión detrás de
+      cada decisión. Pensado para iterarse, no para venderse.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Mecánicas<br>Core</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Medidores<br>Vivos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10&prime;</div>
+        <div class="stat-label">Duración<br>Objetivo</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div class="meta-left">
+        <b>ROL</b> &nbsp;Acusado<br>
+        <b>STACK</b> &nbsp;Three.js + Convai + Web Speech<br>
+        <b>TONO</b> &nbsp;Absurdo &rarr; Dramedia &rarr; Sátira
+      </div>
+      <div class="meta-right">
+        V0.1 &middot; DRAFT<br>
+        18 JUL 2026
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
