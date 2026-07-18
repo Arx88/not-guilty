@@ -93,15 +93,15 @@ export function GameOrchestrator() {
     async (
       npc: 'juez' | 'fiscal' | 'guarda' | 'novia' | 'supervisor',
       mensaje: string,
-      contextoExtra?: string
+      contextoExtra?: string,
+      isStageDirection?: boolean
     ) => {
       setIaPensando(true);
       setNpcActual(npc);
-      // Sonido según NPC
       if (npc === 'juez') sndGavel();
       else sndClick();
       try {
-        const result = await llamarNPC({ npc, userMessage: mensaje, contextoExtra });
+        const result = await llamarNPC({ npc, userMessage: mensaje, contextoExtra, isStageDirection });
         setCaption(result.reply, npc);
         pushMensaje({
           role: 'assistant',
@@ -136,7 +136,9 @@ export function GameOrchestrator() {
         console.log('[F1-EFFECT] Llamando a hablar()...');
         hablar(
           'juez',
-          `Inicia el juicio. Acusado, se le imputa: ${caso.cargos}. Lugar: ${caso.lugar}, hora: ${caso.hora}. ¿Entiende los cargos?`
+          `El juez abre la sesión y lee los cargos en voz alta: "${caso.cargos}". Lugar: ${caso.lugar}, hora: ${caso.hora}. Luego pregunta al acusado: ¿Entiende los cargos?`,
+          undefined,
+          true // isStageDirection
         ).then(() => console.log('[F1-EFFECT] Juez respondió OK'))
          .catch((e) => console.error('[F1-EFFECT] Error juez:', e));
       }, 800);
