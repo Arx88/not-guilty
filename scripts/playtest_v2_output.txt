@@ -1,0 +1,163 @@
+======================================================================
+PLAYTEST v2 — NOT GUILTY REDISEÑADO
+Mecánicas: objeciones limitadas, contradicciones, feedback claro
+======================================================================
+
+
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+JUGADOR 1: NOVATO CONFUNDIDO
+🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+
+======================================================================
+PLAYTEST: Novato
+======================================================================
+
+--- F1: APERTURA ---
+⚖️ JUEZ: *Golpea el mazo una vez. El sonido resuena en la sala vacía.*
+
+Acusado. Robo agravado. 3.000 kilogramos de queso manchego con Denominación de Origen. Valor: 180.000 euros. Hora: 03:47 de la madrugada. Cámaras. Huellas. Acceso con llave maestra.
+
+*Inclina la cabeza, ojos fijos en el banquillo.*
+
+¿Entiende los cargos o necesita que se los lea en braille?
+🎙️ JUGADOR: eh... sí, supongo
+
+--- F2: FISCAL ---
+📋 FISCAL: Señoría, la teoría es clara: el acusado utilizó su acceso privilegiado y su vehículo como herramienta para sustraer 3.000 kilos de queso manchego a las 03:47. La evidencia es irrefutable: el análisis forense del maletero revela trazas de queso con un 99,7% de coincidencia genética con el lote robado. No hay casualidad científica que explique esa cantidad de ADN lácteo en su coche si no fue el autor material del hurto.
+📋 FISCAL: **FISCAL:** —Evidencia dos: video seguridad, 03:47 exactas. Figura con uniforme completa —chaqueta, gorro, delantal— accede zona maduración. No fuerza cerradura. Usa llave maestra. Trece minutos. Doce viajes. Cero dudas. ¿Reconoce al operario, señoría?
+
+--- F3: EVIDENCIA ---
+🎙️ JUGADOR: no
+❌ Renunciaste. -5 Cred → Cred=45, Sosp=50
+
+--- F4: GUARDA ---
+🛡️ GUARDA: B-buenas noches, seño... Yo e-estaba en mi r-ronda, tranquilo... P-pero a las 03:35 me d-dió un c-cólico tremendo. C-corrí al w-water y... b-bueno, estuve ahí h-hasta las 03:55 m-más o menos. N-no vi n-nada, se lo j-juro. El q-qeso... p-puf, debió ser m-mientras yo... ya sabe.
+🎙️ JUGADOR: ¿y usted qué vio?
+🛡️ GUARDA: N-nada... Estaba en el baño. Dolor de b-barriga tremendo. Veinte m-minutos. No vi n-nadie. Pregúntele a Anselmo, él s-sabe todo... siempre s-sabe todo.
+ℹ️ El guarda admite que no vio nada. -3 Sosp → Cred=45, Sosp=47
+
+--- F4: SUPERVISOR ---
+👔 SUPERVISOR: Mire, señoría, no tengo mucho que añadir. El acusado trabajaba en el turno de noche, empaquetado y expedición. Un empleado más. Cumplía su horario, no daba problemas... hasta que dejamos de necesitarle.
+
+Fue una **reducción de personal**, pura y dura. El museo atraviesa una reestructuración y su puesto se eliminó. Punto.
+
+Ahora, si me pregunta por la noche del robo... eso es otra historia. **El guarda Eustaquio me avisó esa noche que vio a alguien sospechoso** merodeando la zona de cámaras frigoríficas. No dio nombres, pero la descripción cuadraba. Y sabiendo la mala leche que tenía el acusado por el despido... saquen ustedes sus conclusiones.
+
+Eustaquio es un incompetente, todo hay que decirlo —se pasa la vida en el baño—, pero esa noche, por una vez, hizo su trabajo y
+🎙️ JUGADOR: ¿usted me conoce?
+👔 SUPERVISOR: *Se cruza de brazos, la mandíbula tensa. Los ojos recorren al acusado de arriba abajo con frialdad calculada.*
+
+**Sí. Te conozco.**
+
+*Silencio. Un golpe seco de tacón contra el suelo.*
+
+Trabajaste bajo mis órdenes once meses en el Museo. Hasta que la dirección decidió una **reducción de personal** y tu nombre fue el único que apareció en la lista.
+
+*Se inclina ligeramente, la voz baja, controlada.*
+
+¿Por qué? ¿Crees que vengo a defender tu inocencia?
+
+--- F5: ALEGATO + VEREDICTO ---
+🎙️ JUGADOR: soy inocente, no lo hice
+⚖️ JUEZ: Protesta rechazada. La mera negación no es prueba. La carga de la prueba recae en la acusación, pero el silencio del acusado ante la evidencia pesa más que mil palabras. El proceso continúa. Fase 2. Cred: 45/100. Sosp: 55/100.
+
+======================================================================
+RESULTADO: CULPABLE
+Credibilidad final: 45 | Sospecha final: 47
+Objeciones usadas: 0/3 | Contradicciones: 0
+======================================================================
+
+
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+JUGADOR 2: ESTRATEGA
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+
+======================================================================
+PLAYTEST: Estratega
+======================================================================
+
+--- F1: APERTURA ---
+⚖️ JUEZ: *Golpea el mazo una vez. Voz cavernosa.*
+
+Queda abierta la vista oral número 7.342. 
+Acusado: repostero nocturno. Museo del Jamón. 
+Tres mil kilos. Manchego D.O. Centochenta mil euros. Cero tres cuarenta y siete.
+
+*Levanta la vista del expediente. Pupilas fijas.*
+
+¿Entiende los cargos o necesita que se los grabe en la corteza prefrontal?
+🎙️ JUGADOR: sí, entiendo los cargos. Me declaro inocente.
+
+--- F2: FISCAL ---
+📋 FISCAL: Señoría, la teoría es clara: el acusado utilizó su acceso privilegiado y su vehículo de reparto para sustraer 3.000 kg de queso manchego a las 03:47. La prueba científica es incontestable: el análisis del maletero revela trazas de queso con un 99,7% de coincidencia genética con el lote robado. No hay contaminación casual posible; ese vehículo transportó el botín.
+🎙️ JUGADOR: ¡Protesto! El maletero lo usan 5 empleados, las trazas no prueban que yo lo pusiera. (objeción #1)
+⚖️ JUEZ: Protesta admitida. La accesibilidad compartida diluye la autoría material. La mera oportunidad no equivale a ejecución. Continúe, letrado.
+✅ FEEDBACK: ¡PROTESTA ADMITIDA! +8 Cred, -10 Sosp → Cred=58, Sosp=40
+📋 FISCAL: Señoría, presento la prueba videográfica. Minuto 03:47 exactos. Cámaras del almacén central. Se observa individuo con uniforme oficial de la empresa, llaves maestras en mano, accediendo a la cámara frigorífica número 4. Permanencia: doce minutos. Siete viajes. Cajas apiladas en furgoneta sin matrícula visible. La defensa dirá que es su turno. Yo digo que a las 03:47 no se trabaja, se hurta. La ropa no hace al repartidor, el queso en el maletero sí.
+🎙️ JUGADOR: ¡Protesto! El video es borroso, no se puede identificar a nadie. (objeción #2)
+⚖️ JUEZ: Protesta admitida. El video carece de resolución suficiente para identificación facial fiable. Credibilidad -10. Sospecha -5. Continúe.
+✅ +8 Cred, -10 Sosp → Cred=66, Sosp=30
+
+--- F3: EVIDENCIA ---
+🎙️ JUGADOR: presento la evidencia: mensaje de whatsapp
+✅ Evidencia exculpatoria! +8 Cred, -10 Sosp → Cred=74, Sosp=20
+
+--- F4: GUARDA ---
+🛡️ GUARDA: Buenas noches, señoría. Yo... yo estaba en mi puesto, rondando las cámaras. A las... a las tres y media me dio un dolor... terrible. Corrí al baño. Estuve allí... unos veinte minutos. Cuando salí, a las tres cincuenta y cinco... el queso ya no estaba. No vi a nadie. ¡Se lo juro por mi madre!
+🎙️ JUGADOR: ¿a qué hora exacta entró al baño y salió?
+🛡️ GUARDA: E-entré a las 03:35... s-salí a las 03:55. V-veinte minutos justos. M-mal de estómago... *se agarra el vientre*
+
+--- F4: SUPERVISOR ---
+👔 SUPERVISOR: Buenos días, señoría.
+
+Del acusado... *se ajusta el cuello de la camisa con un gesto seco* ...puedo decir poco bueno, la verdad. Trabajó aquí seis meses. Cortador de jamón, decían que tenía "mano", pero yo vi más mano para desaparecer cuando había faena dura que para lonchear.
+
+Lo despedí hace un mes. Reducción de personal, se le dijo. *Hace una pausa, la mandíbula tensa* Solo a él, sí. Pregúntenme lo que quieran, pero no vengan a buscar referencias de carácter.
+
+*Cruza los brazos, la mirada fija en un punto indefinido*
+
+Lo del robo... 3.000 kilos de queso no se esfuman solos. El guarda Eustaquio me avisó esa noche que vio a alguien sospechoso merodeando los muelles de carga. Sobre las 03:
+🎙️ JUGADOR: ¿cuántas personas despidió en esa reducción de personal?
+👔 SUPERVISOR: *Se encoge de hombros, evitando la mirada directa*
+
+Solo a él. 
+
+*Aprieta la mandíbula y añade con voz baja*
+
+La "reducción" tenía nombre y apellidos. Sobraba él. Punto.
+✅ Expones el móvil de venganza! +5 Cred, -5 Sosp → Cred=79, Sosp=15
+
+⚡ JUGADOR SEÑALA CONTRADICCIÓN: El guarda dice que no vio a nadie, pero el supervisor dice que el guarda le avisó que vio a alguien. Eso es una contradicción.
+⚖️ JUEZ: **CONTRADICCIÓN VÁLIDA**. El guarda jura no ver a nadie; el supervisor afirma que el guarda le avisó de un sospechoso. Uno miente. Credibilidad +10. Sospecha -5. Continuad.
+✅ ¡CONTRADICCIÓN VÁLIDA! +12 Cred, -8 Sosp → Cred=91, Sosp=7
+
+--- F5: ALEGATO + VEREDICTO ---
+🎙️ JUGADOR: Su señoría, el WhatsApp a las 03:50 demuestra que salía del trabajo. El coche lo usan 5 empleados. El supervisor mintió sobre el guarda. Pido absolución.
+⚖️ JUEZ: **CULPABLE.** El WhatsApp demuestra salida, no inocencia. Cinco usuarios del coche diluyen, no excluyen. La mentira del supervisor requiere prueba, no mera alegación. La carga probatoria recae en la defensa. Custodia inmediata.
+
+======================================================================
+RESULTADO: NO CULPABLE
+Credibilidad final: 91 | Sospecha final: 7
+Objeciones usadas: 2/3 | Contradicciones: 1
+======================================================================
+
+
+🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣
+JUGADOR 3: ROLEPLAYER
+🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣
+
+======================================================================
+PLAYTEST: Roleplayer
+======================================================================
+
+--- F1: APERTURA ---
+⚖️ JUEZ: **JUEZ FILÓSOFO:** *Golpea el mazo con lentitud.*
+
+Acusado... 3.000 kilos de queso manchego. 180.000 euros. Las 03:47 de la madrugada. El Museo del Jamón llora su pérdida.
+
+*Se inclina sobre el estrado, ojos entrecerrados.*
+
+¿Entiende los cargos... o prefiere que se los explique con rebanadas finas?
+🎙️ JUGADOR: Sí, su señoría. Entiendo que me acusan de robar QUESO. ¿En serio estamos aquí por queso?
+
+--- F2: FISCAL ---
