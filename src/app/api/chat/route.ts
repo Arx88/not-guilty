@@ -57,6 +57,8 @@ export async function POST(req: NextRequest) {
         top_p: 0.9,
         max_tokens: body.maxTokens ?? 350,
         stream: false,
+        // Desactivar reasoning/thinking en Nemotron Ultra (evita que filtre chain-of-thought en inglés)
+        chat_template_kwargs: { thinking: false },
       }),
     });
 

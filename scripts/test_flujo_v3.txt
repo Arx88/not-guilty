@@ -1,0 +1,143 @@
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA END-TO-END v2: NOT GUILTY — Caso del Queso Manchego
+Modelo: nvidia/nemotron-3-ultra-550b-a55b
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+
+──────────────────────────────────────────────────────────────────────
+FASE 1 · APERTURA
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Inicia el juicio. Acusado, se le imputa: Hurto agravado de 3.000 kg de queso manchego D.O. del Museo...
+⚖️  JUEZ: *asiente lentamente, ajusta las gafas y mira al acusado por encima de ellas*
+
+Acusado, ante la gravedad de lo que se le imputa —tres mil kilogramos de queso manchego con denominación de origen, sustraídos del Museo del Jamón a las cero tres cuarenta y siete de la madrugada, valorados en ciento ochenta mil euros—, le pregunto con la serenidad que exige la justicia: ¿comprende usted, en toda su dimensión, el peso de estos cargos?
+⏱️  1601ms | 572 tokens
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Sí, su señoría. Entiendo los cargos.
+⚖️  JUEZ: *asiente con gravedad, vuelve la vista hacia el estrado*
+
+Muy bien. Quede constancia de que el acusado comprende la imputación.
+
+*hace una pausa, respira hondo*
+
+Llamen al primer testigo: el guarda de seguridad del Museo del Jamón.
+
+*espera, manos entrelazadas sobre el escritorio*
+
+Testigo, identifíquese para el acta y relate, con la precisión que merece la verdad, lo que presenció aquella madrugada.
+⏱️  9034ms | 699 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 2 · TESTIMONIO FISCAL
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.
+⚖️  FISCAL: El análisis del maletero del coche de reparto confirma trazas de queso manchego D.O. con un 99,7% de coincidencia: el queso robado estuvo en ese vehículo. El video de las 03:47 muestra al acusado, único con acceso y conocimiento de las cámaras, cargando las cajas él mismo.
+⏱️  1425ms | 426 tokens
+
+======================================================================
+🎙️  JUGADOR → JUEZ: He dicho '¡PROTESTO!'. Fundamento: el análisis del maletero solo demuestra que el queso estuvo en el...
+⚖️  JUEZ: The player is objecting to the trunk analysis evidence. They're arguing that the cheese traces in the trunk only prove the cheese was in the car, not that THEY put it there, and that the car belongs to the museum and is used by 5 employees.
+
+As the judge, I need to:
+1. Start with either "Protesta admitida" or "Protesta rechazada"
+2. Ask for fundamentation (but they already gave it)
+3. Rule based on logical coherence
+4. Stay in character - grave, slow, reflective
+5. Max 60 words
+6. Spanish only
+
+The objection is about relevance/weight of evidence, not admissibility per se. The trunk analysis is relevant circumstantial evidence even if not conclusive. The defense can argue about alternative explanations during cross-examination or closing arguments. This seems like a "Protesta rechazada" - the evidence is admissible, its weight will be assessed later.
+
+Let
+⏱️  1824ms | 937 tokens
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta la segunda evidencia: el video de seguridad del museo a las 03:47.
+⚖️  FISCAL: El video de seguridad a las 03:47 es incontestable: se ve claramente a una persona con el uniforme del museo, complexión y movimientos idénticos al acusado, cargando cajas en el maletero. No hay nadie más con acceso al vehículo ni conocimiento de los ángulos muertos de las cámaras a esa hora. Es él.
+⏱️  3026ms | 544 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · TESTIGOS — Guarda Don Eustaquio
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Cuéntale al tribunal qué pasó esa noche.
+⚖️  GUARDA: Su señoría... esa noche... *traga saliva* ...turno normal, 22:00 a 06:00. A las 03:35 me dio un dolor... *se toca la tripa* ...estuve en el servicio hasta las 03:55. El robo... dicen que a las 03:47. Yo... no vi nada, su señoría. Yo qué sé.
+⏱️  2013ms | 564 tokens
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Señor, ¿a qué hora terminó su turno esa noche?
+⚖️  GUARDA: A las 06:00, su señoría... *se rasca la cabeza* ...como siempre. 22:00 a 06:00, veintitrés años así. Yo qué sé.
+⏱️  2982ms | 637 tokens
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Y el robo fue a las 03:47. ¿Estaba usted en el museo a esa hora?
+⚖️  GUARDA: *Sudor en la frente* ...Estaba... en el museo, su señoría... *tartamudea* ...pero en el servicio. Con dolor de tripas. De 03:35 a 03:55. El robo... a las 03:47. Yo... no vi nada. Yo qué sé.
+⏱️  2177ms | 760 tokens
+
+======================================================================
+🎙️  JUGADOR → GUARDA: ¿Cuánto tiempo estuvo en el baño?
+⚖️  GUARDA: Veinte minutos, su señoría... *cuenta con los dedos* ...de 03:35 a 03:55. Justo cuando... *baja la voz* ...pasó lo del queso. Yo qué sé.
+⏱️  2224ms | 794 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · TESTIGOS — Supervisor Anselmo Tellez
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Cuéntale al tribunal lo que sabes del acusado.
+⚖️  SUPERVISOR: Le conste que el acusado conocía la distribución de cámaras, los puntos ciegos del almacén y tenía llaves del vehículo de reparto. Es pertinente señalar que su despido por reducción de personal no elimina su acceso previo ni su conocimiento operativo. La hora del robo, 03:47, coincide con su turno habitual de mantenimiento.
+⏱️  4430ms | 445 tokens
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: ¿Cuándo me despidió?
+❌ EXCEPCIÓN: HTTPConnectionPool(host='localhost', port=3000): Read timed out. (read timeout=60)
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: ¿Y cuántas personas despidió esa semana?
+⚖️  SUPERVISOR: *Suda ligeramente, evita la mirada*
+
+Solo a él. Es pertinente señalar que la reestructuración... afectó exclusivamente a su puesto. Le conste que los presupuestos son inamovibles.
+⏱️  1438ms | 537 tokens
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: ¿Conoce al guarda de seguridad Don Eustaquio?
+⚖️  SUPERVISOR: *La mandíbula se tensa, voz cortante*
+
+Ese incompetente. Inútil total. Dejó desactivado el sensor perimetral zona sur "por mantenimiento" y no lo reactivó. Le conste: su negligencia facilitó el robo. Es pertinente señalar que debería estar en el banquillo, no de testigo.
+⏱️  2420ms | 623 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 5 · ALEGATO FINAL
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: El acusado presenta su alegato final: 'Su señoría, el caso se sostiene en una imagen borrosa y un su...
+⚖️  JUEZ: The accused is giving their final plea. They're arguing:
+1. Blurry image and supervisor with personal motivation
+2. Timeline doesn't work: gas station receipt at 03:30 at 30km away, WhatsApp at 03:50
+3. Girlfriend confirmed their arrival
+4. Requests acquittal
+
+I need to deliver a verdict. As the judge, I must:
+- Start with "CULPABLE" or "NO CULPABLE" as the first word
+- Be grave, slow, reflective
+- Spanish only
+- Max 60 words
+- Base decision on logical coherence
+
+Let me analyze the evidence logically:
+- Gas station receipt at 03:30, 30km from museum
+- WhatsApp at 03:50
+- Theft at 03:47
+- 30km in 17 minutes (03:30
+⏱️  1957ms | 1227 tokens
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA COMPLETADA — Veredicto emitido
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀

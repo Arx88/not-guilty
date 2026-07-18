@@ -1,0 +1,127 @@
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA END-TO-END v2: NOT GUILTY — Caso del Queso Manchego
+Modelo: nvidia/nemotron-3-ultra-550b-a55b
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+
+──────────────────────────────────────────────────────────────────────
+FASE 1 · APERTURA
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Inicia el juicio. Acusado, se le imputa: Hurto agravado de 3.000 kg de queso manchego D.O. del Museo...
+⚖️  JUEZ: *asiente lentamente, mira al acusado por encima de las gafas*
+
+Entendido. *pausa* Antes de proceder: la defensa, ¿presenta escrito de alegaciones previas o pasamos directamente a la prueba testifical? *deja caer la pluma sobre el expediente*
+⏱️  1953ms | 472 tokens
+
+======================================================================
+🎙️  JUGADOR → JUEZ: Sí, su señoría. Entiendo los cargos.
+⚖️  JUEZ: *anota algo en el margen del folio*
+
+Bien. *levanta la vista* ¿Cómo se declara: culpable o no culpable? *espera, manos entrelazadas sobre la mesa*
+⏱️  3177ms | 498 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 2 · TESTIMONIO FISCAL
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta tu teoría del caso en 2 frases y menciona el análisis del maletero como primera evidencia.
+⚖️  FISCAL: Señoría, el análisis del maletero del coche oficial revela trazas de queso manchego D.O. con un 99,7% de coincidencia, colocando el botín en el vehículo del acusado. A las 03:47, las cámaras graban a alguien con su uniforme y sus llaves cargando cajas: solo él conocía los horarios, el acceso y la ruta de escape.
+⏱️  1395ms | 442 tokens
+
+======================================================================
+🎙️  JUGADOR → JUEZ: He dicho '¡PROTESTO!'. Fundamento: el análisis del maletero solo demuestra que el queso estuvo en el...
+⚖️  JUEZ: *ajusta las gafas, sin inmutarse*
+
+Objeción registrada. *pausa* Fundamento jurídico, por favor: ¿inviolabilidad del domicilio, cadena de custodia rota, falta de pericial contradictoria...? *golpea suavemente el expediente* Cite artículo o doctrina.
+⏱️  1756ms | 728 tokens
+
+======================================================================
+🎙️  JUGADOR → FISCAL: Presenta la segunda evidencia: el video de seguridad del museo a las 03:47.
+⚖️  FISCAL: El video de seguridad a las 03:47 es incontestable: se ve a una figura con su uniforme, su complexión y sus credenciales abriendo el maletero y apilando cajas de D.O. con total tranquilidad. No hay forzamiento, no hay prisa; actúa como quien sabe que nadie vigila a esa hora y que el coche de reparto es su coartada perfecta.
+⏱️  1360ms | 583 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · TESTIGOS — Guarda Don Eustaquio
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Cuéntale al tribunal qué pasó esa noche.
+⚖️  GUARDA: *Pone mano en la biblia, tiembla*
+
+Su señoría... esa noche... turno normal, 22:00 a 06:00. A las 03:35... dolor de tripa fuerte. Me fui al baño. Veinte minutos... maybe más. No vi nada.
+⏱️  3110ms | 552 tokens
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Señor, ¿a qué hora terminó su turno esa noche?
+⚖️  GUARDA: A las 06:00, su señoría. Como toas las noches. Veintitrés años... siempre a las seis.
+⏱️  1142ms | 559 tokens
+
+======================================================================
+🎙️  JUGADOR → GUARDA: Y el robo fue a las 03:47. ¿Estaba usted en el museo a esa hora?
+⚖️  GUARDA: *Baja la vista, se rasca la nuca*
+
+Estaba... en el museo, sí. Pero en el baño. Desde las 03:35 hasta las 03:55... más o menos. Dolor de tripas. No vi nada, su señoría. Yo qué sé.
+⏱️  1956ms | 665 tokens
+
+======================================================================
+🎙️  JUGADOR → GUARDA: ¿Cuánto tiempo estuvo en el baño?
+⚖️  GUARDA: Veinte minutos... maybe veinticinco. Desde las 03:35 hasta las 03:55. Dolor fuerte, su señoría. No vi nada.
+⏱️  1398ms | 706 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 4 · TESTIGOS — Supervisor Anselmo Tellez
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: Cuéntale al tribunal lo que sabes del acusado.
+⚖️  SUPERVISOR: Le conste que el acusado conocía la disposición exacta de las cámaras, los puntos ciegos del almacén y tenía llaves del vehículo de reparto. Es pertinente señalar que su despido por reducción de personal no elimina su acceso previo ni su conocimiento operativo. La hora del robo, 03:47, coincide con su turno anterior.
+⏱️  2106ms | 432 tokens
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: ¿Cuándo me despidió?
+⚖️  SUPERVISOR: Hace exactamente un mes. El 15 de octubre se formalizó su baja por reducción de personal. Le conste que la notificación se realizó por escrito y con firma de recibido.
+⏱️  1298ms | 482 tokens
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: ¿Y cuántas personas despidió esa semana?
+⚖️  SUPERVISOR: *Suda ligeramente, evita la mirada*
+
+Solo a él. Es pertinente señalar que su puesto era el único... prescindible. Le conste que la reestructuración afectó exclusivamente a su área.
+⏱️  8306ms | 576 tokens
+
+======================================================================
+🎙️  JUGADOR → SUPERVISOR: ¿Conoce al guarda de seguridad Don Eustaquio?
+⚖️  SUPERVISOR: *La mandíbula se tensa, voz cortante*
+
+Ese incompetente. Inútil total. Dormía en turno de noche mientras vaciaban el almacén. Le conste que he presentado tres quejas formales por negligencia; la dirección las archivó. Es pertinente señalar que su "vigilancia" facilitó el robo.
+⏱️  19461ms | 679 tokens
+
+──────────────────────────────────────────────────────────────────────
+FASE 5 · ALEGATO FINAL
+──────────────────────────────────────────────────────────────────────
+
+======================================================================
+🎙️  JUGADOR → JUEZ: El acusado presenta su alegato final: 'Su señoría, el caso se sostiene en una imagen borrosa y un su...
+⚖️  JUEZ: The user is presenting the defendant's final argument and asking me to issue a verdict. As the philosophical judge, I need to analyze the logical coherence of the evidence presented throughout the trial.
+
+Let me review what we have:
+1. Accused: Night pastry chef at Museo del Jamón
+2. Crime: Theft of 3,000 kg Manchego cheese D.O. (€180,000) at 03:47
+3. Witnesses: Guard, girlfriend, supervisor
+4. Evidence:
+   - WhatsApp message at 03:50
+   - Gas station receipt at 03:30, 30km away
+   - Route schedule
+   - Trunk analysis with cheese traces
+
+The defense argues:
+- Trunk analysis only shows cheese was in car, not that defendant put it there (car shared by 5 employees)
+- Timeline doesn't work: gas station 30km
+⏱️  8622ms | 886 tokens
+
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+PRUEBA COMPLETADA — Veredicto emitido
+🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀

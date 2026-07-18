@@ -180,6 +180,40 @@ export function GameUI() {
         )}
       </div>
 
+      {/* ─── Indicador de window de objeción ─── */}
+      {fase === 'F2' && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          <Card className="p-6 bg-red-950/80 border-red-500 animate-pulse">
+            <div className="text-center">
+              <div className="text-[10px] font-mono text-red-400 tracking-widest mb-2">
+                WINDOW DE OBJECIÓN
+              </div>
+              <div className="text-3xl font-black text-red-300 mb-2">¡PROTESTA!</div>
+              <div className="text-xs text-red-200/70 font-mono">
+                Di "¡Protesto!" ahora para objetar
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* ─── Indicador de espera de jugador ─── */}
+      {(fase === 'F1' || fase === 'F3' || fase === 'F4' || fase === 'F5') && (
+        <div className="absolute bottom-32 right-4 pointer-events-none">
+          <Card className="p-3 bg-emerald-950/70 border-emerald-700/50 backdrop-blur">
+            <div className="text-[10px] font-mono text-emerald-400 tracking-widest mb-1">
+              TU TURNO
+            </div>
+            <div className="text-xs text-emerald-200/90 font-mono">
+              {fase === 'F1' && 'Di "sí" o "no"'}
+              {fase === 'F3' && 'Di "sí" para presentar evidencia'}
+              {fase === 'F4' && 'Contra-interroga al testigo'}
+              {fase === 'F5' && 'Alegato final: habla libre'}
+            </div>
+          </Card>
+        </div>
+      )}
+
       {/* ─── Hints de palabras clave ─── */}
       <div className="absolute bottom-6 left-4 pointer-events-none">
         <Card className="p-2 bg-black/60 border-amber-700/30 backdrop-blur">
@@ -188,6 +222,7 @@ export function GameUI() {
             <div>"¡Protesto!" — objetar al fiscal</div>
             <div>"¡Recusación, jurado N!" — recusar</div>
             <div>"Sí" / "No" — responder al juez</div>
+            <div className="text-emerald-400/70 mt-1">Habla libre en F4/F5</div>
           </div>
         </Card>
       </div>
