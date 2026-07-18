@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Mic, MicOff, AlertTriangle, Gavel, Send } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { initAudio, sndClick, sndTick } from '../state/sounds';
+import { initAudio, sndClick, sndTick, startAmbient, stopAmbient } from '../state/sounds';
 
 const PLAYER_INPUT_EVENT = 'notguilty-player-input';
 
@@ -82,6 +82,14 @@ export function GameUI() {
     sendPlayerInput(textInput);
     setTextInput('');
   };
+
+  // Iniciar audio ambiente cuando empieza el juego
+  useEffect(() => {
+    if (fase !== 'pre') {
+      startAmbient();
+    }
+    return () => stopAmbient();
+  }, [fase]);
 
   if (fase === 'pre') return null;
 
@@ -250,14 +258,13 @@ export function GameUI() {
         </div>
       )}
 
-      {/* ─── BURBUJA DE DIÁLOGO DEL NPC (Phoenix Wright style) ─── */}
+      {/* ─── BURBUJA DE DIÁLOGO DEL NPC ─── */}
       {(caption || iaPensando) && (
         <div className="absolute bottom-36 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl pointer-events-none z-20">
           <div
             className="relative bg-amber-50 border-4 border-amber-900 rounded-2xl p-4 shadow-2xl"
             style={{ animation: 'bubbleIn 0.3s ease-out' }}
           >
-            {/* Speaker label */}
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-black tracking-[0.3em] text-amber-900">
                 {speakerActual === 'juez' ? '⚖️ JUEZ' :
@@ -273,13 +280,46 @@ export function GameUI() {
                 </span>
               )}
             </div>
-            {/* Texto del NPC */}
             <div className="text-stone-900 text-base sm:text-lg font-serif leading-relaxed">
               {caption || '...'}
             </div>
           </div>
         </div>
       )}
+
+      {/* ─── PANEL DE TESTIMONIOS (F4) — para comparar lo que dijo cada testigo ─── */}
+      {fase === 'F4' && (() => {
+        const testimonios = useGame.getState().testimoniosEscuchados;
+        const keys = Object.keys(testimonios);
+        if (keys.length === 0) return null;
+        return (
+          <div className="absolute top-32 left-3 w-72 pointer-events-auto z-15">
+            <Card className="p-2 bg-black/70 border-purple-700/40 backdrop-blur">
+              <div className="text-[9px] font-mono text-purple-400 mb-1 tracking-widest">
+                📝 TESTIMONIOS REGISTRADOS
+              </div>
+              <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                {keys.map((k) => {
+                  const nombre = k === 'guarda' ? '🛡️ Eustaquio' : k === 'supervisor' ? '👔 Anselmo' : k === 'novia' ? '💕 Maribel' : k;
+                  return (
+                    <div key={k} className="bg-stone-900/60 rounded p-1.5 border border-purple-800/30">
+                      <div className="text-[9px] font-mono text-purple-300 mb-0.5">{nombre}:</div>
+                      <div className="text-[10px] text-amber-100/70 leading-tight line-clamp-3">
+                        {testimonios[k].slice(0, 150)}...
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {keys.length >= 2 && (
+                <div className="text-[9px] font-mono text-purple-400 mt-1 border-t border-purple-800/30 pt-1">
+                  ⚡ Compara lo que dijeron. ¿Hay contradicciones?
+                </div>
+              )}
+            </Card>
+          </div>
+        );
+      })()}
 
       {/* ─── Botón micrófono + Input de texto (fallback) ─── */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-auto flex flex-col items-center gap-2">

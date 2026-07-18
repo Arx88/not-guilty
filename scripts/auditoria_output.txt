@@ -1,0 +1,227 @@
+======================================================================
+🏢 AUDITORÍA SUPERCELL — NOT GUILTY
+📋 8 especialistas evalúan el juego desde su área
+⚠️  Evaluación brutalmente honesta
+======================================================================
+
+🎮 Jugando partida óptima para auditoría...
+✅ Partida completada. Los auditores analizan...
+
+
+──────────────────────────────────────────────────────────────────────
+🔍 GAME DESIGN DIRECTOR
+📋 15 años. Clash Royale, Brawl Stars. Especialista en mecánicas core y loops de juego.
+🎯 Enfoque: Mecánicas core, loop de juego, balance, skill ceiling, decisiones significativas
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+### INFORME DE AUDITORÍA: NOT GUILTY
+**PUNTUACIÓN: 4.5/10** (El núcleo es un "walking simulator" de diálogos; la agencia real es inexistente hasta F4).
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1.  **F1-F2 son "Press X to Continue", no gameplay.** F1 es binario (Sí/No) sin consecuencia visible en métricas. F2 obliga a objetar en 20s sobre evidencia que el jugador *acaba de oír por primera vez* y no ha podido analizar. Es prueba de reflejos/lectura rápida, no de deducción legal. **Resultado:** El jugador aprende que "objetar" = "clickar rápido", no "encontrar el fallo lógico".
+
+2.  **Economía de objeciones
+
+──────────────────────────────────────────────────────────────────────
+🔍 UX/UI LEAD
+📋 12 años. Squad Busters, Hay Day. Especialista en onboarding y claridad visual.
+🎯 Enfoque: Onboarding, claridad de información, jerarquía visual, fricción, accesibilidad
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+### INFORME DE AUDITORÍA: NOT GUILTY
+**PUNTUACIÓN: 4/10** (El *core* es brillante; la envoltura UX lo mata antes de que el jugador lo entienda).
+
+---
+
+#### 3 PROBLEMAS CRÍTICOS
+1.  **Ceguera Mecánica en F1:** El jugador ve "Sí/No" y cree que es un diálogo narrativo, no una **declaración legal vinculante**. No hay *feedforward* de que admitir "acceso a cámaras" = confesar medio delito. La UI no distingue "Hechos" (peligrosos) de "Circunstancias" (neutros).
+2.  **Objetar a Ciegas (F2):** Ventana de 20s con 3 balas totales, pero **cero *preview* legal**. El jugador no
+
+──────────────────────────────────────────────────────────────────────
+🔍 NARRATIVE DESIGNER
+📋 10 años. Boom Beach, Clash of Clans lore. Especialista en personajes y emoción.
+🎯 Enfoque: Personajes, tono, emoción, stakes, arco narrativo, inversión del jugador
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+**INFORME DE AUDITORÍA: NOT GUILTY**
+**PUNTUACIÓN: 4/10** (Mecánica sólida, alma nula. Es un *paper prototype* con piel de juicio.)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1. **El "Fantasma del Acusado":** En 5 fases, **cero líneas de diálogo propio del jugador**. Solo "sí/no", clics y objeciones técnicas. El jugador no *es* el acusado; es su abogado mudo. No hay miedo, indignación, cansancio ni mentira en su voz. El veredicto final cita "coartada digital" y "testigo del coche" —**hechos que el jugador nunca vivió, dijo ni eligió**. Se siente *exento*, no *absuelto*.
+
+2. **NPCs funcionales, no humanos:** El Gu
+
+──────────────────────────────────────────────────────────────────────
+🔍 PLAYER PSYCHOLOGY EXPERT
+📋 PhD en psicología del juego. Consultor de Riot y Supercell. Especialista en motivación y flujo.
+🎯 Enfoque: Motivación intrínseca/extrínseca, estado de flujo, frustración, maestría, agencia
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+### INFORME DE AUDITORÍA: NOT GUILTY
+**PUNTUACIÓN: 4.5/10** (El núcleo es oro, la envoltura es plomo. La IA escribe mejor que tu UX.)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1.  **FALSA AGENCIA EN F1 (El "Press X to Jason"):** F1 no es gameplay, es un *cutscene interactivo*. Responder "sí/no" a la lectura de cargos no ejerce la fantasía de "ser abogado", rompe el *flow* antes de empezar y enseña al jugador que sus inputs no importan. **Daño:** Destruye la *Autonomía* (SDT) en el minuto 0.
+2.  **OBJECIONES COMO QTE OCULTO (F2):** Ventana de 2
+
+──────────────────────────────────────────────────────────────────────
+🔍 STREAMER & VIRAL EXPERT
+📋 Ex-Twitch partnership manager. Asesoró a Among Us, Fall Guys, Lethal Company.
+🎯 Enfoque: Clippeabilidad, momentos compartibles, streaming potential, chat engagement, FOMO
+──────────────────────────────────────────────────────────────────────
+
+❌ Error generando informe: [ERROR 504]
+
+──────────────────────────────────────────────────────────────────────
+🔍 LIVEOPS & RETENTION LEAD
+📋 8 años. Clash of Clans LiveOps. Especialista en retención D1/D7/D30.
+🎯 Enfoque: Rejugabilidad, variedad, progresión, motivos para volver, contenido a largo plazo
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+**PUNTUACIÓN: 3/10**
+Tienes un *motor* de simulación jurídica brillante (Nemotron Ultra gestiona contradicciones con coherencia real), pero **cero juego** alrededor. Es una demo técnica, no un servicio *live*.
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1.  **Curva de aprendizaje invertida (El "Muro F2"):** En F1 el jugador solo pulsa Sí/No (agencia 0). En F2 se le exigen conocimientos procesales reales (*"¿Objetas por relevancia, hearsay o cadena de custodia?"*) en 20s sin tutorial. **Resultado:** 60%+ drop en F2 por pánico cognitivo, no por dificultad justa.
+2.  **Economía de "Partida Única":** El caso del queso manchego es **estático**.
+
+──────────────────────────────────────────────────────────────────────
+🔍 AUDIO DIRECTOR
+📋 14 años. Brawl Stars audio. Especialista en feedback sonoro y atmósfera.
+🎯 Enfoque: Feedback sonoro, música, atmósfera, voz, impacto emocional del audio
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+**INFORME DE AUDITORÍA DE AUDIO — NOT GUILTY**
+**PUNTUACIÓN: 3/10** (Silencio no es minimalismo, es abandono)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1. **VACÍO SONORO TOTAL EN F1–F5**: No hay *room tone* de sala de vistas (HVAC, papel, micros abiertos), ni *stings* de transición entre fases, ni *underscore* tensional. El jugador oye su propia respiración y el zumbido del PC. En un juego 100% conversacional, **el silencio es un bug, no una feature**.
+
+2. **CERO FEEDBACK DE ESTADO (CRED/SOSP)**: Los metros 50/50, 70/30, 20/80 son
+
+──────────────────────────────────────────────────────────────────────
+🔍 TECHNICAL DIRECTOR
+📋 16 años. Supercell tech lead. Especialista en performance y estabilidad.
+🎯 Enfoque: Latencia, estabilidad, escalabilidad, edge cases, failure modes
+──────────────────────────────────────────────────────────────────────
+
+📊 INFORME:
+**INFORME DE AUDITORÍA TÉCNICA — NOT GUILTY**
+**PUNTUACIÓN: 4/10** (Arquitectura frágil, UX rota, cero observabilidad. No escala.)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1. **Pipeline de voz bloqueante sin timeouts ni fallbacks**  
+   STT (Whisper/Web Speech) → LLM (Nemotron 550B) → TTS en serie, *síncrono*, sin `AbortController`, sin streaming de tokens, sin TTS incremental. Una petición atascada en la nube congela el juicio entero. El jugador habla, nada pasa 12–18 s, cree que está roto, recarga. **P99 > 15 s inaceptable para tiempo real.**
+
+2. **Contexto LLM sin poda
+
+
+======================================================================
+📋 INFORME EJECUTIVO COMPILADO
+======================================================================
+
+--- GAME DESIGN DIRECTOR ---
+### INFORME DE AUDITORÍA: NOT GUILTY
+**PUNTUACIÓN: 4.5/10** (El núcleo es un "walking simulator" de diálogos; la agencia real es inexistente hasta F4).
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1.  **F1-F2 son "Press X to Continue", no gameplay.** F1 es binario (Sí/No) sin consecuencia visible en métricas. F2 obliga a objetar en 20s sobre evidencia que el jugador *acaba de oír por primera vez* y no ha podido analizar. Es prueba de reflejos/lectura rápida, no de deducción legal. **Resultado:** El jugador a
+
+--- UX/UI LEAD ---
+### INFORME DE AUDITORÍA: NOT GUILTY
+**PUNTUACIÓN: 4/10** (El *core* es brillante; la envoltura UX lo mata antes de que el jugador lo entienda).
+
+---
+
+#### 3 PROBLEMAS CRÍTICOS
+1.  **Ceguera Mecánica en F1:** El jugador ve "Sí/No" y cree que es un diálogo narrativo, no una **declaración legal vinculante**. No hay *feedforward* de que admitir "acceso a cámaras" = confesar medio delito. La UI no distingue "Hechos" (peligrosos) de "Circunstancias" (neutros).
+2.  **Objetar a Ciegas (F2):** Ventana d
+
+--- NARRATIVE DESIGNER ---
+**INFORME DE AUDITORÍA: NOT GUILTY**
+**PUNTUACIÓN: 4/10** (Mecánica sólida, alma nula. Es un *paper prototype* con piel de juicio.)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1. **El "Fantasma del Acusado":** En 5 fases, **cero líneas de diálogo propio del jugador**. Solo "sí/no", clics y objeciones técnicas. El jugador no *es* el acusado; es su abogado mudo. No hay miedo, indignación, cansancio ni mentira en su voz. El veredicto final cita "coartada digital" y "testigo del coche" —**hechos que el jugador 
+
+--- PLAYER PSYCHOLOGY EXPERT ---
+### INFORME DE AUDITORÍA: NOT GUILTY
+**PUNTUACIÓN: 4.5/10** (El núcleo es oro, la envoltura es plomo. La IA escribe mejor que tu UX.)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1.  **FALSA AGENCIA EN F1 (El "Press X to Jason"):** F1 no es gameplay, es un *cutscene interactivo*. Responder "sí/no" a la lectura de cargos no ejerce la fantasía de "ser abogado", rompe el *flow* antes de empezar y enseña al jugador que sus inputs no importan. **Daño:** Destruye la *Autonomía* (SDT) en el minuto 0.
+2.  **OBJECION
+
+--- STREAMER & VIRAL EXPERT ---
+Error en generación
+
+--- LIVEOPS & RETENTION LEAD ---
+**PUNTUACIÓN: 3/10**
+Tienes un *motor* de simulación jurídica brillante (Nemotron Ultra gestiona contradicciones con coherencia real), pero **cero juego** alrededor. Es una demo técnica, no un servicio *live*.
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1.  **Curva de aprendizaje invertida (El "Muro F2"):** En F1 el jugador solo pulsa Sí/No (agencia 0). En F2 se le exigen conocimientos procesales reales (*"¿Objetas por relevancia, hearsay o cadena de custodia?"*) en 20s sin tutorial. **Resultado:** 60%+ dro
+
+--- AUDIO DIRECTOR ---
+**INFORME DE AUDITORÍA DE AUDIO — NOT GUILTY**
+**PUNTUACIÓN: 3/10** (Silencio no es minimalismo, es abandono)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1. **VACÍO SONORO TOTAL EN F1–F5**: No hay *room tone* de sala de vistas (HVAC, papel, micros abiertos), ni *stings* de transición entre fases, ni *underscore* tensional. El jugador oye su propia respiración y el zumbido del PC. En un juego 100% conversacional, **el silencio es un bug, no una feature**.
+
+2. **CERO FEEDBACK DE ESTADO (CRED/SOSP)**: Los metr
+
+--- TECHNICAL DIRECTOR ---
+**INFORME DE AUDITORÍA TÉCNICA — NOT GUILTY**
+**PUNTUACIÓN: 4/10** (Arquitectura frágil, UX rota, cero observabilidad. No escala.)
+
+---
+
+### 3 PROBLEMAS CRÍTICOS
+
+1. **Pipeline de voz bloqueante sin timeouts ni fallbacks**  
+   STT (Whisper/Web Speech) → LLM (Nemotron 550B) → TTS en serie, *síncrono*, sin `AbortController`, sin streaming de tokens, sin TTS incremental. Una petición atascada en la nube congela el juicio entero. El jugador habla, nada pasa 12–18 s, cree que está roto, recarga. **P
+
+
+======================================================================
+💾 Informe guardado en scripts/auditoria_supercell.json
+======================================================================

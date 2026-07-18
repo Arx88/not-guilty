@@ -109,3 +109,65 @@ export function initAudio() {
     ctx.resume();
   }
 }
+
+// ── Audio ambiente de tribunal ──
+let ambientNodes: any = null;
+
+/** Inicia el ambiente sonoro del tribunal: HVAC bajo + murmullo ocasional */
+export function startAmbient() {
+  const ctx = getCtx();
+  if (!ctx || ambientNodes) return;
+
+  // Tono bajo continuo (HVAC / aire acondicionado de la sala)
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.frequency.value = 55; // La grave
+  osc1.type = 'sine';
+  gain1.gain.value = 0.015;
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+  osc1.start();
+
+  // Segundo tono más alto pero muy suave
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.frequency.value = 110; // La una octava arriba
+  osc2.type = 'sine';
+  gain2.gain.value = 0.008;
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+  osc2.start();
+
+  // Ruido sutil de fondo (papales, toses lejanas)
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * 0.005;
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = 'lowpass';
+  noiseFilter.frequency.value = 300;
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.value = 0.02;
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+  noise.start();
+
+  ambientNodes = { osc1, gain1, osc2, gain2, noise, noiseGain };
+}
+
+/** Detiene el ambiente */
+export function stopAmbient() {
+  if (!ambientNodes) return;
+  try {
+    ambientNodes.osc1.stop();
+    ambientNodes.osc2.stop();
+    ambientNodes.noise.stop();
+  } catch (e) {}
+  ambientNodes = null;
+}

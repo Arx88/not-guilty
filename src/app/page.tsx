@@ -15,6 +15,86 @@ const GameOrchestrator = dynamic(
 
 export default function Home() {
   const [started, setStarted] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  if (started && !showTutorial) {
+    // Pantalla de tutorial antes de empezar
+    return (
+      <div className="min-h-screen bg-stone-950 flex items-center justify-center p-4">
+        <Card className="max-w-2xl bg-stone-900/90 border-amber-600/50 backdrop-blur p-8">
+          <div className="space-y-5">
+            <div className="text-center">
+              <h2 className="text-3xl font-black text-amber-50 mb-2">Antes de empezar...</h2>
+              <p className="text-amber-300/70 text-sm">30 segundos para que no entres a ciegas</p>
+            </div>
+
+            {/* Tutorial visual */}
+            <div className="space-y-3">
+              <div className="bg-red-950/40 border border-red-700/40 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-2xl">⚡</span>
+                  <span className="text-red-300 font-bold text-sm">OBJECIONES (3 totales)</span>
+                </div>
+                <p className="text-red-100/70 text-xs">
+                  Cuando el fiscal presente una prueba, aparecerá un botón rojo "<b>¡PROTESTO!</b>".
+                  Tienes <b>20 segundos</b> para decidir si objetar.
+                  Solo tienes <b>3 objeciones</b> en todo el juicio. Úsalas sabiamente.
+                  <br /><br />
+                  <b>¿Cuándo objetar?</b> Cuando la prueba del fiscal tenga un fallo.
+                  Ej: "El coche lo usan 5 empleados" → las trazas no prueban que fuiste TÚ.
+                </p>
+              </div>
+
+              <div className="bg-purple-950/40 border border-purple-700/40 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-2xl">🔍</span>
+                  <span className="text-purple-300 font-bold text-sm">CONTRADICCIONES</span>
+                </div>
+                <p className="text-purple-100/70 text-xs">
+                  Los testigos pueden <b>mentir</b>. Si el guarda dice una cosa y el supervisor
+                  dice lo contrario, di <b>"contradicción"</b> o escribe lo que notaste.
+                  <br /><br />
+                  <b>Ej:</b> El guarda dice "no vi a nadie" pero el supervisor dice
+                  "el guarda me avisó que vio a alguien". Uno miente. ¡Atrápalo!
+                </p>
+              </div>
+
+              <div className="bg-emerald-950/40 border border-emerald-700/40 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-2xl">⚖️</span>
+                  <span className="text-emerald-300 font-bold text-sm">CÓMO GANAR</span>
+                </div>
+                <p className="text-emerald-100/70 text-xs">
+                  Mantén <b className="text-emerald-400">Credibilidad</b> alta y
+                  <b className="text-red-400"> Sospecha</b> baja.
+                  <br />
+                  • Objeta bien → +Credibilidad, -Sospecha<br />
+                  • Elige la evidencia correcta → +Credibilidad<br />
+                  • Encuentra contradicciones → +Credibilidad, -Sospecha<br />
+                  • Al final: si Credibilidad ≥ Sospecha → <b className="text-emerald-400">ABSUELTO</b>
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-amber-950/30 border border-amber-700/30 rounded p-3">
+              <p className="text-amber-200/80 text-xs text-center">
+                💡 <b>Tip:</b> Usa el botón <b>⌨ Texto</b> si el micrófono no te funciona.
+                Escucha a los testigos con atención. Toma nota mental de lo que dicen.
+              </p>
+            </div>
+
+            <Button
+              onClick={() => setShowTutorial(true)}
+              size="lg"
+              className="w-full bg-amber-700 hover:bg-amber-800 text-amber-50 py-4 text-lg"
+            >
+              <Play className="mr-2 h-5 w-5" /> ENTRAR AL JUICIO
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   if (!started) {
     return (

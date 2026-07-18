@@ -1,0 +1,34 @@
+[
+  {
+    "rol": "GAME DESIGN DIRECTOR",
+    "informe": "### INFORME DE AUDITORÍA: NOT GUILTY\n**PUNTUACIÓN: 4.5/10** (El núcleo es un \"walking simulator\" de diálogos; la agencia real es inexistente hasta F4).\n\n---\n\n### 3 PROBLEMAS CRÍTICOS\n\n1.  **F1-F2 son \"Press X to Continue\", no gameplay.** F1 es binario (Sí/No) sin consecuencia visible en métricas. F2 obliga a objetar en 20s sobre evidencia que el jugador *acaba de oír por primera vez* y no ha podido analizar. Es prueba de reflejos/lectura rápida, no de deducción legal. **Resultado:** El jugador aprende que \"objetar\" = \"clickar rápido\", no \"encontrar el fallo lógico\".\n\n2.  **Economía de objeciones"
+  },
+  {
+    "rol": "UX/UI LEAD",
+    "informe": "### INFORME DE AUDITORÍA: NOT GUILTY\n**PUNTUACIÓN: 4/10** (El *core* es brillante; la envoltura UX lo mata antes de que el jugador lo entienda).\n\n---\n\n#### 3 PROBLEMAS CRÍTICOS\n1.  **Ceguera Mecánica en F1:** El jugador ve \"Sí/No\" y cree que es un diálogo narrativo, no una **declaración legal vinculante**. No hay *feedforward* de que admitir \"acceso a cámaras\" = confesar medio delito. La UI no distingue \"Hechos\" (peligrosos) de \"Circunstancias\" (neutros).\n2.  **Objetar a Ciegas (F2):** Ventana de 20s con 3 balas totales, pero **cero *preview* legal**. El jugador no"
+  },
+  {
+    "rol": "NARRATIVE DESIGNER",
+    "informe": "**INFORME DE AUDITORÍA: NOT GUILTY**\n**PUNTUACIÓN: 4/10** (Mecánica sólida, alma nula. Es un *paper prototype* con piel de juicio.)\n\n---\n\n### 3 PROBLEMAS CRÍTICOS\n\n1. **El \"Fantasma del Acusado\":** En 5 fases, **cero líneas de diálogo propio del jugador**. Solo \"sí/no\", clics y objeciones técnicas. El jugador no *es* el acusado; es su abogado mudo. No hay miedo, indignación, cansancio ni mentira en su voz. El veredicto final cita \"coartada digital\" y \"testigo del coche\" —**hechos que el jugador nunca vivió, dijo ni eligió**. Se siente *exento*, no *absuelto*.\n\n2. **NPCs funcionales, no humanos:** El Gu"
+  },
+  {
+    "rol": "PLAYER PSYCHOLOGY EXPERT",
+    "informe": "### INFORME DE AUDITORÍA: NOT GUILTY\n**PUNTUACIÓN: 4.5/10** (El núcleo es oro, la envoltura es plomo. La IA escribe mejor que tu UX.)\n\n---\n\n### 3 PROBLEMAS CRÍTICOS\n\n1.  **FALSA AGENCIA EN F1 (El \"Press X to Jason\"):** F1 no es gameplay, es un *cutscene interactivo*. Responder \"sí/no\" a la lectura de cargos no ejerce la fantasía de \"ser abogado\", rompe el *flow* antes de empezar y enseña al jugador que sus inputs no importan. **Daño:** Destruye la *Autonomía* (SDT) en el minuto 0.\n2.  **OBJECIONES COMO QTE OCULTO (F2):** Ventana de 2"
+  },
+  {
+    "rol": "STREAMER & VIRAL EXPERT",
+    "informe": "Error en generación"
+  },
+  {
+    "rol": "LIVEOPS & RETENTION LEAD",
+    "informe": "**PUNTUACIÓN: 3/10**\nTienes un *motor* de simulación jurídica brillante (Nemotron Ultra gestiona contradicciones con coherencia real), pero **cero juego** alrededor. Es una demo técnica, no un servicio *live*.\n\n---\n\n### 3 PROBLEMAS CRÍTICOS\n\n1.  **Curva de aprendizaje invertida (El \"Muro F2\"):** En F1 el jugador solo pulsa Sí/No (agencia 0). En F2 se le exigen conocimientos procesales reales (*\"¿Objetas por relevancia, hearsay o cadena de custodia?\"*) en 20s sin tutorial. **Resultado:** 60%+ drop en F2 por pánico cognitivo, no por dificultad justa.\n2.  **Economía de \"Partida Única\":** El caso del queso manchego es **estático**."
+  },
+  {
+    "rol": "AUDIO DIRECTOR",
+    "informe": "**INFORME DE AUDITORÍA DE AUDIO — NOT GUILTY**\n**PUNTUACIÓN: 3/10** (Silencio no es minimalismo, es abandono)\n\n---\n\n### 3 PROBLEMAS CRÍTICOS\n\n1. **VACÍO SONORO TOTAL EN F1–F5**: No hay *room tone* de sala de vistas (HVAC, papel, micros abiertos), ni *stings* de transición entre fases, ni *underscore* tensional. El jugador oye su propia respiración y el zumbido del PC. En un juego 100% conversacional, **el silencio es un bug, no una feature**.\n\n2. **CERO FEEDBACK DE ESTADO (CRED/SOSP)**: Los metros 50/50, 70/30, 20/80 son"
+  },
+  {
+    "rol": "TECHNICAL DIRECTOR",
+    "informe": "**INFORME DE AUDITORÍA TÉCNICA — NOT GUILTY**\n**PUNTUACIÓN: 4/10** (Arquitectura frágil, UX rota, cero observabilidad. No escala.)\n\n---\n\n### 3 PROBLEMAS CRÍTICOS\n\n1. **Pipeline de voz bloqueante sin timeouts ni fallbacks**  \n   STT (Whisper/Web Speech) → LLM (Nemotron 550B) → TTS en serie, *síncrono*, sin `AbortController`, sin streaming de tokens, sin TTS incremental. Una petición atascada en la nube congela el juicio entero. El jugador habla, nada pasa 12–18 s, cree que está roto, recarga. **P99 > 15 s inaceptable para tiempo real.**\n\n2. **Contexto LLM sin poda"
+  }
+]
