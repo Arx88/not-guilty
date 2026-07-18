@@ -409,13 +409,13 @@ export function GameOrchestrator() {
       }
 
       // F3: respuesta a "¿desea presentar evidencia?"
-      if (sf === 'F3.espera') {
+      if (sf === 'F3.espera' && caso) {
         const lower = text.toLowerCase();
         // Si el jugador presenta una evidencia específica (viene con "Presento la evidencia:")
         if (lower.includes('presento la evidencia') || lower.includes('evidencia')) {
           // Buscar qué evidencia es
           const evidencias = caso.evidencias;
-          let evidenciaPresentada = null;
+          let evidenciaPresentada: typeof evidencias[0] | null = null;
           for (const ev of evidencias) {
             if (lower.includes(ev.nombre.toLowerCase()) || lower.includes(ev.id)) {
               evidenciaPresentada = ev;
@@ -423,22 +423,23 @@ export function GameOrchestrator() {
             }
           }
           if (evidenciaPresentada) {
+            const ev = evidenciaPresentada;
             // Bonus según tipo
-            if (evidenciaPresentada.tipo === 'exculpatoria') {
+            if (ev.tipo === 'exculpatoria') {
               ajustarMedidor('credibilidad', +8);
               ajustarMedidor('sospecha', -10);
               sndSuccess();
-            } else if (evidenciaPresentada.tipo === 'ambigua') {
+            } else if (ev.tipo === 'ambigua') {
               ajustarMedidor('credibilidad', +4);
               ajustarMedidor('sospecha', -3);
-            } else if (evidenciaPresentada.tipo === 'incriminatoria') {
+            } else if (ev.tipo === 'incriminatoria') {
               ajustarMedidor('sospecha', +8);
               sndFail();
             }
             hablar(
               'juez',
-              `El acusado presenta: ${evidenciaPresentada.nombre}. ${evidenciaPresentada.descripcion}. ¿Fiscal, objeta?`,
-              `El jugador presenta la evidencia "${evidenciaPresentada.nombre}" (${evidenciaPresentada.tipo}). Admítela brevemente y pasa a testigos.`
+              `El acusado presenta: ${ev.nombre}. ${ev.descripcion}. ¿Fiscal, objeta?`,
+              `El jugador presenta la evidencia "${ev.nombre}" (${ev.tipo}). Admítela brevemente y pasa a testigos.`
             );
           } else {
             hablar(

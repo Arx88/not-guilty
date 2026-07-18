@@ -5,7 +5,7 @@
  */
 'use client';
 
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { OrbitControls, Html, ContactShadows, Environment } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { useRef, useMemo, Suspense } from 'react';
@@ -15,8 +15,8 @@ import { useGame } from '../state/store';
 // ──────────────────────────────────────────────────────────
 // MUEBLES KENNEY (GLB reales)
 // ──────────────────────────────────────────────────────────
-function FurnitureModel({ url, position, rotation = [0, 0, 0], scale = 1 }) {
-  const gltf = useLoader(GLTFLoader, url);
+function FurnitureModel({ url, position, rotation = [0, 0, 0], scale = 1 }: any) {
+  const gltf = useLoader(GLTFLoader, url) as any;
   const cloned = useMemo(() => gltf.scene.clone(true), [gltf]);
   return (
     <primitive
